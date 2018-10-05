@@ -1,0 +1,99 @@
+data:
+  sites:
+  - id: A1
+    code: A1
+    name: 안성 1창고
+  zones:
+  - id: A
+    code: A
+    site-id: A1
+  - id: B
+    code: B
+    site-id: A1
+  racks:
+  - id: A-1
+    code: 1
+    zone-id: A
+  - id: A-2
+    code: 2
+    zone-id: A
+  - id: B-1
+    code: 1
+    zone-id: B
+  - id: B-2
+    code: 2
+    zone-id: B
+  bays:
+  - id: A-1-1
+    code: 1
+    rack-id: A-1
+  - id: A-1-2
+    code: 2
+    rack-id: A-1
+  - id: A-2-1
+    code: 1
+    rack-id: A-2
+  - id: A-2-2
+    code: 2
+    rack-id: A-2
+  - id: B-1-1
+    code: 1
+    rack-id: B-1
+  - id: B-1-2
+    code: 2
+    rack-id: B-1
+  - id: B-2-1
+    code: 1
+    rack-id: B-2
+  - id: B-2-2
+    code: 2
+    rack-id: B-2
+  levels:
+  - id: A-1-1-1
+    code: 1
+    bay-id: A-1-1
+  - id: A-1-1-2
+    code: 2
+    bay-id: A-1-1
+  - id: A-1-2-1
+    code: 1
+    bay-id: A-1-2
+  - id: A-1-2-2
+    code: 2
+    bay-id: A-1-2
+  - id: A-2-1-1
+    code: 1
+    bay-id: A-2-1
+  - id: A-2-1-2
+    code: 2
+    bay-id: A-2-1
+  - id: A-2-2-1
+    code: 1
+    bay-id: A-2-2
+  - id: A-2-2-2
+    code: 2
+    bay-id: A-2-2
+  - id: B-1-1-1
+    code: 1
+    bay-id: B-1-1
+  - id: B-1-1-2
+    code: 2
+    bay-id: B-1-1
+  - id: B-1-2-1
+    code: 1
+    bay-id: B-1-2
+  - id: B-1-2-2
+    code: 2
+    bay-id: B-1-2
+  - id: B-2-1-1
+    code: 1
+    bay-id: B-2-1
+  - id: B-2-1-2
+    code: 2
+    bay-id: B-2-1
+  - id: B-2-2-1
+    code: 1
+    bay-id: B-2-2
+  - id: B-2-2-2
+    code: 2
+    bay-id: B-2-2
