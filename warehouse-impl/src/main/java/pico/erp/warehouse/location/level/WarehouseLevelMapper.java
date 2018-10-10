@@ -4,6 +4,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
+import pico.erp.warehouse.location.bay.WarehouseBay;
+import pico.erp.warehouse.location.bay.WarehouseBayEntity;
+import pico.erp.warehouse.location.bay.WarehouseBayId;
 import pico.erp.warehouse.location.bay.WarehouseBayMapper;
 
 @org.mapstruct.Mapper
@@ -17,12 +20,11 @@ public abstract class WarehouseLevelMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .bay(bayMapper.domain(entity.getBay()))
+      .bay(bayMapper.jpa(entity.getBay()))
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "bay", expression = "java(bayMapper.entity(domain.getBay()))"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
@@ -38,11 +40,9 @@ public abstract class WarehouseLevelMapper {
   })
   public abstract WarehouseLevelData map(WarehouseLevel domain);
 
-  @Mappings({
-    @Mapping(target = "bay", expression = "java(bayMapper.map(request.getBayId()))")
-  })
-  public abstract WarehouseLevelMessages.CreateRequest map(
-    WarehouseLevelRequests.CreateRequest request);
+  protected WarehouseBayEntity jpa(WarehouseBay domain) {
+    return bayMapper.jpa(domain);
+  }
 
   @Mappings({
   })
@@ -50,5 +50,15 @@ public abstract class WarehouseLevelMapper {
     WarehouseLevelRequests.UpdateRequest request);
 
   public abstract void pass(WarehouseLevelEntity from, @MappingTarget WarehouseLevelEntity to);
+
+  @Mappings({
+    @Mapping(target = "bay", source = "bayId")
+  })
+  public abstract WarehouseLevelMessages.CreateRequest map(
+    WarehouseLevelRequests.CreateRequest request);
+
+  protected WarehouseBay map(WarehouseBayId warehouseBayId) {
+    return bayMapper.map(warehouseBayId);
+  }
 
 }

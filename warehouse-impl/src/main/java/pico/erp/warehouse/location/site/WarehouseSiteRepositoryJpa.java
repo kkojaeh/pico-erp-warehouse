@@ -32,9 +32,9 @@ public class WarehouseSiteRepositoryJpa implements WarehouseSiteRepository {
 
   @Override
   public WarehouseSite create(@NotNull WarehouseSite site) {
-    val entity = mapper.entity(site);
+    val entity = mapper.jpa(site);
     val created = repository.save(entity);
-    return mapper.domain(created);
+    return mapper.jpa(created);
   }
 
   @Override
@@ -56,13 +56,13 @@ public class WarehouseSiteRepositoryJpa implements WarehouseSiteRepository {
   @Override
   public Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id) {
     return Optional.ofNullable(repository.findOne(id))
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull WarehouseSite site) {
     val entity = repository.findOne(site.getId());
-    mapper.pass(mapper.entity(site), entity);
+    mapper.pass(mapper.jpa(site), entity);
     repository.save(entity);
   }
 

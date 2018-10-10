@@ -6,6 +6,9 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import pico.erp.warehouse.location.site.WarehouseSite;
+import pico.erp.warehouse.location.site.WarehouseSiteEntity;
+import pico.erp.warehouse.location.site.WarehouseSiteId;
 import pico.erp.warehouse.location.site.WarehouseSiteMapper;
 
 @org.mapstruct.Mapper
@@ -18,23 +21,22 @@ public abstract class WarehouseZoneMapper {
   @Autowired
   protected WarehouseZoneRepository warehouseZoneRepository;
 
-  public WarehouseZone domain(WarehouseZoneEntity entity) {
+  public WarehouseZone jpa(WarehouseZoneEntity entity) {
     return WarehouseZone.builder()
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .site(siteMapper.domain(entity.getSite()))
+      .site(siteMapper.jpa(entity.getSite()))
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "site", expression = "java(siteMapper.entity(domain.getSite()))"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
-  public abstract WarehouseZoneEntity entity(WarehouseZone domain);
+  public abstract WarehouseZoneEntity jpa(WarehouseZone domain);
 
   @Mappings({
   })
@@ -57,12 +59,21 @@ public abstract class WarehouseZoneMapper {
       .orElse(null);
   }
 
+  protected WarehouseSiteEntity jpa(WarehouseSite domain) {
+    return siteMapper.jpa(domain);
+  }
+
+  public abstract void pass(WarehouseZoneEntity from, @MappingTarget WarehouseZoneEntity to);
+
   @Mappings({
-    @Mapping(target = "site", expression = "java(siteMapper.map(request.getSiteId()))")
+    @Mapping(target = "site", source = "siteId")
   })
   public abstract WarehouseZoneMessages.CreateRequest map(
     WarehouseZoneRequests.CreateRequest request);
 
-  public abstract void pass(WarehouseZoneEntity from, @MappingTarget WarehouseZoneEntity to);
+  protected WarehouseSite map(WarehouseSiteId warehouseSiteId) {
+    return siteMapper.map(warehouseSiteId);
+  }
+
 
 }

@@ -37,9 +37,9 @@ public class WarehouseRackRepositoryJpa implements WarehouseRackRepository {
 
   @Override
   public WarehouseRack create(@NotNull WarehouseRack rack) {
-    val entity = mapper.entity(rack);
+    val entity = mapper.jpa(rack);
     val created = repository.save(entity);
-    return mapper.domain(created);
+    return mapper.jpa(created);
   }
 
   @Override
@@ -55,19 +55,19 @@ public class WarehouseRackRepositoryJpa implements WarehouseRackRepository {
   @Override
   public Stream<WarehouseRack> findAllBy(@NotNull WarehouseZoneId zoneId) {
     return repository.findAllBy(zoneId)
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public Optional<WarehouseRack> findBy(@NotNull WarehouseRackId id) {
     return Optional.ofNullable(repository.findOne(id))
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull WarehouseRack rack) {
     val entity = repository.findOne(rack.getId());
-    mapper.pass(mapper.entity(rack), entity);
+    mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }
 

@@ -14,7 +14,7 @@ public abstract class WarehouseSiteMapper {
   @Autowired
   protected WarehouseSiteRepository warehouseSiteRepository;
 
-  public WarehouseSite domain(WarehouseSiteEntity entity) {
+  public WarehouseSite jpa(WarehouseSiteEntity entity) {
     return WarehouseSite.builder()
       .id(entity.getId())
       .code(entity.getCode())
@@ -29,7 +29,7 @@ public abstract class WarehouseSiteMapper {
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
-  public abstract WarehouseSiteEntity entity(WarehouseSite domain);
+  public abstract WarehouseSiteEntity jpa(WarehouseSite domain);
 
   @Mappings({
   })

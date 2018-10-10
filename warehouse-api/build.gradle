@@ -3,9 +3,11 @@ apply plugin: 'groovy'
 apply plugin: "net.ltgt.apt"
 apply plugin: 'net.ltgt.apt-idea'
 
-apply from: 'https://rawgit.com/kkojaeh/pico-erp-gradle/master/api.gradle'
+apply from: 'https://github.com/kkojaeh/pico-erp-gradle/raw/master/api.gradle'
 
 dependencies {
+
+  compile("org.projectlombok:lombok:${lombokVersion}")
 
   compile("com.github.kkojaeh.pico-erp-shared:shared-api:${sharedVersion}")
 

@@ -6,6 +6,9 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import pico.erp.warehouse.location.rack.WarehouseRack;
+import pico.erp.warehouse.location.rack.WarehouseRackEntity;
+import pico.erp.warehouse.location.rack.WarehouseRackId;
 import pico.erp.warehouse.location.rack.WarehouseRackMapper;
 
 @org.mapstruct.Mapper
@@ -18,23 +21,22 @@ public abstract class WarehouseBayMapper {
   @Autowired
   protected WarehouseBayRepository warehouseBayRepository;
 
-  public WarehouseBay domain(WarehouseBayEntity entity) {
+  public WarehouseBay jpa(WarehouseBayEntity entity) {
     return WarehouseBay.builder()
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .rack(rackMapper.domain(entity.getRack()))
+      .rack(rackMapper.jpa(entity.getRack()))
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "rack", expression = "java(rackMapper.entity(domain.getRack()))"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
-  public abstract WarehouseBayEntity entity(WarehouseBay domain);
+  public abstract WarehouseBayEntity jpa(WarehouseBay domain);
 
   @Mappings({
   })
@@ -57,12 +59,20 @@ public abstract class WarehouseBayMapper {
       .orElse(null);
   }
 
+  protected WarehouseRackEntity jpa(WarehouseRack domain) {
+    return rackMapper.jpa(domain);
+  }
+
+  public abstract void pass(WarehouseBayEntity from, @MappingTarget WarehouseBayEntity to);
+
+  protected WarehouseRack map(WarehouseRackId warehouseRackId) {
+    return rackMapper.map(warehouseRackId);
+  }
+
   @Mappings({
-    @Mapping(target = "rack", expression = "java(rackMapper.map(request.getRackId()))")
+    @Mapping(target = "rack", source = "rackId")
   })
   public abstract WarehouseBayMessages.CreateRequest map(
     WarehouseBayRequests.CreateRequest request);
-
-  public abstract void pass(WarehouseBayEntity from, @MappingTarget WarehouseBayEntity to);
 
 }

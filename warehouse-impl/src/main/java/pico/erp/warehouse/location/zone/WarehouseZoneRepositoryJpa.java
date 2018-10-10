@@ -37,9 +37,9 @@ public class WarehouseZoneRepositoryJpa implements WarehouseZoneRepository {
 
   @Override
   public WarehouseZone create(@NotNull WarehouseZone site) {
-    val entity = mapper.entity(site);
+    val entity = mapper.jpa(site);
     val created = repository.save(entity);
-    return mapper.domain(created);
+    return mapper.jpa(created);
   }
 
   @Override
@@ -55,19 +55,19 @@ public class WarehouseZoneRepositoryJpa implements WarehouseZoneRepository {
   @Override
   public Stream<WarehouseZone> findAllBy(@NotNull WarehouseSiteId siteId) {
     return repository.findAllBy(siteId)
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public Optional<WarehouseZone> findBy(@NotNull WarehouseZoneId id) {
     return Optional.ofNullable(repository.findOne(id))
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull WarehouseZone site) {
     val entity = repository.findOne(site.getId());
-    mapper.pass(mapper.entity(site), entity);
+    mapper.pass(mapper.jpa(site), entity);
     repository.save(entity);
   }
 
