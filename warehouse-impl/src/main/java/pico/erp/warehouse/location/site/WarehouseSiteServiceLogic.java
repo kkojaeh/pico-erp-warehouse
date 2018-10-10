@@ -1,5 +1,7 @@
 package pico.erp.warehouse.location.site;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,13 @@ public class WarehouseSiteServiceLogic implements WarehouseSiteService {
     return warehouseSiteRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseSiteExceptions.NotFoundException::new);
+  }
+
+  @Override
+  public List<WarehouseSiteData> getAll() {
+    return warehouseSiteRepository.findAll()
+      .map(mapper::map)
+      .collect(Collectors.toList());
   }
 
   @Override

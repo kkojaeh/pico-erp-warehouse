@@ -1,5 +1,6 @@
 package pico.erp.warehouse.location.site;
 
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +13,8 @@ public interface WarehouseSiteService {
   boolean exists(@NotNull WarehouseSiteId id);
 
   WarehouseSiteData get(@NotNull WarehouseSiteId id);
+
+  List<WarehouseSiteData> getAll();
 
   void update(@Valid WarehouseSiteRequests.UpdateRequest request);
 

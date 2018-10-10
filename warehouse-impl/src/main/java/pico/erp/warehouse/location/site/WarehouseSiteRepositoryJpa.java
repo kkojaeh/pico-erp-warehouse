@@ -1,6 +1,7 @@
 package pico.erp.warehouse.location.site;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ interface WarehouseSiteEntityRepository extends
 
   @Query("SELECT CASE WHEN COUNT(ws) > 0 THEN true ELSE false END FROM WarehouseSite ws WHERE ws.locationCode = :locationCode")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
+
+  @Query("SELECT ws FROM WarehouseSite ws")
+  Stream<WarehouseSiteEntity> findAllBy();
 
 }
 
@@ -56,6 +60,12 @@ public class WarehouseSiteRepositoryJpa implements WarehouseSiteRepository {
   @Override
   public Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id) {
     return Optional.ofNullable(repository.findOne(id))
+      .map(mapper::jpa);
+  }
+
+  @Override
+  public Stream<WarehouseSite> findAll() {
+    return repository.findAllBy()
       .map(mapper::jpa);
   }
 

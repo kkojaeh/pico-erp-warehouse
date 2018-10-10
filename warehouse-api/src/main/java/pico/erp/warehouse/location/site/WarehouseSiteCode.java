@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import pico.erp.shared.TypeDefinitions;
 
 @Embeddable
 @Getter
@@ -25,7 +24,7 @@ public class WarehouseSiteCode implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Getter(onMethod = @__({@JsonValue}))
-  @Size(min = 1, max = TypeDefinitions.ID_LENGTH)
+  @Size(min = 1, max = 2)
   @NotNull
   private String value;
 

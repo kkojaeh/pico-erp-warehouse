@@ -65,4 +65,12 @@ class WarehouseSiteServiceSpec extends Specification {
     thrown(WarehouseSiteExceptions.NotFoundException)
   }
 
+  def "창고지를 전체 조회"() {
+    when:
+    def sites = warehouseSiteService.getAll()
+
+    then:
+    sites.size() == 2
+  }
+
 }
