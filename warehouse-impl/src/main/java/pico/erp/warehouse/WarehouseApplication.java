@@ -42,20 +42,20 @@ public class WarehouseApplication implements ApplicationStarter {
   public AuditConfiguration auditConfiguration() {
     return AuditConfiguration.builder()
       .packageToScan("pico.erp.warehouse")
-      .entity(ROLE.class)
+      .entity(WarehouseRoles.class)
       .build();
   }
 
   @Bean
   @Public
   public Role facilityAccessorRole() {
-    return ROLE.WAREHOUSE_ACCESSOR;
+    return WarehouseRoles.WAREHOUSE_ACCESSOR;
   }
 
   @Bean
   @Public
   public Role facilityManagerRole() {
-    return ROLE.WAREHOUSE_MANAGER;
+    return WarehouseRoles.WAREHOUSE_MANAGER;
   }
 
   @Override
