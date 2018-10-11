@@ -51,7 +51,7 @@ public class WarehouseSiteServiceLogic implements WarehouseSiteService {
     val warehouseSite = warehouseSiteRepository.findBy(request.getId())
       .orElseThrow(WarehouseSiteExceptions.NotFoundException::new);
     val response = warehouseSite.apply(mapper.map(request));
-    warehouseSiteRepository.deleteBy(warehouseSite.getId());
+    warehouseSiteRepository.update(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
   }
 

@@ -27,6 +27,8 @@ public abstract class WarehouseRackMapper {
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
       .zone(zoneMapper.jpa(entity.getZone()))
+      .deleted(entity.isDeleted())
+      .deletedDate(entity.getDeletedDate())
       .build();
   }
 

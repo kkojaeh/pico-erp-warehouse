@@ -16,10 +16,10 @@ import pico.erp.warehouse.location.WarehouseLocationCode;
 interface WarehouseSiteEntityRepository extends
   CrudRepository<WarehouseSiteEntity, WarehouseSiteId> {
 
-  @Query("SELECT CASE WHEN COUNT(ws) > 0 THEN true ELSE false END FROM WarehouseSite ws WHERE ws.locationCode = :locationCode")
+  @Query("SELECT CASE WHEN COUNT(ws) > 0 THEN true ELSE false END FROM WarehouseSite ws WHERE ws.locationCode = :locationCode AND ws.deleted = false")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT ws FROM WarehouseSite ws ORDER BY ws.code")
+  @Query("SELECT ws FROM WarehouseSite ws WHERE ws.deleted = false ORDER BY ws.code")
   Stream<WarehouseSiteEntity> findAllBy();
 
 }

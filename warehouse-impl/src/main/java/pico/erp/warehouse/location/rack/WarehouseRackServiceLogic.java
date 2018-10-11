@@ -54,7 +54,7 @@ public class WarehouseRackServiceLogic implements WarehouseRackService {
     val warehouseRack = warehouseRackRepository.findBy(request.getId())
       .orElseThrow(WarehouseRackExceptions.NotFoundException::new);
     val response = warehouseRack.apply(mapper.map(request));
-    warehouseRackRepository.deleteBy(warehouseRack.getId());
+    warehouseRackRepository.update(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
   }
 

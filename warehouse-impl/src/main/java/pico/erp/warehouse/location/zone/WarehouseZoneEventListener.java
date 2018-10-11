@@ -33,4 +33,15 @@ public class WarehouseZoneEventListener {
       });
   }
 
+  @EventListener
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseSiteEvents.DeletedEvent.CHANNEL)
+  public void onWarehouseSiteDeleted(WarehouseSiteEvents.DeletedEvent event) {
+    warehouseZoneRepository.findAllBy(event.getWarehouseSiteId())
+      .forEach(zone -> {
+        val response = zone.apply(new WarehouseZoneMessages.DeleteRequest());
+        warehouseZoneRepository.update(zone);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
 }

@@ -21,6 +21,8 @@ public abstract class WarehouseLevelMapper {
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
       .bay(bayMapper.jpa(entity.getBay()))
+      .deleted(entity.isDeleted())
+      .deletedDate(entity.getDeletedDate())
       .build();
   }
 

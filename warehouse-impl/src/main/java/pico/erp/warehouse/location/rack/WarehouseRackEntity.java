@@ -88,4 +88,8 @@ public class WarehouseRackEntity implements Serializable {
   @LastModifiedDate
   OffsetDateTime lastModifiedDate;
 
+  boolean deleted;
+
+  OffsetDateTime deletedDate;
+
 }

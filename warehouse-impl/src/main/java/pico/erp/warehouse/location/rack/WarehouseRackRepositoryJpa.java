@@ -17,10 +17,10 @@ import pico.erp.warehouse.location.zone.WarehouseZoneId;
 interface WarehouseRackEntityRepository extends
   CrudRepository<WarehouseRackEntity, WarehouseRackId> {
 
-  @Query("SELECT CASE WHEN COUNT(wr) > 0 THEN true ELSE false END FROM WarehouseRack wr WHERE wr.locationCode = :locationCode")
+  @Query("SELECT CASE WHEN COUNT(wr) > 0 THEN true ELSE false END FROM WarehouseRack wr WHERE wr.locationCode = :locationCode AND wr.deleted = false")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT wr FROM WarehouseRack wr WHERE wr.zone.id = :zoneId ORDER BY wr.code")
+  @Query("SELECT wr FROM WarehouseRack wr WHERE wr.zone.id = :zoneId AND wr.deleted = false ORDER BY wr.code")
   Stream<WarehouseRackEntity> findAllBy(@Param("zoneId") WarehouseZoneId zoneId);
 
 }

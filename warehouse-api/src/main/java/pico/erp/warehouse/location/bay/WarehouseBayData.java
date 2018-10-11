@@ -1,6 +1,7 @@
 package pico.erp.warehouse.location.bay;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,5 +25,9 @@ public class WarehouseBayData implements Serializable {
   WarehouseRackId rackId;
 
   WarehouseLocationCode locationCode;
+
+  boolean deleted;
+
+  OffsetDateTime deletedDate;
 
 }

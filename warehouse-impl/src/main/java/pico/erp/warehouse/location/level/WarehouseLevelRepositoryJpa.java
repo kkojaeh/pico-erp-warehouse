@@ -17,10 +17,10 @@ import pico.erp.warehouse.location.bay.WarehouseBayId;
 interface WarehouseLevelEntityRepository extends
   CrudRepository<WarehouseLevelEntity, WarehouseLevelId> {
 
-  @Query("SELECT CASE WHEN COUNT(wl) > 0 THEN true ELSE false END FROM WarehouseLevel wl WHERE wl.locationCode = :locationCode")
+  @Query("SELECT CASE WHEN COUNT(wl) > 0 THEN true ELSE false END FROM WarehouseLevel wl WHERE wl.locationCode = :locationCode AND wl.deleted = false")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT wl FROM WarehouseLevel wl WHERE wl.bay.id = :bayId ORDER BY wl.code")
+  @Query("SELECT wl FROM WarehouseLevel wl WHERE wl.bay.id = :bayId AND wl.deleted = false ORDER BY wl.code")
   Stream<WarehouseLevelEntity> findAllBy(@Param("bayId") WarehouseBayId bayId);
 
 }

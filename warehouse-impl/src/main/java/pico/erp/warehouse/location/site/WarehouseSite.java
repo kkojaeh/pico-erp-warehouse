@@ -1,6 +1,7 @@
 package pico.erp.warehouse.location.site;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -34,6 +35,10 @@ public class WarehouseSite implements Serializable {
 
   String name;
 
+  boolean deleted;
+
+  OffsetDateTime deletedDate;
+
   public WarehouseSiteMessages.CreateResponse apply(WarehouseSiteMessages.CreateRequest request) {
     id = request.getId();
     code = request.getCode();
@@ -53,6 +58,8 @@ public class WarehouseSite implements Serializable {
   }
 
   public WarehouseSiteMessages.DeleteResponse apply(WarehouseSiteMessages.DeleteRequest request) {
+    deleted = true;
+    deletedDate = OffsetDateTime.now();
     return new WarehouseSiteMessages.DeleteResponse(
       Arrays.asList(new WarehouseSiteEvents.DeletedEvent(this.id)));
   }

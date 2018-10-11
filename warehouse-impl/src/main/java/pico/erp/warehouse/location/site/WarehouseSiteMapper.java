@@ -20,6 +20,8 @@ public abstract class WarehouseSiteMapper {
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
       .name(entity.getName())
+      .deleted(entity.isDeleted())
+      .deletedDate(entity.getDeletedDate())
       .build();
   }
 

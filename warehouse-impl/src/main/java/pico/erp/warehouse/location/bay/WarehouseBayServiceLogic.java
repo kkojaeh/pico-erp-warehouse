@@ -53,7 +53,7 @@ public class WarehouseBayServiceLogic implements WarehouseBayService {
     val warehouseBay = warehouseBayRepository.findBy(request.getId())
       .orElseThrow(WarehouseBayExceptions.NotFoundException::new);
     val response = warehouseBay.apply(mapper.map(request));
-    warehouseBayRepository.deleteBy(warehouseBay.getId());
+    warehouseBayRepository.update(warehouseBay);
     eventPublisher.publishEvents(response.getEvents());
   }
 

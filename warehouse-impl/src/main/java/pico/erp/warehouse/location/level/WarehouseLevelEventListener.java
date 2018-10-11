@@ -33,4 +33,15 @@ public class WarehouseLevelEventListener {
       });
   }
 
+  @EventListener
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseBayEvents.DeletedEvent.CHANNEL)
+  public void onWarehouseBayDeleted(WarehouseBayEvents.DeletedEvent event) {
+    warehouseLevelRepository.findAllBy(event.getWarehouseBayId())
+      .forEach(level -> {
+        val response = level.apply(new WarehouseLevelMessages.DeleteRequest());
+        warehouseLevelRepository.update(level);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
 }

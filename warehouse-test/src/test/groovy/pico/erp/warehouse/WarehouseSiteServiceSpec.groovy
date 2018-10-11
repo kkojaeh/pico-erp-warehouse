@@ -100,4 +100,16 @@ class WarehouseSiteServiceSpec extends Specification {
     thrown(WarehouseSiteExceptions.CodeAlreadyExistsException)
   }
 
+  def "하위 장소가 존재하는 창고를 삭제"() {
+    when:
+    warehouseSiteService.delete(new WarehouseSiteRequests.DeleteRequest(
+      id: WarehouseSiteId.from("A1")
+    ))
+    def site = warehouseSiteService.get(WarehouseSiteId.from("A1"))
+
+    then:
+    site.deleted == true
+    warehouseSiteService.getAll().size() == 1
+  }
+
 }

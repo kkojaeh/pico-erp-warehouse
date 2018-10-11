@@ -27,6 +27,8 @@ public abstract class WarehouseBayMapper {
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
       .rack(rackMapper.jpa(entity.getRack()))
+      .deleted(entity.isDeleted())
+      .deletedDate(entity.getDeletedDate())
       .build();
   }
 

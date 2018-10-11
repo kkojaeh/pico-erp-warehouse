@@ -27,6 +27,8 @@ public abstract class WarehouseZoneMapper {
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
       .site(siteMapper.jpa(entity.getSite()))
+      .deleted(entity.isDeleted())
+      .deletedDate(entity.getDeletedDate())
       .build();
   }
 

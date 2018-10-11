@@ -53,7 +53,7 @@ public class WarehouseLevelServiceLogic implements WarehouseLevelService {
     val warehouseLevel = warehouseLevelRepository.findBy(request.getId())
       .orElseThrow(WarehouseLevelExceptions.NotFoundException::new);
     val response = warehouseLevel.apply(mapper.map(request));
-    warehouseLevelRepository.deleteBy(warehouseLevel.getId());
+    warehouseLevelRepository.update(warehouseLevel);
     eventPublisher.publishEvents(response.getEvents());
   }
 

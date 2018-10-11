@@ -52,7 +52,7 @@ public class WarehouseZoneServiceLogic implements WarehouseZoneService {
     val warehouseZone = warehouseZoneRepository.findBy(request.getId())
       .orElseThrow(WarehouseZoneExceptions.NotFoundException::new);
     val response = warehouseZone.apply(mapper.map(request));
-    warehouseZoneRepository.deleteBy(warehouseZone.getId());
+    warehouseZoneRepository.update(warehouseZone);
     eventPublisher.publishEvents(response.getEvents());
   }
 

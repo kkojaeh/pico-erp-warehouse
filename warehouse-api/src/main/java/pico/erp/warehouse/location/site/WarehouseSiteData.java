@@ -1,6 +1,7 @@
 package pico.erp.warehouse.location.site;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -23,5 +24,9 @@ public class WarehouseSiteData implements Serializable {
   WarehouseLocationCode locationCode;
 
   String name;
+
+  boolean deleted;
+
+  OffsetDateTime deletedDate;
 
 }
