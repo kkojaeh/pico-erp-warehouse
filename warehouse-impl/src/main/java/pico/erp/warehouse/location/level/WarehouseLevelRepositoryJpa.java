@@ -20,7 +20,7 @@ interface WarehouseLevelEntityRepository extends
   @Query("SELECT CASE WHEN COUNT(wl) > 0 THEN true ELSE false END FROM WarehouseLevel wl WHERE wl.locationCode = :locationCode")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT wl FROM WarehouseLevel wl WHERE wl.bay.id = :bayId")
+  @Query("SELECT wl FROM WarehouseLevel wl WHERE wl.bay.id = :bayId ORDER BY wl.code")
   Stream<WarehouseLevelEntity> findAllBy(@Param("bayId") WarehouseBayId bayId);
 
 }

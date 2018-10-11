@@ -19,7 +19,7 @@ interface WarehouseSiteEntityRepository extends
   @Query("SELECT CASE WHEN COUNT(ws) > 0 THEN true ELSE false END FROM WarehouseSite ws WHERE ws.locationCode = :locationCode")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT ws FROM WarehouseSite ws")
+  @Query("SELECT ws FROM WarehouseSite ws ORDER BY ws.code")
   Stream<WarehouseSiteEntity> findAllBy();
 
 }
