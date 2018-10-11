@@ -49,7 +49,7 @@ public class WarehouseBay implements Serializable {
     code = request.getCode();
     locationCode = rack.getLocationCode().with(code);
     return new WarehouseBayMessages.UpdateResponse(
-      Arrays.asList(new WarehouseBayEvents.UpdatedEvent(this.id, codeChanged)));
+      Arrays.asList(new WarehouseBayEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);
   }
 
   public WarehouseBayMessages.ResetLocationCodeResponse apply(

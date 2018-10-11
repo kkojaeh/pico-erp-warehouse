@@ -69,4 +69,30 @@ class WarehouseLevelServiceSpec extends Specification {
     thrown(WarehouseLevelExceptions.NotFoundException)
   }
 
+  def "중복 코드를 생성하면 오류 발생"() {
+    when:
+    warehouseLevelService.create(new WarehouseLevelRequests.CreateRequest(
+      id: WarehouseLevelId.from("A-1-1-19"),
+      bayId: warehouseBayId,
+      code: WarehouseLevelCode.from(20)
+    ))
+    then:
+    thrown(WarehouseLevelExceptions.CodeAlreadyExistsException)
+  }
+
+  def "이미 존재하는 코드로 변경하면 오류 발생"() {
+    when:
+    warehouseLevelService.create(new WarehouseLevelRequests.CreateRequest(
+      id: WarehouseLevelId.from("A-1-1-19"),
+      bayId: warehouseBayId,
+      code: WarehouseLevelCode.from(19)
+    ))
+    warehouseLevelService.update(new WarehouseLevelRequests.UpdateRequest(
+      id: WarehouseLevelId.from("A-1-1-19"),
+      code: WarehouseLevelCode.from(20)
+    ))
+    then:
+    thrown(WarehouseLevelExceptions.CodeAlreadyExistsException)
+  }
+
 }

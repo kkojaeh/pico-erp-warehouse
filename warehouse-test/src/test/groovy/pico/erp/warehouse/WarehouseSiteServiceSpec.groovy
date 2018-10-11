@@ -73,4 +73,31 @@ class WarehouseSiteServiceSpec extends Specification {
     sites.size() == 2
   }
 
+  def "중복 코드를 생성하면 오류 발생"() {
+    when:
+    warehouseSiteService.create(new WarehouseSiteRequests.CreateRequest(
+      id: WarehouseSiteId.from("A3"),
+      code: WarehouseSiteCode.from("A2"),
+      name: "안성 2창고1"
+    ))
+    then:
+    thrown(WarehouseSiteExceptions.CodeAlreadyExistsException)
+  }
+
+  def "이미 존재하는 코드로 변경하면 오류 발생"() {
+    when:
+    warehouseSiteService.create(new WarehouseSiteRequests.CreateRequest(
+      id: WarehouseSiteId.from("A3"),
+      code: WarehouseSiteCode.from("A3"),
+      name: "안성 3창고"
+    ))
+    warehouseSiteService.update(new WarehouseSiteRequests.UpdateRequest(
+      id: WarehouseSiteId.from("A3"),
+      code: WarehouseSiteCode.from("A2"),
+      name: "안성 3창고"
+    ))
+    then:
+    thrown(WarehouseSiteExceptions.CodeAlreadyExistsException)
+  }
+
 }

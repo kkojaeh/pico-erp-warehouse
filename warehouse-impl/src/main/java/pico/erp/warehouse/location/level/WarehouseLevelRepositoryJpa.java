@@ -53,6 +53,11 @@ public class WarehouseLevelRepositoryJpa implements WarehouseLevelRepository {
   }
 
   @Override
+  public boolean exists(@NotNull WarehouseLocationCode locationCode) {
+    return repository.exists(locationCode);
+  }
+
+  @Override
   public Stream<WarehouseLevel> findAllBy(@NotNull WarehouseBayId bayId) {
     return repository.findAllBy(bayId)
       .map(mapper::domain);

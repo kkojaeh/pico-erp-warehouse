@@ -11,8 +11,8 @@ public interface WarehouseSiteExceptions {
     private static final long serialVersionUID = 1L;
   }
 
-  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-site.already.exists.code.exception")
-  class AlreadyExistsCodeException extends RuntimeException {
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-site.code.already.exists.exception")
+  class CodeAlreadyExistsException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   }

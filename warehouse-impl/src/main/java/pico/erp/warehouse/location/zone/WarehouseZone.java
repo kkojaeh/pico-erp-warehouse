@@ -49,7 +49,7 @@ public class WarehouseZone implements Serializable {
     code = request.getCode();
     locationCode = site.getLocationCode().with(code);
     return new WarehouseZoneMessages.UpdateResponse(
-      Arrays.asList(new WarehouseZoneEvents.UpdatedEvent(this.id, codeChanged)));
+      Arrays.asList(new WarehouseZoneEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);
   }
 
   public WarehouseZoneMessages.ResetLocationCodeResponse apply(

@@ -3,6 +3,7 @@ package pico.erp.warehouse.location.rack;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
+import pico.erp.warehouse.location.WarehouseLocationCode;
 import pico.erp.warehouse.location.zone.WarehouseZoneId;
 
 public interface WarehouseRackRepository {
@@ -12,6 +13,8 @@ public interface WarehouseRackRepository {
   void deleteBy(@NotNull WarehouseRackId id);
 
   boolean exists(@NotNull WarehouseRackId id);
+
+  boolean exists(@NotNull WarehouseLocationCode locationCode);
 
   Stream<WarehouseRack> findAllBy(@NotNull WarehouseZoneId zoneId);
 

@@ -11,6 +11,7 @@ public interface WarehouseLocationExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-location.not.found.exception")
   class NotFoundException extends RuntimeException {
 

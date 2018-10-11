@@ -49,7 +49,7 @@ public class WarehouseSite implements Serializable {
     name = request.getName();
     locationCode = WarehouseLocationCode.from(code);
     return new WarehouseSiteMessages.UpdateResponse(
-      Arrays.asList(new WarehouseSiteEvents.UpdatedEvent(this.id, codeChanged)));
+      Arrays.asList(new WarehouseSiteEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);
   }
 
   public WarehouseSiteMessages.DeleteResponse apply(WarehouseSiteMessages.DeleteRequest request) {

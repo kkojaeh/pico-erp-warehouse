@@ -11,6 +11,12 @@ public interface WarehouseZoneExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-zone.code.already.exists.exception")
+  class CodeAlreadyExistsException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-zone.not.found.exception")
   class NotFoundException extends RuntimeException {
 

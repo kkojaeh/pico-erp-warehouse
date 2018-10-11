@@ -49,7 +49,7 @@ public class WarehouseLevel implements Serializable {
     code = request.getCode();
     locationCode = bay.getLocationCode().with(code);
     return new WarehouseLevelMessages.UpdateResponse(
-      Arrays.asList(new WarehouseLevelEvents.UpdatedEvent(this.id, codeChanged)));
+      Arrays.asList(new WarehouseLevelEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);
   }
 
   public WarehouseLevelMessages.ResetLocationCodeResponse apply(

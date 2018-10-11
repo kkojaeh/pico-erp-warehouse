@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.location.bay.WarehouseBayId;
+import pico.erp.warehouse.location.level.WarehouseLevelExceptions.CodeAlreadyExistsException;
 import pico.erp.warehouse.location.level.WarehouseLevelRequests.CreateRequest;
 import pico.erp.warehouse.location.level.WarehouseLevelRequests.DeleteRequest;
 import pico.erp.warehouse.location.level.WarehouseLevelRequests.UpdateRequest;
@@ -38,6 +39,9 @@ public class WarehouseLevelServiceLogic implements WarehouseLevelService {
     val response = warehouseLevel.apply(mapper.map(request));
     if (warehouseLevelRepository.exists(warehouseLevel.getId())) {
       throw new WarehouseLevelExceptions.AlreadyExistsException();
+    }
+    if (warehouseLevelRepository.exists(warehouseLevel.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
     }
     val created = warehouseLevelRepository.create(warehouseLevel);
     eventPublisher.publishEvents(response.getEvents());
@@ -77,6 +81,10 @@ public class WarehouseLevelServiceLogic implements WarehouseLevelService {
     val warehouseLevel = warehouseLevelRepository.findBy(request.getId())
       .orElseThrow(WarehouseLevelExceptions.NotFoundException::new);
     val response = warehouseLevel.apply(mapper.map(request));
+    if (response.isCodeChanged() && warehouseLevelRepository
+      .exists(warehouseLevel.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
+    }
     warehouseLevelRepository.update(warehouseLevel);
     eventPublisher.publishEvents(response.getEvents());
   }

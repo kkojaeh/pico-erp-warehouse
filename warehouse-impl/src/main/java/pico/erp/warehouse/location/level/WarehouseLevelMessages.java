@@ -57,6 +57,8 @@ public interface WarehouseLevelMessages {
 
     Collection<Event> events;
 
+    boolean codeChanged;
+
   }
 
   @Value

@@ -11,6 +11,12 @@ public interface WarehouseBayExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-bay.code.already.exists.exception")
+  class CodeAlreadyExistsException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-bay.not.found.exception")
   class NotFoundException extends RuntimeException {
 

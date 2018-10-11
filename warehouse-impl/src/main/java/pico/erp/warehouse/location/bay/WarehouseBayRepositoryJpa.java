@@ -53,6 +53,11 @@ public class WarehouseBayRepositoryJpa implements WarehouseBayRepository {
   }
 
   @Override
+  public boolean exists(@NotNull WarehouseLocationCode locationCode) {
+    return repository.exists(locationCode);
+  }
+
+  @Override
   public Stream<WarehouseBay> findAllBy(@NotNull WarehouseRackId rackId) {
     return repository.findAllBy(rackId)
       .map(mapper::jpa);

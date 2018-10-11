@@ -69,4 +69,30 @@ class WarehouseBayServiceSpec extends Specification {
     thrown(WarehouseBayExceptions.NotFoundException)
   }
 
+  def "중복 코드를 생성하면 오류 발생"() {
+    when:
+    warehouseBayService.create(new WarehouseBayRequests.CreateRequest(
+      id: WarehouseBayId.from("A-1-100"),
+      rackId: warehouseRackId,
+      code: WarehouseBayCode.from(99)
+    ))
+    then:
+    thrown(WarehouseBayExceptions.CodeAlreadyExistsException)
+  }
+
+  def "이미 존재하는 코드로 변경하면 오류 발생"() {
+    when:
+    warehouseBayService.create(new WarehouseBayRequests.CreateRequest(
+      id: WarehouseBayId.from("A-1-100"),
+      rackId: warehouseRackId,
+      code: WarehouseBayCode.from(98)
+    ))
+    warehouseBayService.update(new WarehouseBayRequests.UpdateRequest(
+      id: WarehouseBayId.from("A-1-100"),
+      code: WarehouseBayCode.from(99)
+    ))
+    then:
+    thrown(WarehouseBayExceptions.CodeAlreadyExistsException)
+  }
+
 }

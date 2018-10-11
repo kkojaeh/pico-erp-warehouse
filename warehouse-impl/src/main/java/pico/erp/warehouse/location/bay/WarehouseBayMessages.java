@@ -57,6 +57,8 @@ public interface WarehouseBayMessages {
 
     Collection<Event> events;
 
+    boolean codeChanged;
+
   }
 
   @Value

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
+import pico.erp.warehouse.location.bay.WarehouseBayExceptions.CodeAlreadyExistsException;
 import pico.erp.warehouse.location.bay.WarehouseBayRequests.CreateRequest;
 import pico.erp.warehouse.location.bay.WarehouseBayRequests.DeleteRequest;
 import pico.erp.warehouse.location.bay.WarehouseBayRequests.UpdateRequest;
@@ -38,6 +39,9 @@ public class WarehouseBayServiceLogic implements WarehouseBayService {
     val response = warehouseBay.apply(mapper.map(request));
     if (warehouseBayRepository.exists(warehouseBay.getId())) {
       throw new WarehouseBayExceptions.AlreadyExistsException();
+    }
+    if (warehouseBayRepository.exists(warehouseBay.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
     }
     val created = warehouseBayRepository.create(warehouseBay);
     eventPublisher.publishEvents(response.getEvents());
@@ -77,6 +81,9 @@ public class WarehouseBayServiceLogic implements WarehouseBayService {
     val warehouseBay = warehouseBayRepository.findBy(request.getId())
       .orElseThrow(WarehouseBayExceptions.NotFoundException::new);
     val response = warehouseBay.apply(mapper.map(request));
+    if (response.isCodeChanged() && warehouseBayRepository.exists(warehouseBay.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
+    }
     warehouseBayRepository.update(warehouseBay);
     eventPublisher.publishEvents(response.getEvents());
   }

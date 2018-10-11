@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
+import pico.erp.warehouse.location.rack.WarehouseRackExceptions.CodeAlreadyExistsException;
 import pico.erp.warehouse.location.rack.WarehouseRackRequests.CreateRequest;
 import pico.erp.warehouse.location.rack.WarehouseRackRequests.DeleteRequest;
 import pico.erp.warehouse.location.rack.WarehouseRackRequests.UpdateRequest;
@@ -39,6 +40,9 @@ public class WarehouseRackServiceLogic implements WarehouseRackService {
     val response = warehouseRack.apply(mapper.map(request));
     if (warehouseRackRepository.exists(warehouseRack.getId())) {
       throw new WarehouseRackExceptions.AlreadyExistsException();
+    }
+    if (warehouseRackRepository.exists(warehouseRack.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
     }
     val created = warehouseRackRepository.create(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
@@ -78,6 +82,10 @@ public class WarehouseRackServiceLogic implements WarehouseRackService {
     val warehouseRack = warehouseRackRepository.findBy(request.getId())
       .orElseThrow(WarehouseZoneExceptions.NotFoundException::new);
     val response = warehouseRack.apply(mapper.map(request));
+    if (response.isCodeChanged() && warehouseRackRepository
+      .exists(warehouseRack.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
+    }
     warehouseRackRepository.update(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
   }

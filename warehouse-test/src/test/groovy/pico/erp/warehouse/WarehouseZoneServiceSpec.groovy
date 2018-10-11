@@ -69,4 +69,30 @@ class WarehouseZoneServiceSpec extends Specification {
     thrown(WarehouseZoneExceptions.NotFoundException)
   }
 
+  def "중복 코드를 생성하면 오류 발생"() {
+    when:
+    warehouseZoneService.create(new WarehouseZoneRequests.CreateRequest(
+      id: WarehouseZoneId.from("Z2"),
+      siteId: warehouseSiteId,
+      code: WarehouseZoneCode.from("Z")
+    ))
+    then:
+    thrown(WarehouseZoneExceptions.CodeAlreadyExistsException)
+  }
+
+  def "이미 존재하는 코드로 변경하면 오류 발생"() {
+    when:
+    warehouseZoneService.create(new WarehouseZoneRequests.CreateRequest(
+      id: WarehouseZoneId.from("Z2"),
+      siteId: warehouseSiteId,
+      code: WarehouseZoneCode.from("Z2")
+    ))
+    warehouseZoneService.update(new WarehouseZoneRequests.UpdateRequest(
+      id: WarehouseZoneId.from("Z2"),
+      code: WarehouseZoneCode.from("Z")
+    ))
+    then:
+    thrown(WarehouseZoneExceptions.CodeAlreadyExistsException)
+  }
+
 }

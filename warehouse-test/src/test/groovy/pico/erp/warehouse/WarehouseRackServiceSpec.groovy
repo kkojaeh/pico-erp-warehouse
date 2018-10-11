@@ -69,4 +69,30 @@ class WarehouseRackServiceSpec extends Specification {
     thrown(WarehouseRackExceptions.NotFoundException)
   }
 
+  def "중복 코드를 생성하면 오류 발생"() {
+    when:
+    warehouseRackService.create(new WarehouseRackRequests.CreateRequest(
+      id: WarehouseRackId.from("A-100"),
+      zoneId: warehouseZoneId,
+      code: WarehouseRackCode.from(99),
+    ))
+    then:
+    thrown(WarehouseRackExceptions.CodeAlreadyExistsException)
+  }
+
+  def "이미 존재하는 코드로 변경하면 오류 발생"() {
+    when:
+    warehouseRackService.create(new WarehouseRackRequests.CreateRequest(
+      id: WarehouseRackId.from("A-100"),
+      zoneId: warehouseZoneId,
+      code: WarehouseRackCode.from(98),
+    ))
+    warehouseRackService.update(new WarehouseRackRequests.UpdateRequest(
+      id: WarehouseRackId.from("A-100"),
+      code: WarehouseRackCode.from(99),
+    ))
+    then:
+    thrown(WarehouseRackExceptions.CodeAlreadyExistsException)
+  }
+
 }

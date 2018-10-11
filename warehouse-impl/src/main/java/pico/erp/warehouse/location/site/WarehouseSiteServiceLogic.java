@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
+import pico.erp.warehouse.location.site.WarehouseSiteExceptions.CodeAlreadyExistsException;
 import pico.erp.warehouse.location.site.WarehouseSiteRequests.CreateRequest;
 import pico.erp.warehouse.location.site.WarehouseSiteRequests.DeleteRequest;
 import pico.erp.warehouse.location.site.WarehouseSiteRequests.UpdateRequest;
@@ -38,7 +39,7 @@ public class WarehouseSiteServiceLogic implements WarehouseSiteService {
       throw new WarehouseSiteExceptions.AlreadyExistsException();
     }
     if (warehouseSiteRepository.exists(warehouseSite.getLocationCode())) {
-      throw new WarehouseSiteExceptions.AlreadyExistsException();
+      throw new CodeAlreadyExistsException();
     }
     val created = warehouseSiteRepository.create(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
@@ -78,6 +79,10 @@ public class WarehouseSiteServiceLogic implements WarehouseSiteService {
     val warehouseSite = warehouseSiteRepository.findBy(request.getId())
       .orElseThrow(WarehouseSiteExceptions.NotFoundException::new);
     val response = warehouseSite.apply(mapper.map(request));
+    if (response.isCodeChanged() && warehouseSiteRepository
+      .exists(warehouseSite.getLocationCode())) {
+      throw new CodeAlreadyExistsException();
+    }
     warehouseSiteRepository.update(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
   }
