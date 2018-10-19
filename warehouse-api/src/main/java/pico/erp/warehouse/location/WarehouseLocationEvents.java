@@ -47,6 +47,8 @@ public interface WarehouseLocationEvents {
 
     private WarehouseLocationId warehouseLocationId;
 
+    private boolean codeChanged;
+
     public String channel() {
       return CHANNEL;
     }

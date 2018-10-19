@@ -47,17 +47,17 @@ public class WarehouseZoneEntity implements Serializable {
 
   @EmbeddedId
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "ID"))
+    @AttributeOverride(name = "value", column = @Column(name = "ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   WarehouseZoneId id;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "CODE"))
+    @AttributeOverride(name = "value", column = @Column(name = "CODE", length = TypeDefinitions.CODE_LENGTH))
   })
   WarehouseZoneCode code;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "LOCATION_CODE"))
+    @AttributeOverride(name = "value", column = @Column(name = "LOCATION_CODE", length = TypeDefinitions.CODE_LENGTH))
   })
   WarehouseLocationCode locationCode;
 

@@ -13,5 +13,9 @@ dependencies {
 
   compile("com.github.kkojaeh.pico-erp-user:user-api:${userVersion}")
 
+  compile("com.github.kkojaeh.pico-erp-company:company-api:${companyVersion}")
+
+  compile("com.github.kkojaeh.pico-erp-item:item-api:${itemVersion}")
+
 }
 

@@ -17,6 +17,7 @@ import pico.erp.warehouse.location.bay.WarehouseBayCode;
 import pico.erp.warehouse.location.level.WarehouseLevelCode;
 import pico.erp.warehouse.location.rack.WarehouseRackCode;
 import pico.erp.warehouse.location.site.WarehouseSiteCode;
+import pico.erp.warehouse.location.station.WarehouseStationCode;
 import pico.erp.warehouse.location.zone.WarehouseZoneCode;
 
 @Embeddable
@@ -63,6 +64,12 @@ public class WarehouseLocationCode implements Serializable {
   public WarehouseLocationCode with(@NonNull WarehouseLevelCode code) {
     return new WarehouseLocationCode(
       String.format("%s-%02d", value, code.getValue())
+    );
+  }
+
+  public WarehouseLocationCode with(@NonNull WarehouseStationCode code) {
+    return new WarehouseLocationCode(
+      String.format("%s-%s", value, code.getValue())
     );
   }
 }

@@ -15,7 +15,7 @@ public abstract class WarehouseLevelMapper {
   @Autowired
   protected WarehouseBayMapper bayMapper;
 
-  public WarehouseLevel domain(WarehouseLevelEntity entity) {
+  public WarehouseLevel jpa(WarehouseLevelEntity entity) {
     return WarehouseLevel.builder()
       .id(entity.getId())
       .code(entity.getCode())
@@ -32,26 +32,24 @@ public abstract class WarehouseLevelMapper {
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
-  public abstract WarehouseLevelEntity entity(WarehouseLevel domain);
-
-  public abstract WarehouseLevelMessages.DeleteRequest map(
-    WarehouseLevelRequests.DeleteRequest request);
-
-  @Mappings({
-    @Mapping(target = "bayId", source = "bay.id")
-  })
-  public abstract WarehouseLevelData map(WarehouseLevel domain);
+  public abstract WarehouseLevelEntity jpa(WarehouseLevel domain);
 
   protected WarehouseBayEntity jpa(WarehouseBay domain) {
     return bayMapper.jpa(domain);
   }
 
   @Mappings({
+    @Mapping(target = "bayId", source = "bay.id")
+  })
+  public abstract WarehouseLevelData map(WarehouseLevel domain);
+
+  public abstract WarehouseLevelMessages.DeleteRequest map(
+    WarehouseLevelRequests.DeleteRequest request);
+
+  @Mappings({
   })
   public abstract WarehouseLevelMessages.UpdateRequest map(
     WarehouseLevelRequests.UpdateRequest request);
-
-  public abstract void pass(WarehouseLevelEntity from, @MappingTarget WarehouseLevelEntity to);
 
   @Mappings({
     @Mapping(target = "bay", source = "bayId")
@@ -62,5 +60,7 @@ public abstract class WarehouseLevelMapper {
   protected WarehouseBay map(WarehouseBayId warehouseBayId) {
     return bayMapper.map(warehouseBayId);
   }
+
+  public abstract void pass(WarehouseLevelEntity from, @MappingTarget WarehouseLevelEntity to);
 
 }

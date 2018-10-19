@@ -23,22 +23,22 @@ public class WarehouseRackEventListener {
   private EventPublisher eventPublisher;
 
   @EventListener
-  @JmsListener(destination = LISTENER_NAME + "." + WarehouseZoneEvents.UpdatedEvent.CHANNEL)
-  public void onWarehouseZoneUpdated(WarehouseZoneEvents.UpdatedEvent event) {
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseZoneEvents.DeletedEvent.CHANNEL)
+  public void onWarehouseZoneDeleted(WarehouseZoneEvents.DeletedEvent event) {
     warehouseRackRepository.findAllBy(event.getWarehouseZoneId())
       .forEach(rack -> {
-        val response = rack.apply(new WarehouseRackMessages.ResetLocationCodeRequest());
+        val response = rack.apply(new WarehouseRackMessages.DeleteRequest());
         warehouseRackRepository.update(rack);
         eventPublisher.publishEvents(response.getEvents());
       });
   }
 
   @EventListener
-  @JmsListener(destination = LISTENER_NAME + "." + WarehouseZoneEvents.DeletedEvent.CHANNEL)
-  public void onWarehouseZoneDeleted(WarehouseZoneEvents.DeletedEvent event) {
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseZoneEvents.UpdatedEvent.CHANNEL)
+  public void onWarehouseZoneUpdated(WarehouseZoneEvents.UpdatedEvent event) {
     warehouseRackRepository.findAllBy(event.getWarehouseZoneId())
       .forEach(rack -> {
-        val response = rack.apply(new WarehouseRackMessages.DeleteRequest());
+        val response = rack.apply(new WarehouseRackMessages.ResetLocationCodeRequest());
         warehouseRackRepository.update(rack);
         eventPublisher.publishEvents(response.getEvents());
       });

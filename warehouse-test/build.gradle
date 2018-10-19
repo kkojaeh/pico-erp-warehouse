@@ -13,4 +13,8 @@ dependencies {
 
   testRuntimeOnly("com.github.kkojaeh.pico-erp-audit:audit-test:${auditVersion}")
 
+  testRuntimeOnly("com.github.kkojaeh.pico-erp-item:item-test:${itemVersion}")
+
+  testRuntimeOnly("com.github.kkojaeh.pico-erp-company:company-test:${companyVersion}")
+
 }

@@ -37,9 +37,9 @@ public class WarehouseLevelRepositoryJpa implements WarehouseLevelRepository {
 
   @Override
   public WarehouseLevel create(@NotNull WarehouseLevel bay) {
-    val entity = mapper.entity(bay);
+    val entity = mapper.jpa(bay);
     val created = repository.save(entity);
-    return mapper.domain(created);
+    return mapper.jpa(created);
   }
 
   @Override
@@ -60,19 +60,19 @@ public class WarehouseLevelRepositoryJpa implements WarehouseLevelRepository {
   @Override
   public Stream<WarehouseLevel> findAllBy(@NotNull WarehouseBayId bayId) {
     return repository.findAllBy(bayId)
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public Optional<WarehouseLevel> findBy(@NotNull WarehouseLevelId id) {
     return Optional.ofNullable(repository.findOne(id))
-      .map(mapper::domain);
+      .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull WarehouseLevel rack) {
     val entity = repository.findOne(rack.getId());
-    mapper.pass(mapper.entity(rack), entity);
+    mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }
 

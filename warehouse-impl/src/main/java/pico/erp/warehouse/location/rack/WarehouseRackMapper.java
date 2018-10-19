@@ -40,6 +40,10 @@ public abstract class WarehouseRackMapper {
   })
   public abstract WarehouseRackEntity jpa(WarehouseRack domain);
 
+  protected WarehouseZoneEntity jpa(WarehouseZone domain) {
+    return zoneMapper.jpa(domain);
+  }
+
   @Mappings({
   })
   public abstract WarehouseRackMessages.UpdateRequest map(
@@ -61,12 +65,6 @@ public abstract class WarehouseRackMapper {
       .orElse(null);
   }
 
-  protected WarehouseZoneEntity jpa(WarehouseZone domain) {
-    return zoneMapper.jpa(domain);
-  }
-
-  public abstract void pass(WarehouseRackEntity from, @MappingTarget WarehouseRackEntity to);
-
   protected WarehouseZone map(WarehouseZoneId warehouseZoneId) {
     return zoneMapper.map(warehouseZoneId);
   }
@@ -76,5 +74,7 @@ public abstract class WarehouseRackMapper {
   })
   public abstract WarehouseRackMessages.CreateRequest map(
     WarehouseRackRequests.CreateRequest request);
+
+  public abstract void pass(WarehouseRackEntity from, @MappingTarget WarehouseRackEntity to);
 
 }

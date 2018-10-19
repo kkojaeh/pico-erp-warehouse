@@ -10,7 +10,9 @@ public enum WarehouseRoles implements Role {
 
   WAREHOUSE_MANAGER,
 
-  WAREHOUSE_ACCESSOR;
+  WAREHOUSE_ACCESSOR,
+
+  WAREHOUSE_WORKER;
 
 
   @Id

@@ -35,25 +35,25 @@ public class WarehouseLevelServiceLogic implements WarehouseLevelService {
 
   @Override
   public WarehouseLevelData create(CreateRequest request) {
-    val warehouseLevel = new WarehouseLevel();
-    val response = warehouseLevel.apply(mapper.map(request));
-    if (warehouseLevelRepository.exists(warehouseLevel.getId())) {
+    val level = new WarehouseLevel();
+    val response = level.apply(mapper.map(request));
+    if (warehouseLevelRepository.exists(level.getId())) {
       throw new WarehouseLevelExceptions.AlreadyExistsException();
     }
-    if (warehouseLevelRepository.exists(warehouseLevel.getLocationCode())) {
+    if (warehouseLevelRepository.exists(level.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseLevelRepository.create(warehouseLevel);
+    val created = warehouseLevelRepository.create(level);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val warehouseLevel = warehouseLevelRepository.findBy(request.getId())
+    val level = warehouseLevelRepository.findBy(request.getId())
       .orElseThrow(WarehouseLevelExceptions.NotFoundException::new);
-    val response = warehouseLevel.apply(mapper.map(request));
-    warehouseLevelRepository.update(warehouseLevel);
+    val response = level.apply(mapper.map(request));
+    warehouseLevelRepository.update(level);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -78,14 +78,14 @@ public class WarehouseLevelServiceLogic implements WarehouseLevelService {
 
   @Override
   public void update(UpdateRequest request) {
-    val warehouseLevel = warehouseLevelRepository.findBy(request.getId())
+    val level = warehouseLevelRepository.findBy(request.getId())
       .orElseThrow(WarehouseLevelExceptions.NotFoundException::new);
-    val response = warehouseLevel.apply(mapper.map(request));
+    val response = level.apply(mapper.map(request));
     if (response.isCodeChanged() && warehouseLevelRepository
-      .exists(warehouseLevel.getLocationCode())) {
+      .exists(level.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseLevelRepository.update(warehouseLevel);
+    warehouseLevelRepository.update(level);
     eventPublisher.publishEvents(response.getEvents());
   }
 }

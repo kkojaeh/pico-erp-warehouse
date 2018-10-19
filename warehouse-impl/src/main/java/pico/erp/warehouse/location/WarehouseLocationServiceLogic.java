@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
-import pico.erp.warehouse.location.level.WarehouseLevelRepository;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -16,19 +15,19 @@ import pico.erp.warehouse.location.level.WarehouseLevelRepository;
 public class WarehouseLocationServiceLogic implements WarehouseLocationService {
 
   @Autowired
-  private WarehouseLevelRepository warehouseLevelRepository;
+  private WarehouseLocationRepository warehouseLocationRepository;
 
   @Autowired
   private WarehouseLocationMapper mapper;
 
   @Override
   public boolean exists(@NotNull WarehouseLocationId id) {
-    return warehouseLevelRepository.exists(mapper.map(id));
+    return warehouseLocationRepository.exists(id);
   }
 
   @Override
   public WarehouseLocationData get(@NotNull WarehouseLocationId id) {
-    return warehouseLevelRepository.findBy(mapper.map(id))
+    return warehouseLocationRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseLocationExceptions.NotFoundException::new);
   }

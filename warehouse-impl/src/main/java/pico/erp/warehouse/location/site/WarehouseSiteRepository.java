@@ -15,9 +15,9 @@ public interface WarehouseSiteRepository {
 
   boolean exists(@NotNull WarehouseLocationCode locationCode);
 
-  Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id);
-
   Stream<WarehouseSite> findAll();
+
+  Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id);
 
   void update(@NotNull WarehouseSite warehouseSite);
 

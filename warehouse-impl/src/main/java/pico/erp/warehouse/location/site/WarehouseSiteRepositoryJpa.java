@@ -56,16 +56,15 @@ public class WarehouseSiteRepositoryJpa implements WarehouseSiteRepository {
     return repository.exists(locationCode);
   }
 
-
   @Override
-  public Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id) {
-    return Optional.ofNullable(repository.findOne(id))
+  public Stream<WarehouseSite> findAll() {
+    return repository.findAllBy()
       .map(mapper::jpa);
   }
 
   @Override
-  public Stream<WarehouseSite> findAll() {
-    return repository.findAllBy()
+  public Optional<WarehouseSite> findBy(@NotNull WarehouseSiteId id) {
+    return Optional.ofNullable(repository.findOne(id))
       .map(mapper::jpa);
   }
 

@@ -23,22 +23,22 @@ public class WarehouseLevelEventListener {
   private EventPublisher eventPublisher;
 
   @EventListener
-  @JmsListener(destination = LISTENER_NAME + "." + WarehouseBayEvents.UpdatedEvent.CHANNEL)
-  public void onWarehouseBayUpdated(WarehouseBayEvents.UpdatedEvent event) {
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseBayEvents.DeletedEvent.CHANNEL)
+  public void onWarehouseBayDeleted(WarehouseBayEvents.DeletedEvent event) {
     warehouseLevelRepository.findAllBy(event.getWarehouseBayId())
       .forEach(level -> {
-        val response = level.apply(new WarehouseLevelMessages.ResetLocationCodeRequest());
+        val response = level.apply(new WarehouseLevelMessages.DeleteRequest());
         warehouseLevelRepository.update(level);
         eventPublisher.publishEvents(response.getEvents());
       });
   }
 
   @EventListener
-  @JmsListener(destination = LISTENER_NAME + "." + WarehouseBayEvents.DeletedEvent.CHANNEL)
-  public void onWarehouseBayDeleted(WarehouseBayEvents.DeletedEvent event) {
+  @JmsListener(destination = LISTENER_NAME + "." + WarehouseBayEvents.UpdatedEvent.CHANNEL)
+  public void onWarehouseBayUpdated(WarehouseBayEvents.UpdatedEvent event) {
     warehouseLevelRepository.findAllBy(event.getWarehouseBayId())
       .forEach(level -> {
-        val response = level.apply(new WarehouseLevelMessages.DeleteRequest());
+        val response = level.apply(new WarehouseLevelMessages.ResetLocationCodeRequest());
         warehouseLevelRepository.update(level);
         eventPublisher.publishEvents(response.getEvents());
       });
