@@ -29,9 +29,9 @@ public class WarehousePackId implements Serializable {
 
   public static WarehousePackId from(@NonNull String value) {
     try {
-      return new WarehousePackId(UUID.fromString(value));
+      return from(UUID.fromString(value));
     } catch (IllegalArgumentException e) {
-      return new WarehousePackId(UUID.nameUUIDFromBytes(value.getBytes()));
+      return from(UUID.nameUUIDFromBytes(value.getBytes()));
     }
   }
 

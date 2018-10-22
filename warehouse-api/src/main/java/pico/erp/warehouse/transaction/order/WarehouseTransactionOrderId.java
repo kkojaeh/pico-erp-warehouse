@@ -29,9 +29,9 @@ public class WarehouseTransactionOrderId implements Serializable {
 
   public static WarehouseTransactionOrderId from(@NonNull String value) {
     try {
-      return new WarehouseTransactionOrderId(UUID.fromString(value));
+      return from(UUID.fromString(value));
     } catch (IllegalArgumentException e) {
-      return new WarehouseTransactionOrderId(UUID.nameUUIDFromBytes(value.getBytes()));
+      return from(UUID.nameUUIDFromBytes(value.getBytes()));
     }
   }
 

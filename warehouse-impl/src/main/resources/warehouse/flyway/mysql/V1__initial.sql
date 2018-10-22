@@ -50,7 +50,7 @@ create table wah_warehouse_pack (
 	created_by_id varchar(50),
 	created_by_name varchar(50),
 	created_date datetime,
-	item_lot_id varchar(255),
+	item_lot_id binary(255),
 	last_modified_by_id varchar(50),
 	last_modified_by_name varchar(50),
 	last_modified_date datetime,
@@ -110,8 +110,8 @@ create table wah_warehouse_station (
 
 create table wah_warehouse_transaction (
 	id binary(16) not null,
-	item_id varchar(16),
-	item_lot_id varchar(16),
+	item_id binary(16),
+	item_lot_id binary(16),
 	quantity decimal(19,2),
 	transacted_by_id varchar(50),
 	transacted_by_name varchar(50),

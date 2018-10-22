@@ -29,9 +29,9 @@ public class WarehouseLevelId implements Serializable {
 
   public static WarehouseLevelId from(@NonNull String value) {
     try {
-      return new WarehouseLevelId(UUID.fromString(value));
+      return from(UUID.fromString(value));
     } catch (IllegalArgumentException e) {
-      return new WarehouseLevelId(UUID.nameUUIDFromBytes(value.getBytes()));
+      return from(UUID.nameUUIDFromBytes(value.getBytes()));
     }
   }
 
