@@ -55,11 +55,12 @@ class WarehouseStationServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지를 조회"() {
     when:
-    def zone = warehouseStationService.get(warehouseStationId)
+    def station = warehouseStationService.get(warehouseStationId)
 
     then:
-    zone.locationCode == WarehouseLocationCode.from("A1-Z")
-    zone.code == WarehouseStationCode.from("Z")
+    station.locationCode == WarehouseLocationCode.from("A1-Z")
+    station.code == WarehouseStationCode.from("Z")
+    station.name == "작업장A"
   }
 
   def "아이디로 존재하지 않는 창고지를 조회"() {

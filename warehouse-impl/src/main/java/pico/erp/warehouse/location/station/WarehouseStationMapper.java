@@ -25,6 +25,7 @@ public abstract class WarehouseStationMapper {
     return WarehouseStation.builder()
       .id(entity.getId())
       .code(entity.getCode())
+      .name(entity.getName())
       .locationCode(entity.getLocationCode())
       .site(siteMapper.jpa(entity.getSite()))
       .deleted(entity.isDeleted())

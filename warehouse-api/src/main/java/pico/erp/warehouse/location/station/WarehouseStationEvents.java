@@ -12,7 +12,7 @@ public interface WarehouseStationEvents {
   @NoArgsConstructor
   class CreatedEvent implements Event {
 
-    public final static String CHANNEL = "event.warehouse-zone.created";
+    public final static String CHANNEL = "event.warehouse-station.created";
 
     private WarehouseStationId warehouseStationId;
 
@@ -27,7 +27,7 @@ public interface WarehouseStationEvents {
   @NoArgsConstructor
   class DeletedEvent implements Event {
 
-    public final static String CHANNEL = "event.warehouse-zone.deleted";
+    public final static String CHANNEL = "event.warehouse-station.deleted";
 
     private WarehouseStationId warehouseStationId;
 
@@ -43,7 +43,7 @@ public interface WarehouseStationEvents {
   @NoArgsConstructor
   class UpdatedEvent implements Event {
 
-    public final static String CHANNEL = "event.warehouse-zone.updated";
+    public final static String CHANNEL = "event.warehouse-station.updated";
 
     private WarehouseStationId warehouseStationId;
 
