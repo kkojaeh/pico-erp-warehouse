@@ -32,6 +32,7 @@ class WarehouseStationServiceSpec extends Specification {
     warehouseStationService.create(new WarehouseStationRequests.CreateRequest(
       id: warehouseStationId,
       siteId: warehouseSiteId,
+      name: "작업장A",
       code: WarehouseStationCode.from("Z"),
     ))
   }
@@ -74,6 +75,7 @@ class WarehouseStationServiceSpec extends Specification {
     warehouseStationService.create(new WarehouseStationRequests.CreateRequest(
       id: WarehouseStationId.from("Z2"),
       siteId: warehouseSiteId,
+      name: "작업장B",
       code: WarehouseStationCode.from("Z")
     ))
     then:
@@ -85,10 +87,12 @@ class WarehouseStationServiceSpec extends Specification {
     warehouseStationService.create(new WarehouseStationRequests.CreateRequest(
       id: WarehouseStationId.from("Z2"),
       siteId: warehouseSiteId,
+      name: "작업장B",
       code: WarehouseStationCode.from("Z2")
     ))
     warehouseStationService.update(new WarehouseStationRequests.UpdateRequest(
       id: WarehouseStationId.from("Z2"),
+      name: "작업장B",
       code: WarehouseStationCode.from("Z")
     ))
     then:
