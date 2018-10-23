@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
-import pico.erp.user.UserId;
 import pico.erp.warehouse.location.station.WarehouseStationId;
 
 
@@ -18,7 +17,7 @@ public interface WarehouseTransactionRequestRequests {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
-  class CreateRequest {
+  class InboundRequest {
 
     @Valid
     @NotNull
@@ -28,13 +27,33 @@ public interface WarehouseTransactionRequestRequests {
     @NotNull
     OffsetDateTime dueDate;
 
-    // 공급처 회사(회사)
-    CompanyId supplierId;
+    // 대상 회사(회사)
+    CompanyId relatedCompanyId;
 
-    // 공급지 내부일때 사
+    // 공급지 내부일때 사용
     WarehouseStationId stationId;
 
-    UserId requesterId;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class OutboundRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionRequestId id;
+
+    // 예정일
+    @NotNull
+    OffsetDateTime dueDate;
+
+    // 대상 회사(회사)
+    CompanyId relatedCompanyId;
+
+    // 공급지 내부일때 사용
+    WarehouseStationId stationId;
 
   }
 
@@ -53,7 +72,7 @@ public interface WarehouseTransactionRequestRequests {
     OffsetDateTime dueDate;
 
     // 공급처 회사(회사)
-    CompanyId supplierId;
+    CompanyId relatedCompanyId;
 
     WarehouseStationId stationId;
 
@@ -73,6 +92,16 @@ public interface WarehouseTransactionRequestRequests {
   @NoArgsConstructor
   @AllArgsConstructor
   class CommitRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionRequestId id;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class CancelRequest {
 
     @Valid
     @NotNull

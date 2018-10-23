@@ -22,7 +22,7 @@ import spock.lang.Specification
 @ActiveProfiles("test")
 @Configuration
 @ComponentScan("pico.erp.config")
-class WarehouseTransactionServiceSpec extends Specification {
+class WarehouseTransactionRequestServiceSpec extends Specification {
 
   @Autowired
   WarehousePackService warehousePackService

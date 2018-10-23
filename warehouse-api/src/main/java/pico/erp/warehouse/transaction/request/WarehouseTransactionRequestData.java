@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import pico.erp.company.CompanyId;
-import pico.erp.user.UserId;
+import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.WarehouseStationId;
 
 @Data
@@ -23,10 +23,12 @@ public class WarehouseTransactionRequestData implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyId supplierId;
+  CompanyId targetId;
 
   WarehouseStationId stationId;
 
-  UserId requesterId;
+  Auditor committedBy;
+
+  OffsetDateTime committedDate;
 
 }
