@@ -104,6 +104,7 @@ create table wah_warehouse_station (
 	last_modified_by_name varchar(50),
 	last_modified_date datetime,
 	location_code varchar(20),
+	name varchar(50),
 	warehouse_site_id binary(16),
 	primary key (id)
 ) engine=InnoDB;

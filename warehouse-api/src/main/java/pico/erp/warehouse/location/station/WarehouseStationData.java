@@ -26,6 +26,8 @@ public class WarehouseStationData implements Serializable {
 
   WarehouseLocationCode locationCode;
 
+  String name;
+
   boolean deleted;
 
   OffsetDateTime deletedDate;

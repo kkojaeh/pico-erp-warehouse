@@ -51,6 +51,9 @@ public class WarehouseStationEntity implements Serializable {
   })
   WarehouseStationId id;
 
+  @Column(length = TypeDefinitions.NAME_LENGTH)
+  String name;
+
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "CODE", length = TypeDefinitions.CODE_LENGTH))
   })

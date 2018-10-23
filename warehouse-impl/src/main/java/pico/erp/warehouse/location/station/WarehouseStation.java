@@ -36,6 +36,8 @@ public class WarehouseStation implements Serializable {
 
   WarehouseSite site;
 
+  String name;
+
   boolean deleted;
 
   OffsetDateTime deletedDate;
@@ -43,6 +45,7 @@ public class WarehouseStation implements Serializable {
   public WarehouseStationMessages.CreateResponse apply(
     WarehouseStationMessages.CreateRequest request) {
     id = request.getId();
+    name = request.getName();
     code = request.getCode();
     site = request.getSite();
     locationCode = site.getLocationCode().with(code);
@@ -54,6 +57,7 @@ public class WarehouseStation implements Serializable {
     WarehouseStationMessages.UpdateRequest request) {
     val codeChanged = !code.equals(request.getCode());
     code = request.getCode();
+    name = request.getName();
     locationCode = site.getLocationCode().with(code);
     return new WarehouseStationMessages.UpdateResponse(
       Arrays.asList(new WarehouseStationEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);

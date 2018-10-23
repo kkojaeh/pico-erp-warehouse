@@ -2,10 +2,12 @@ package pico.erp.warehouse.location.station;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pico.erp.shared.TypeDefinitions;
 import pico.erp.warehouse.location.site.WarehouseSiteId;
 
 
@@ -24,6 +26,10 @@ public interface WarehouseStationRequests {
     @Valid
     @NotNull
     WarehouseStationCode code;
+
+    @NotNull
+    @Size(max = TypeDefinitions.NAME_LENGTH)
+    String name;
 
     @Valid
     @NotNull
@@ -44,6 +50,10 @@ public interface WarehouseStationRequests {
     @Valid
     @NotNull
     WarehouseStationCode code;
+
+    @NotNull
+    @Size(max = TypeDefinitions.NAME_LENGTH)
+    String name;
 
   }
 
