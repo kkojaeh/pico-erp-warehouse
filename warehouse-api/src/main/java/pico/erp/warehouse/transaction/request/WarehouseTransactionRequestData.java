@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import pico.erp.company.CompanyId;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -23,12 +24,20 @@ public class WarehouseTransactionRequestData implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyId targetId;
+  CompanyId relatedCompanyId;
 
   WarehouseStationId stationId;
 
   Auditor committedBy;
 
   OffsetDateTime committedDate;
+
+  Auditor canceledBy;
+
+  OffsetDateTime canceledDate;
+
+  WarehouseTransactionRequestStatusKind status;
+
+  WarehouseTransactionTypeKind type;
 
 }

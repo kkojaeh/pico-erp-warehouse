@@ -13,6 +13,7 @@ import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.Event;
 import pico.erp.warehouse.location.station.WarehouseStation;
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 public interface WarehouseTransactionRequestMessages {
 
@@ -20,7 +21,7 @@ public interface WarehouseTransactionRequestMessages {
   @AllArgsConstructor
   @NoArgsConstructor
   @Data
-  class InboundRequest {
+  class CreateRequest {
 
     @Valid
     @NotNull
@@ -36,27 +37,7 @@ public interface WarehouseTransactionRequestMessages {
     // 공급지 내부일때 사용
     WarehouseStation station;
 
-  }
-
-  @Builder
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Data
-  class OutboundRequest {
-
-    @Valid
-    @NotNull
-    WarehouseTransactionRequestId id;
-
-    // 예정일
-    @NotNull
-    OffsetDateTime dueDate;
-
-    // 대상 회사(회사)
-    CompanyData relatedCompany;
-
-    // 공급지 내부일때 사용
-    WarehouseStation station;
+    WarehouseTransactionTypeKind type;
 
   }
 
@@ -100,15 +81,30 @@ public interface WarehouseTransactionRequestMessages {
 
   }
 
-  @Value
-  class InboundResponse {
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  class AcceptRequest {
 
-    Collection<Event> events;
+    @NotNull
+    Auditor acceptedBy;
+
+  }
+
+  @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  class CompleteRequest {
+
+    @NotNull
+    Auditor completedBy;
 
   }
 
   @Value
-  class OutboundResponse {
+  class CreateResponse {
 
     Collection<Event> events;
 
@@ -130,6 +126,20 @@ public interface WarehouseTransactionRequestMessages {
 
   @Value
   class CancelResponse {
+
+    Collection<Event> events;
+
+  }
+
+  @Value
+  class AcceptResponse {
+
+    Collection<Event> events;
+
+  }
+
+  @Value
+  class CompleteResponse {
 
     Collection<Event> events;
 

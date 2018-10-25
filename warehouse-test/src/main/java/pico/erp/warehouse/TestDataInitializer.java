@@ -18,9 +18,12 @@ import pico.erp.warehouse.location.rack.WarehouseRackRequests;
 import pico.erp.warehouse.location.rack.WarehouseRackService;
 import pico.erp.warehouse.location.site.WarehouseSiteRequests;
 import pico.erp.warehouse.location.site.WarehouseSiteService;
+import pico.erp.warehouse.location.station.WarehouseStationRequests;
+import pico.erp.warehouse.location.station.WarehouseStationService;
 import pico.erp.warehouse.location.zone.WarehouseZoneRequests;
 import pico.erp.warehouse.location.zone.WarehouseZoneService;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Transactional
 @Configuration
 @Profile({"!development", "!production"})
@@ -46,6 +49,10 @@ public class TestDataInitializer implements ApplicationInitializer {
   @Autowired
   private WarehouseLevelService warehouseLevelService;
 
+  @Lazy
+  @Autowired
+  private WarehouseStationService warehouseStationService;
+
 
   @Autowired
   private DataProperties dataProperties;
@@ -57,6 +64,7 @@ public class TestDataInitializer implements ApplicationInitializer {
     dataProperties.racks.forEach(warehouseRackService::create);
     dataProperties.bays.forEach(warehouseBayService::create);
     dataProperties.levels.forEach(warehouseLevelService::create);
+    dataProperties.stations.forEach(warehouseStationService::create);
   }
 
   @Data
@@ -73,6 +81,8 @@ public class TestDataInitializer implements ApplicationInitializer {
     List<WarehouseBayRequests.CreateRequest> bays = new LinkedList<>();
 
     List<WarehouseLevelRequests.CreateRequest> levels = new LinkedList<>();
+
+    List<WarehouseStationRequests.CreateRequest> stations = new LinkedList<>();
 
   }
 

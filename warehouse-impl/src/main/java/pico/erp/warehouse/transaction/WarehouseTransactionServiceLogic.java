@@ -7,9 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
-import pico.erp.warehouse.pack.WarehousePackExceptions;
-import pico.erp.warehouse.transaction.WarehouseTransactionRequests.InboundRequest;
-import pico.erp.warehouse.transaction.WarehouseTransactionRequests.OutboundRequest;
+import pico.erp.warehouse.transaction.WarehouseTransactionRequests.CreateRequest;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -28,28 +26,15 @@ public class WarehouseTransactionServiceLogic implements WarehouseTransactionSer
   private EventPublisher eventPublisher;
 
   @Override
-  public WarehouseTransactionData inbound(InboundRequest request) {
+  public WarehouseTransactionData create(CreateRequest request) {
     val transaction = new WarehouseTransaction();
     val response = transaction.apply(mapper.map(request));
     if (warehouseTransactionRepository.exists(transaction.getId())) {
-      throw new WarehousePackExceptions.AlreadyExistsException();
+      throw new WarehouseTransactionExceptions.AlreadyExistsException();
     }
     val created = warehouseTransactionRepository.create(transaction);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
-
-  @Override
-  public WarehouseTransactionData outbound(OutboundRequest request) {
-    val transaction = new WarehouseTransaction();
-    val response = transaction.apply(mapper.map(request));
-    if (warehouseTransactionRepository.exists(transaction.getId())) {
-      throw new WarehousePackExceptions.AlreadyExistsException();
-    }
-    val created = warehouseTransactionRepository.create(transaction);
-    eventPublisher.publishEvents(response.getEvents());
-    return mapper.map(created);
-  }
-
 
 }

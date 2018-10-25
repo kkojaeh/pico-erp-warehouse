@@ -8,72 +8,126 @@ import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
-import pico.erp.item.lot.ItemLotData;
-import pico.erp.item.lot.ItemLotId;
-import pico.erp.item.lot.ItemLotService;
+import pico.erp.company.CompanyData;
+import pico.erp.company.CompanyId;
+import pico.erp.company.CompanyService;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.pack.code.WarehousePackCodeGenerator;
-import pico.erp.warehouse.transaction.WarehouseTransactionData;
-import pico.erp.warehouse.transaction.WarehouseTransactionRequests;
+import pico.erp.warehouse.location.station.WarehouseStation;
+import pico.erp.warehouse.location.station.WarehouseStationEntity;
+import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.location.station.WarehouseStationMapper;
 
 @Mapper
 public abstract class WarehouseTransactionRequestMapper {
 
   @Autowired
-  protected WarehousePackCodeGenerator codeGenerator;
+  protected AuditorAware<Auditor> auditorAware;
 
   @Lazy
   @Autowired
-  protected ItemLotService itemLotService;
+  protected CompanyService companyService;
 
   @Autowired
-  protected AuditorAware<Auditor> auditorAware;
+  protected WarehouseStationMapper stationMapper;
+
+  @Lazy
+  @Autowired
+  protected WarehouseTransactionRequestRepository transactionRequestRepository;
 
   public WarehouseTransactionRequest jpa(WarehouseTransactionRequestEntity entity) {
     return WarehouseTransactionRequest.builder()
       .id(entity.getId())
-      .itemLot(map(entity.getItemLotId()))
-      .quantity(entity.getQuantity())
-      .transactedBy(entity.getTransactedBy())
-      .transactedDate(entity.getTransactedDate())
-      .quantity(entity.getQuantity())
+      .dueDate(entity.getDueDate())
+      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .station(jpa(entity.getStation()))
+      .committedBy(entity.getCommittedBy())
+      .committedDate(entity.getCommittedDate())
+      .canceledBy(entity.getCanceledBy())
+      .canceledDate(entity.getCanceledDate())
+      .status(entity.getStatus())
       .type(entity.getType())
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "itemLotId", source = "itemLot.id"),
-    @Mapping(target = "itemId", source = "itemLot.itemId")
+    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "createdBy", ignore = true),
+    @Mapping(target = "createdDate", ignore = true)
   })
   public abstract WarehouseTransactionRequestEntity jpa(WarehouseTransactionRequest domain);
 
-  @Mappings({
-    @Mapping(target = "itemLot", source = "itemLotId"),
-    @Mapping(target = "transactedBy", expression = "java(auditorAware.getCurrentAuditor())")
-  })
-  public abstract WarehouseTransactionRequestMessages.OutboundRequest map(
-    WarehouseTransactionRequests.OutboundRequest request);
+  protected WarehouseStation jpa(WarehouseStationEntity entity) {
+    return stationMapper.jpa(entity);
+  }
+
+  protected WarehouseStationEntity jpa(WarehouseStation domain) {
+    return stationMapper.jpa(domain);
+  }
 
   @Mappings({
-    @Mapping(target = "itemLotId", source = "itemLot.id")
+    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "station", source = "stationId")
   })
-  public abstract WarehouseTransactionData map(WarehouseTransactionRequest transaction);
+  public abstract WarehouseTransactionRequestMessages.CreateRequest map(
+    WarehouseTransactionRequestRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "itemLot", source = "itemLotId"),
-    @Mapping(target = "transactedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "stationId", source = "station.id")
   })
-  public abstract WarehouseTransactionRequestMessages.InboundRequest map(
-    WarehouseTransactionRequests.InboundRequest request);
+  public abstract WarehouseTransactionRequestData map(
+    WarehouseTransactionRequest transactionRequest);
 
-  protected ItemLotData map(ItemLotId itemLotId) {
-    return Optional.ofNullable(itemLotId)
-      .map(itemLotService::get)
+  @Mappings({
+    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "station", source = "stationId")
+  })
+  public abstract WarehouseTransactionRequestMessages.UpdateRequest map(
+    WarehouseTransactionRequestRequests.UpdateRequest request);
+
+  @Mappings({
+    @Mapping(target = "committedBy", expression = "java(auditorAware.getCurrentAuditor())")
+  })
+  public abstract WarehouseTransactionRequestMessages.CommitRequest map(
+    WarehouseTransactionRequestRequests.CommitRequest request);
+
+  @Mappings({
+    @Mapping(target = "canceledBy", expression = "java(auditorAware.getCurrentAuditor())")
+  })
+  public abstract WarehouseTransactionRequestMessages.CancelRequest map(
+    WarehouseTransactionRequestRequests.CancelRequest request);
+
+  @Mappings({
+    @Mapping(target = "acceptedBy", expression = "java(auditorAware.getCurrentAuditor())")
+  })
+  public abstract WarehouseTransactionRequestMessages.AcceptRequest map(
+    WarehouseTransactionRequestRequests.AcceptRequest request);
+
+  @Mappings({
+    @Mapping(target = "completedBy", expression = "java(auditorAware.getCurrentAuditor())")
+  })
+  public abstract WarehouseTransactionRequestMessages.CompleteRequest map(
+    WarehouseTransactionRequestRequests.CompleteRequest request);
+
+  protected CompanyData map(CompanyId companyId) {
+    return Optional.ofNullable(companyId)
+      .map(companyService::get)
       .orElse(null);
+  }
+
+  protected WarehouseStation map(WarehouseStationId warehouseStationId) {
+    return stationMapper.map(warehouseStationId);
   }
 
   public abstract void pass(
     WarehouseTransactionRequestEntity from, @MappingTarget WarehouseTransactionRequestEntity to);
+
+  public WarehouseTransactionRequest map(WarehouseTransactionRequestId transactionRequestId) {
+    return Optional.ofNullable(transactionRequestId)
+      .map(id -> transactionRequestRepository.findBy(id)
+        .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new))
+      .orElse(null);
+  }
 
 
 }

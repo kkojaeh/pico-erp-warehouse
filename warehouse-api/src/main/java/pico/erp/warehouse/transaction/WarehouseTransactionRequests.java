@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pico.erp.company.CompanyId;
 import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.location.station.WarehouseStationId;
 
 
 public interface WarehouseTransactionRequests {
@@ -16,7 +18,9 @@ public interface WarehouseTransactionRequests {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
-  class InboundRequest {
+  class CreateRequest {
+
+    WarehouseTransactionId id;
 
     @Valid
     @NotNull
@@ -26,21 +30,17 @@ public interface WarehouseTransactionRequests {
     @NotNull
     BigDecimal quantity;
 
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Builder
-  class OutboundRequest {
-
+    // 대상 회사(회사)
     @Valid
     @NotNull
-    ItemLotId itemLotId;
+    CompanyId relatedCompanyId;
 
+    // 공급지 내부일때 사용
     @Valid
+    WarehouseStationId stationId;
+
     @NotNull
-    BigDecimal quantity;
+    WarehouseTransactionTypeKind type;
 
   }
 

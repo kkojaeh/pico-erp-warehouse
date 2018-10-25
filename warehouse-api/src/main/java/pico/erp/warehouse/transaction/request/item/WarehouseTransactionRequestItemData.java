@@ -20,7 +20,7 @@ public class WarehouseTransactionRequestItemData implements Serializable {
   @Id
   WarehouseTransactionRequestItemId id;
 
-  WarehouseTransactionRequestId requestId;
+  WarehouseTransactionRequestId transactionRequestId;
 
   ItemId itemId;
 

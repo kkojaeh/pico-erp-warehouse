@@ -1,4 +1,4 @@
-package pico.erp.warehouse
+package pico.erp.warehouse.pack
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,7 +22,7 @@ import spock.lang.Specification
 @ActiveProfiles("test")
 @Configuration
 @ComponentScan("pico.erp.config")
-class WarehouseTransactionRequestServiceSpec extends Specification {
+class WarehousePackServiceSpec extends Specification {
 
   @Autowired
   WarehousePackService warehousePackService

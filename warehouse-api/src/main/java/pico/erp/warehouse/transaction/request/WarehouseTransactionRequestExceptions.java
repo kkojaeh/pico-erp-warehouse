@@ -23,6 +23,18 @@ public interface WarehouseTransactionRequestExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-request.cannot.accept.exception")
+  class CannotAcceptException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-request.cannot.complete.exception")
+  class CannotCompleteException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
 
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-transaction-request.not.found.exception")
   class NotFoundException extends RuntimeException {

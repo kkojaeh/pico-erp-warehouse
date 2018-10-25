@@ -6,15 +6,15 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum WarehouseTransactionRequestStatusKind {
 
-  CREATED(true, true, true),
+  CREATED(true, true, true, false, false),
 
-  COMMITTED(false, false, true),
+  COMMITTED(false, false, true, true, false),
 
-  CANCELED(true, false, false),
+  CANCELED(true, false, false, false, false),
 
-  IN_PROGRESS(false, false, false),
+  ACCEPTED(false, false, false, false, true),
 
-  COMPLETED(false, false, false);
+  COMPLETED(false, false, false, false, false);
 
   @Getter
   private final boolean modifiable;
@@ -24,5 +24,11 @@ public enum WarehouseTransactionRequestStatusKind {
 
   @Getter
   private final boolean cancelable;
+
+  @Getter
+  private final boolean acceptable;
+
+  @Getter
+  private final boolean completable;
 
 }

@@ -12,8 +12,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
+import pico.erp.company.CompanyData;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.shared.data.Auditor;
+import pico.erp.warehouse.location.station.WarehouseStation;
 
 @Builder
 @Getter
@@ -38,27 +40,26 @@ public class WarehouseTransaction implements Serializable {
 
   OffsetDateTime transactedDate;
 
+  CompanyData relatedCompany;
+
+  WarehouseStation station;
+
   public WarehouseTransaction() {
 
   }
 
-  public WarehouseTransactionMessages.InboundResponse apply(
-    WarehouseTransactionMessages.InboundRequest request) {
+  public WarehouseTransactionMessages.CreateResponse apply(
+    WarehouseTransactionMessages.CreateRequest request) {
+    id = request.getId();
     itemLot = request.getItemLot();
     quantity = request.getQuantity();
-    type = WarehouseTransactionTypeKind.INBOUND;
-    return new WarehouseTransactionMessages.InboundResponse(
+    type = request.getType();
+    relatedCompany = request.getRelatedCompany();
+    station = request.getStation();
+    transactedBy = request.getTransactedBy();
+    transactedDate = OffsetDateTime.now();
+    return new WarehouseTransactionMessages.CreateResponse(
       Arrays.asList(new WarehouseTransactionEvents.InboundedEvent(this.id))
-    );
-  }
-
-  public WarehouseTransactionMessages.OutboundResponse apply(
-    WarehouseTransactionMessages.OutboundRequest request) {
-    itemLot = request.getItemLot();
-    quantity = request.getQuantity();
-    type = WarehouseTransactionTypeKind.OUTBOUND;
-    return new WarehouseTransactionMessages.OutboundResponse(
-      Arrays.asList(new WarehouseTransactionEvents.OutboundedEvent(this.id))
     );
   }
 

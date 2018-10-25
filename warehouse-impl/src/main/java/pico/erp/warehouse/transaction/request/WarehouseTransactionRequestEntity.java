@@ -12,7 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,16 +26,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import pico.erp.company.CompanyData;
-import pico.erp.item.lot.ItemLotId;
+import pico.erp.company.CompanyId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
+import pico.erp.warehouse.location.station.WarehouseStationEntity;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
-@Entity(name = "WarehouseTransaction")
-@Table(name = "WAH_WAREHOUSE_TRANSACTION", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_ITEM_ID_IDX", columnList = "ITEM_ID")
-})
+@Entity(name = "WarehouseTransactionRequest")
+@Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST")
 @Data
 @EqualsAndHashCode(of = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -56,15 +55,17 @@ public class WarehouseTransactionRequestEntity implements Serializable {
   OffsetDateTime dueDate;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "RELATED_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
   })
-  CompanyData itemId;
+  CompanyId relatedCompanyId;
 
-  @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "ITEM_LOT_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
-  })
-  ItemLotId itemLotId;
+  @ManyToOne
+  @JoinColumn(name = "STATION_ID")
+  WarehouseStationEntity station;
 
+  @Column(length = TypeDefinitions.ENUM_LENGTH)
+  @Enumerated(EnumType.STRING)
+  WarehouseTransactionRequestStatusKind status;
 
   @Column(length = TypeDefinitions.ENUM_LENGTH)
   @Enumerated(EnumType.STRING)
@@ -94,8 +95,8 @@ public class WarehouseTransactionRequestEntity implements Serializable {
 
   @Embedded
   @AttributeOverrides({
-    @AttributeOverride(name = "id", column = @Column(name = "COMMITTED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
-    @AttributeOverride(name = "name", column = @Column(name = "COMMITTED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+    @AttributeOverride(name = "id", column = @Column(name = "CANCELED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "CANCELED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
   })
   Auditor canceledBy;
 

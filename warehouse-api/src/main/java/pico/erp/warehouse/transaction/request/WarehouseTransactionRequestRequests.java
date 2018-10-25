@@ -2,13 +2,16 @@ package pico.erp.warehouse.transaction.request;
 
 import java.time.OffsetDateTime;
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
 import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 
 public interface WarehouseTransactionRequestRequests {
@@ -17,43 +20,26 @@ public interface WarehouseTransactionRequestRequests {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
-  class InboundRequest {
+  class CreateRequest {
 
     @Valid
     @NotNull
     WarehouseTransactionRequestId id;
 
     // 예정일
+    @Future
     @NotNull
     OffsetDateTime dueDate;
 
     // 대상 회사(회사)
+    @NotNull
     CompanyId relatedCompanyId;
 
     // 공급지 내부일때 사용
     WarehouseStationId stationId;
 
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Builder
-  class OutboundRequest {
-
-    @Valid
     @NotNull
-    WarehouseTransactionRequestId id;
-
-    // 예정일
-    @NotNull
-    OffsetDateTime dueDate;
-
-    // 대상 회사(회사)
-    CompanyId relatedCompanyId;
-
-    // 공급지 내부일때 사용
-    WarehouseStationId stationId;
+    WarehouseTransactionTypeKind type;
 
   }
 
@@ -68,6 +54,7 @@ public interface WarehouseTransactionRequestRequests {
     WarehouseTransactionRequestId id;
 
     // 예정일
+    @Future
     @NotNull
     OffsetDateTime dueDate;
 
@@ -76,16 +63,6 @@ public interface WarehouseTransactionRequestRequests {
 
     WarehouseStationId stationId;
 
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  class DeleteRequest {
-
-    @Valid
-    @NotNull
-    WarehouseTransactionRequestId id;
   }
 
   @Data
@@ -106,5 +83,41 @@ public interface WarehouseTransactionRequestRequests {
     @Valid
     @NotNull
     WarehouseTransactionRequestId id;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class CancelUncommittedRequest {
+
+    /**
+     * 지정 기준시간보다 예전 데이터를 삭제
+     */
+    @NotNull
+    @Past
+    OffsetDateTime fixedDate;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class AcceptRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionRequestId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class CompleteRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionRequestId id;
+
   }
 }

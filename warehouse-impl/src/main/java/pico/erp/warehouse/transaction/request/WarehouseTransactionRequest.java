@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
@@ -18,6 +19,7 @@ import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 @Builder
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
@@ -35,6 +37,10 @@ public class WarehouseTransactionRequest implements Serializable {
 
   WarehouseStation station;
 
+  WarehouseTransactionRequestStatusKind status;
+
+  WarehouseTransactionTypeKind type;
+
   Auditor committedBy;
 
   OffsetDateTime committedDate;
@@ -43,35 +49,23 @@ public class WarehouseTransactionRequest implements Serializable {
 
   OffsetDateTime canceledDate;
 
-  WarehouseTransactionRequestStatusKind status;
+  Auditor acceptedBy;
 
-  WarehouseTransactionTypeKind type;
+  OffsetDateTime acceptedDate;
 
-  public WarehouseTransactionRequest() {
-  }
+  Auditor completedBy;
 
-  public WarehouseTransactionRequestMessages.InboundResponse apply(
-    WarehouseTransactionRequestMessages.InboundRequest request) {
+  OffsetDateTime completedDate;
+
+  public WarehouseTransactionRequestMessages.CreateResponse apply(
+    WarehouseTransactionRequestMessages.CreateRequest request) {
     id = request.getId();
     dueDate = request.getDueDate();
     relatedCompany = request.getRelatedCompany();
     station = request.getStation();
     status = WarehouseTransactionRequestStatusKind.CREATED;
-    type = WarehouseTransactionTypeKind.INBOUND;
-    return new WarehouseTransactionRequestMessages.InboundResponse(
-      Arrays.asList(new WarehouseTransactionRequestEvents.CreatedEvent(this.id))
-    );
-  }
-
-  public WarehouseTransactionRequestMessages.OutboundResponse apply(
-    WarehouseTransactionRequestMessages.OutboundRequest request) {
-    id = request.getId();
-    dueDate = request.getDueDate();
-    relatedCompany = request.getRelatedCompany();
-    station = request.getStation();
-    status = WarehouseTransactionRequestStatusKind.CREATED;
-    type = WarehouseTransactionTypeKind.OUTBOUND;
-    return new WarehouseTransactionRequestMessages.OutboundResponse(
+    type = request.getType();
+    return new WarehouseTransactionRequestMessages.CreateResponse(
       Arrays.asList(new WarehouseTransactionRequestEvents.CreatedEvent(this.id))
     );
   }
@@ -94,6 +88,7 @@ public class WarehouseTransactionRequest implements Serializable {
     if (!status.isCommittable()) {
       throw new WarehouseTransactionRequestExceptions.CannotCommitException();
     }
+    status = WarehouseTransactionRequestStatusKind.COMMITTED;
     committedBy = request.getCommittedBy();
     committedDate = OffsetDateTime.now();
     return new WarehouseTransactionRequestMessages.CommitResponse(
@@ -103,14 +98,45 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.CancelResponse apply(
     WarehouseTransactionRequestMessages.CancelRequest request) {
-    if (!status.isCommittable()) {
+    if (!status.isCancelable()) {
       throw new WarehouseTransactionRequestExceptions.CannotCommitException();
     }
+    status = WarehouseTransactionRequestStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
     canceledDate = OffsetDateTime.now();
     return new WarehouseTransactionRequestMessages.CancelResponse(
       Arrays.asList(new WarehouseTransactionRequestEvents.CanceledEvent(this.id))
     );
+  }
+
+  public WarehouseTransactionRequestMessages.AcceptResponse apply(
+    WarehouseTransactionRequestMessages.AcceptRequest request) {
+    if (!status.isAcceptable()) {
+      throw new WarehouseTransactionRequestExceptions.CannotAcceptException();
+    }
+    status = WarehouseTransactionRequestStatusKind.ACCEPTED;
+    acceptedBy = request.getAcceptedBy();
+    acceptedDate = OffsetDateTime.now();
+    return new WarehouseTransactionRequestMessages.AcceptResponse(
+      Arrays.asList(new WarehouseTransactionRequestEvents.AcceptedEvent(this.id))
+    );
+  }
+
+  public WarehouseTransactionRequestMessages.CompleteResponse apply(
+    WarehouseTransactionRequestMessages.CompleteRequest request) {
+    if (!status.isCompletable()) {
+      throw new WarehouseTransactionRequestExceptions.CannotCompleteException();
+    }
+    status = WarehouseTransactionRequestStatusKind.COMPLETED;
+    completedBy = request.getCompletedBy();
+    completedDate = OffsetDateTime.now();
+    return new WarehouseTransactionRequestMessages.CompleteResponse(
+      Arrays.asList(new WarehouseTransactionRequestEvents.CompletedEvent(this.id))
+    );
+  }
+
+  public boolean isModifiable() {
+    return status.isModifiable();
   }
 
 }

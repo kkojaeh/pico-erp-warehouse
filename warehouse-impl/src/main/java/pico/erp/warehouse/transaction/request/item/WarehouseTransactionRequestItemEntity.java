@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction;
+package pico.erp.warehouse.transaction.request.item;
 
 
 import java.io.Serializable;
@@ -11,9 +11,6 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,18 +22,16 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import pico.erp.company.CompanyId;
 import pico.erp.item.ItemId;
-import pico.erp.item.lot.ItemLotId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.location.station.WarehouseStationEntity;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
 
-@Entity(name = "WarehouseTransaction")
-@Table(name = "WAH_WAREHOUSE_TRANSACTION", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_ITEM_ID_IDX", columnList = "ITEM_ID")
-})
+@Entity(name = "WarehouseTransactionRequestItem")
+@Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM")
 @Data
 @EqualsAndHashCode(of = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -45,7 +40,7 @@ import pico.erp.warehouse.location.station.WarehouseStationEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WarehouseTransactionEntity implements Serializable {
+public class WarehouseTransactionRequestItemEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -53,41 +48,30 @@ public class WarehouseTransactionEntity implements Serializable {
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  WarehouseTransactionId id;
+  WarehouseTransactionRequestItemId id;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   ItemId itemId;
 
-  @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "ITEM_LOT_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
-  })
-  ItemLotId itemLotId;
-
-  BigDecimal quantity;
-
-  @Column(length = TypeDefinitions.ENUM_LENGTH)
-  @Enumerated(EnumType.STRING)
-  WarehouseTransactionTypeKind type;
-
-  @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "RELATED_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
-  })
-  CompanyId relatedCompanyId;
-
   @ManyToOne
-  @JoinColumn(name = "STATION_ID")
-  WarehouseStationEntity station;
+  @JoinColumn(name = "TRANSACTION_REQUEST_ID")
+  WarehouseTransactionRequestEntity transactionRequest;
+
+  @Column(precision = 19, scale = 2)
+  BigDecimal quantity;
 
   @Embedded
   @AttributeOverrides({
-    @AttributeOverride(name = "id", column = @Column(name = "TRANSACTED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
-    @AttributeOverride(name = "name", column = @Column(name = "TRANSACTED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+    @AttributeOverride(name = "id", column = @Column(name = "CREATED_BY_ID", updatable = false, length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "CREATED_BY_NAME", updatable = false, length = TypeDefinitions.NAME_LENGTH))
   })
-  Auditor transactedBy;
+  @CreatedBy
+  Auditor createdBy;
 
-  @Column
-  OffsetDateTime transactedDate;
+  @CreatedDate
+  @Column(updatable = false)
+  OffsetDateTime createdDate;
 
 }

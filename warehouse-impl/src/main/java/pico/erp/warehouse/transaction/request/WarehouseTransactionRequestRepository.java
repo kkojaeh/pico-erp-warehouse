@@ -1,22 +1,23 @@
 package pico.erp.warehouse.transaction.request;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
-import pico.erp.warehouse.transaction.WarehouseTransactionId;
 
 public interface WarehouseTransactionRequestRepository {
-
-  long countByCreatedToday();
 
   WarehouseTransactionRequest create(
     @NotNull WarehouseTransactionRequest warehouseTransactionRequest);
 
-  void deleteBy(@NotNull WarehouseTransactionId id);
+  void deleteBy(@NotNull WarehouseTransactionRequestId id);
 
-  boolean exists(@NotNull WarehouseTransactionId id);
+  boolean exists(@NotNull WarehouseTransactionRequestId id);
 
-  Optional<WarehouseTransactionRequest> findBy(@NotNull WarehouseTransactionId id);
+  Stream<WarehouseTransactionRequest> findAllUncommittedAt(@NotNull OffsetDateTime fixedDate);
 
   void update(@NotNull WarehouseTransactionRequest warehouseTransactionRequest);
+
+  Optional<WarehouseTransactionRequest> findBy(@NotNull WarehouseTransactionRequestId id);
 
 }

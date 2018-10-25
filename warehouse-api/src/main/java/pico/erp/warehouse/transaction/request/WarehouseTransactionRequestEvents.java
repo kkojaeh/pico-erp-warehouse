@@ -35,7 +35,6 @@ public interface WarehouseTransactionRequestEvents {
       return CHANNEL;
     }
 
-
   }
 
   @Data
@@ -50,7 +49,6 @@ public interface WarehouseTransactionRequestEvents {
     public String channel() {
       return CHANNEL;
     }
-
 
   }
 
@@ -67,6 +65,35 @@ public interface WarehouseTransactionRequestEvents {
       return CHANNEL;
     }
 
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class AcceptedEvent implements Event {
+
+    public final static String CHANNEL = "event.warehouse-transaction-request.accepted";
+
+    private WarehouseTransactionRequestId warehouseTransactionRequestId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class CompletedEvent implements Event {
+
+    public final static String CHANNEL = "event.warehouse-transaction-request.completed";
+
+    private WarehouseTransactionRequestId warehouseTransactionRequestId;
+
+    public String channel() {
+      return CHANNEL;
+    }
 
   }
 
