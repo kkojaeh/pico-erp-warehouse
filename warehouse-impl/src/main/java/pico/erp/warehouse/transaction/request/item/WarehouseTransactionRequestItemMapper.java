@@ -30,6 +30,10 @@ public abstract class WarehouseTransactionRequestItemMapper {
   @Autowired
   protected WarehouseTransactionRequestMapper transactionRequestMapper;
 
+  @Lazy
+  @Autowired
+  protected WarehouseTransactionRequestItemRepository transactionRequestItemRepository;
+
   public WarehouseTransactionRequestItem jpa(WarehouseTransactionRequestItemEntity entity) {
     return WarehouseTransactionRequestItem.builder()
       .id(entity.getId())
@@ -91,6 +95,14 @@ public abstract class WarehouseTransactionRequestItemMapper {
   public abstract void pass(
     WarehouseTransactionRequestItemEntity from,
     @MappingTarget WarehouseTransactionRequestItemEntity to);
+
+  public WarehouseTransactionRequestItem map(
+    WarehouseTransactionRequestItemId transactionRequestItemId) {
+    return Optional.ofNullable(transactionRequestItemId)
+      .map(id -> transactionRequestItemRepository.findBy(id)
+        .orElseThrow(WarehouseTransactionRequestItemExceptions.NotFoundException::new))
+      .orElse(null);
+  }
 
 
 }

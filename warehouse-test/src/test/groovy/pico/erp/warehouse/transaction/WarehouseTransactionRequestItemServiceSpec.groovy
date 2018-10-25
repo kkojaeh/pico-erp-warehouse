@@ -57,7 +57,7 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     ))
   }
 
-  def "입고요청을 품목을 추가한다"() {
+  def "입/출고요청에 품목을 추가한다"() {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(

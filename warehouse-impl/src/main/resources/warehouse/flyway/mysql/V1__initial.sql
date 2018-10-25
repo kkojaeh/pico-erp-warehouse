@@ -114,10 +114,54 @@ create table wah_warehouse_transaction (
 	item_id binary(16),
 	item_lot_id binary(16),
 	quantity decimal(19,2),
+	related_company_id varchar(50),
 	transacted_by_id varchar(50),
 	transacted_by_name varchar(50),
 	transacted_date datetime,
 	type varchar(20),
+	station_id binary(16),
+	primary key (id)
+) engine=InnoDB;
+
+create table wah_warehouse_transaction_request (
+	id binary(16) not null,
+	canceled_by_id varchar(50),
+	canceled_by_name varchar(50),
+	canceled_date datetime,
+	committed_by_id varchar(50),
+	committed_by_name varchar(50),
+	committed_date datetime,
+	created_by_id varchar(50),
+	created_by_name varchar(50),
+	created_date datetime,
+	due_date datetime,
+	related_company_id varchar(50),
+	status varchar(20),
+	type varchar(20),
+	station_id binary(16),
+	primary key (id)
+) engine=InnoDB;
+
+create table wah_warehouse_transaction_request_item (
+	id binary(16) not null,
+	created_by_id varchar(50),
+	created_by_name varchar(50),
+	created_date datetime,
+	item_id binary(16),
+	quantity decimal(19,2),
+	transaction_request_id binary(16),
+	primary key (id)
+) engine=InnoDB;
+
+create table wah_warehouse_transaction_request_item_lot (
+	id binary(16) not null,
+	created_by_id varchar(50),
+	created_by_name varchar(50),
+	created_date datetime,
+	item_lot_id binary(16),
+	quantity decimal(19,2),
+	transaction_request_id binary(16),
+	transaction_request_item_id binary(16),
 	primary key (id)
 ) engine=InnoDB;
 
@@ -140,6 +184,12 @@ create table wah_warehouse_zone (
 create index WAH_WAREHOUSE_TRANSACTION_ITEM_ID_IDX
 	on wah_warehouse_transaction (item_id);
 
+alter table wah_warehouse_transaction_request_item
+	add constraint WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_TRANSACTION_REQUEST_ID_ITEM_ID_IDX unique (transaction_request_id,item_id);
+
+alter table wah_warehouse_transaction_request_item_lot
+	add constraint WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT_TRANSACTION_REQUEST_ITEM_ID_ITEM_LOT_ID_IDX unique (transaction_request_item_id,item_lot_id);
+
 alter table wah_warehouse_bay
 	add constraint FK13ix8wv673fhpfaaysjgc1l21 foreign key (warehouse_rack_id)
 	references wah_warehouse_rack (id);
@@ -159,6 +209,26 @@ alter table wah_warehouse_rack
 alter table wah_warehouse_station
 	add constraint FKg7n8hf067q01woho8bn3vxpcr foreign key (warehouse_site_id)
 	references wah_warehouse_site (id);
+
+alter table wah_warehouse_transaction
+	add constraint FK5mybufp4hgyxp08ly2m1aipft foreign key (station_id)
+	references wah_warehouse_station (id);
+
+alter table wah_warehouse_transaction_request
+	add constraint FK6q8sorcd3ibbbwqthkcw5168w foreign key (station_id)
+	references wah_warehouse_station (id);
+
+alter table wah_warehouse_transaction_request_item
+	add constraint FKoa0ktk7d3it0n92d812cncd2s foreign key (transaction_request_id)
+	references wah_warehouse_transaction_request (id);
+
+alter table wah_warehouse_transaction_request_item_lot
+	add constraint FKeb29m8p3c6dnu7a7cvcxq04nn foreign key (transaction_request_id)
+	references wah_warehouse_transaction_request (id);
+
+alter table wah_warehouse_transaction_request_item_lot
+	add constraint FKcfk6qyj37vg3hio0ammfmpc1e foreign key (transaction_request_item_id)
+	references wah_warehouse_transaction_request_item (id);
 
 alter table wah_warehouse_zone
 	add constraint FK3f1r1vu6bjuaq4c7dym0adj6j foreign key (warehouse_site_id)

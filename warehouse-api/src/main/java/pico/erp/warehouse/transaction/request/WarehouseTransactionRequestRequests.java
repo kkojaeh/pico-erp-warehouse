@@ -4,7 +4,6 @@ import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -94,7 +93,6 @@ public interface WarehouseTransactionRequestRequests {
      * 지정 기준시간보다 예전 데이터를 삭제
      */
     @NotNull
-    @Past
     OffsetDateTime fixedDate;
 
   }

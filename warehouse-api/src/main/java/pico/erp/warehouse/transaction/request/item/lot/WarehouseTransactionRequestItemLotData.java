@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
-import pico.erp.item.ItemId;
-import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
+import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemId;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -20,9 +20,9 @@ public class WarehouseTransactionRequestItemLotData implements Serializable {
   @Id
   WarehouseTransactionRequestItemLotId id;
 
-  WarehouseTransactionRequestId requestId;
+  WarehouseTransactionRequestItemId transactionRequestItemId;
 
-  ItemId itemLotId;
+  ItemLotId itemLotId;
 
   BigDecimal quantity;
 

@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction.request.item;
+package pico.erp.warehouse.transaction.request.item.lot;
 
 
 import java.io.Serializable;
@@ -26,14 +26,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import pico.erp.item.ItemId;
+import pico.erp.item.lot.ItemLotId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
+import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemEntity;
 
-@Entity(name = "WarehouseTransactionRequestItem")
-@Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_TRANSACTION_REQUEST_ID_ITEM_ID_IDX", unique = true, columnList = "TRANSACTION_REQUEST_ID, ITEM_ID")
+@Entity(name = "WarehouseTransactionRequestItemLot")
+@Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT", indexes = {
+  @Index(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT_TRANSACTION_REQUEST_ITEM_ID_ITEM_LOT_ID_IDX", unique = true, columnList = "TRANSACTION_REQUEST_ITEM_ID, ITEM_LOT_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")
@@ -43,7 +44,7 @@ import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WarehouseTransactionRequestItemEntity implements Serializable {
+public class WarehouseTransactionRequestItemLotEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -51,16 +52,20 @@ public class WarehouseTransactionRequestItemEntity implements Serializable {
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  WarehouseTransactionRequestItemId id;
+  WarehouseTransactionRequestItemLotId id;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "ITEM_LOT_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  ItemId itemId;
+  ItemLotId itemLotId;
 
   @ManyToOne
   @JoinColumn(name = "TRANSACTION_REQUEST_ID")
   WarehouseTransactionRequestEntity transactionRequest;
+
+  @ManyToOne
+  @JoinColumn(name = "TRANSACTION_REQUEST_ITEM_ID")
+  WarehouseTransactionRequestItemEntity transactionRequestItem;
 
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;
