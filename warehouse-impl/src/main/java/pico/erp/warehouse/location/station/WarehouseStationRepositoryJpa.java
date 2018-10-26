@@ -20,7 +20,7 @@ interface WarehouseStationEntityRepository extends
   @Query("SELECT CASE WHEN COUNT(ws) > 0 THEN true ELSE false END FROM WarehouseStation ws WHERE ws.locationCode = :locationCode AND ws.deleted = false")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT ws FROM WarehouseStation ws WHERE ws.site.id = :siteId AND ws.deleted = false ORDER BY ws.code")
+  @Query("SELECT ws FROM WarehouseStation ws WHERE ws.siteId = :siteId AND ws.deleted = false ORDER BY ws.code")
   Stream<WarehouseStationEntity> findAllBy(@Param("siteId") WarehouseSiteId siteId);
 
 }

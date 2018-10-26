@@ -7,7 +7,6 @@ import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import pico.erp.warehouse.location.zone.WarehouseZone;
-import pico.erp.warehouse.location.zone.WarehouseZoneEntity;
 import pico.erp.warehouse.location.zone.WarehouseZoneId;
 import pico.erp.warehouse.location.zone.WarehouseZoneMapper;
 
@@ -26,13 +25,14 @@ public abstract class WarehouseRackMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .zone(zoneMapper.jpa(entity.getZone()))
+      .zone(map(entity.getZoneId()))
       .deleted(entity.isDeleted())
       .deletedDate(entity.getDeletedDate())
       .build();
   }
 
   @Mappings({
+    @Mapping(target = "zoneId", source = "zone.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
@@ -40,9 +40,6 @@ public abstract class WarehouseRackMapper {
   })
   public abstract WarehouseRackEntity jpa(WarehouseRack domain);
 
-  protected WarehouseZoneEntity jpa(WarehouseZone domain) {
-    return zoneMapper.jpa(domain);
-  }
 
   @Mappings({
   })

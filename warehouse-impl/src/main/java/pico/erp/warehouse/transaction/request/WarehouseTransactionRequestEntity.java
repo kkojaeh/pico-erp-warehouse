@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.company.CompanyId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.location.station.WarehouseStationEntity;
+import pico.erp.warehouse.location.station.WarehouseStationId;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 @Entity(name = "WarehouseTransactionRequest")
@@ -59,9 +57,10 @@ public class WarehouseTransactionRequestEntity implements Serializable {
   })
   CompanyId relatedCompanyId;
 
-  @ManyToOne
-  @JoinColumn(name = "STATION_ID")
-  WarehouseStationEntity station;
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "STATION_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  WarehouseStationId stationId;
 
   @Column(length = TypeDefinitions.ENUM_LENGTH)
   @Enumerated(EnumType.STRING)

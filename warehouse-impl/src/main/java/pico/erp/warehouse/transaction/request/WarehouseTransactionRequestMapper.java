@@ -14,7 +14,6 @@ import pico.erp.company.CompanyId;
 import pico.erp.company.CompanyService;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.WarehouseStation;
-import pico.erp.warehouse.location.station.WarehouseStationEntity;
 import pico.erp.warehouse.location.station.WarehouseStationId;
 import pico.erp.warehouse.location.station.WarehouseStationMapper;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemRepository;
@@ -50,7 +49,7 @@ public abstract class WarehouseTransactionRequestMapper {
       .id(entity.getId())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
-      .station(jpa(entity.getStation()))
+      .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
       .canceledBy(entity.getCanceledBy())
@@ -73,7 +72,7 @@ public abstract class WarehouseTransactionRequestMapper {
       .id(entity.getId())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
-      .station(jpa(entity.getStation()))
+      .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
       .canceledBy(entity.getCanceledBy())
@@ -85,19 +84,12 @@ public abstract class WarehouseTransactionRequestMapper {
   }
 
   @Mappings({
+    @Mapping(target = "stationId", source = "station.id"),
     @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
   public abstract WarehouseTransactionRequestEntity jpa(WarehouseTransactionRequest domain);
-
-  protected WarehouseStation jpa(WarehouseStationEntity entity) {
-    return stationMapper.jpa(entity);
-  }
-
-  protected WarehouseStationEntity jpa(WarehouseStation domain) {
-    return stationMapper.jpa(domain);
-  }
 
   @Mappings({
     @Mapping(target = "relatedCompany", source = "relatedCompanyId"),

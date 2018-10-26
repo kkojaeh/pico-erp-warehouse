@@ -35,7 +35,7 @@ import pico.erp.warehouse.location.station.WarehouseStationEntity;
 
 @Entity(name = "WarehouseTransaction")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_ITEM_ID_IDX", columnList = "ITEM_ID")
+  @Index(columnList = "ITEM_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")

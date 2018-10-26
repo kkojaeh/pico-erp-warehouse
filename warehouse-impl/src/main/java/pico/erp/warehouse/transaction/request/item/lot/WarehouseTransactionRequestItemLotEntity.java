@@ -32,7 +32,9 @@ import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestIt
 
 @Entity(name = "WarehouseTransactionRequestItemLot")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT_TRANSACTION_REQUEST_ITEM_ID_ITEM_LOT_ID_IDX", unique = true, columnList = "TRANSACTION_REQUEST_ITEM_ID, ITEM_LOT_ID")
+  @Index(columnList = "TRANSACTION_REQUEST_ITEM_ID, ITEM_LOT_ID", unique = true),
+  @Index(columnList = "TRANSACTION_REQUEST_ITEM_ID"),
+  @Index(columnList = "TRANSACTION_REQUEST_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")
