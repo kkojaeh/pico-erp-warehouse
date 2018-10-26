@@ -23,6 +23,12 @@ public interface WarehouseTransactionRequestExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-request.cannot.cancel.exception")
+  class CannotCancelException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-request.cannot.accept.exception")
   class CannotAcceptException extends RuntimeException {
 

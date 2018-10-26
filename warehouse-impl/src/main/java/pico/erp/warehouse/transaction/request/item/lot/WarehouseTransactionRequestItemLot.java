@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
 import pico.erp.item.lot.ItemLotData;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEvents;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItem;
 
 @Builder
@@ -49,7 +50,11 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
     itemLot = request.getItemLot();
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemLotMessages.CreateResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemLotEvents.CreatedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemLotEvents.CreatedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(
+          this.transactionRequestItem.getTransactionRequest().getId())
+      )
     );
   }
 
@@ -60,7 +65,11 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
     }
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemLotMessages.UpdateResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemLotEvents.UpdatedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemLotEvents.UpdatedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(
+          this.transactionRequestItem.getTransactionRequest().getId())
+      )
     );
   }
 
@@ -70,7 +79,11 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
       throw new WarehouseTransactionRequestItemLotExceptions.CannotDeleteException();
     }
     return new WarehouseTransactionRequestItemLotMessages.DeleteResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemLotEvents.DeletedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemLotEvents.DeletedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(
+          this.transactionRequestItem.getTransactionRequest().getId())
+      )
     );
   }
 

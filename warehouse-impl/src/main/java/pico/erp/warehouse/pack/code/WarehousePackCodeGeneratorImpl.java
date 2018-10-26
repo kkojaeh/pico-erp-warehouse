@@ -19,12 +19,12 @@ public class WarehousePackCodeGeneratorImpl implements WarehousePackCodeGenerato
   @Override
   public WarehousePackCode generate(WarehousePack warehousePack) {
     val now = OffsetDateTime.now();
-    val date = ((now.getYear() % 10) * 1000) + now.getDayOfYear();
-    val radixDate = Integer.toString(date, 36);
-    val prefix = ("000".substring(radixDate.length()) + radixDate).toUpperCase();
-    val count = packRepository.countByCreatedToday();
-    val code = String.format("%s-%04d", prefix, count);
-    return WarehousePackCode.from(code);
+    val yearDay = ((now.getYear() % 10) * 1000) + now.getDayOfYear();
+    val code = String.format("%3s-%3s",
+      Integer.toString(yearDay, 36),
+      Long.toString(packRepository.countByCreatedToday(), 36)
+    );
+    return WarehousePackCode.from(code.toUpperCase().replace(' ', '0'));
   }
 
 }

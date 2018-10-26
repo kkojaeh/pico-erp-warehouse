@@ -103,4 +103,6 @@ public class WarehouseTransactionRequestEntity implements Serializable {
   @Column
   OffsetDateTime canceledDate;
 
+  boolean committable;
+
 }

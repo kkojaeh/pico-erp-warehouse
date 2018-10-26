@@ -20,4 +20,7 @@ public interface WarehouseTransactionRequestRepository {
 
   Optional<WarehouseTransactionRequest> findBy(@NotNull WarehouseTransactionRequestId id);
 
+  Optional<WarehouseTransactionRequestAggregator> findAggregatorBy(
+    @NotNull WarehouseTransactionRequestId id);
+
 }

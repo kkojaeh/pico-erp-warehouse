@@ -67,6 +67,13 @@ public class WarehouseTransactionRequestRepositoryJpa implements
   }
 
   @Override
+  public Optional<WarehouseTransactionRequestAggregator> findAggregatorBy(
+    WarehouseTransactionRequestId id) {
+    return Optional.ofNullable(repository.findOne(id))
+      .map(mapper::aggregator);
+  }
+
+  @Override
   public void update(@NotNull WarehouseTransactionRequest transactionRequest) {
     val entity = repository.findOne(transactionRequest.getId());
     mapper.pass(mapper.jpa(transactionRequest), entity);

@@ -97,5 +97,20 @@ public interface WarehouseTransactionRequestEvents {
 
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class MemberChangedEvent implements Event {
+
+    public final static String CHANNEL = "event.warehouse-transaction-request.member-changed";
+
+    private WarehouseTransactionRequestId warehouseTransactionRequestId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
 
 }

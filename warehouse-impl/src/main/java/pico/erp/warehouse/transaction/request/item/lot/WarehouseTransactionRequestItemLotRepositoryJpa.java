@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemId;
 
 
@@ -18,14 +19,18 @@ import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestIt
 interface WarehouseTransactionRequestItemLotEntityRepository extends
   CrudRepository<WarehouseTransactionRequestItemLotEntity, WarehouseTransactionRequestItemLotId> {
 
-  @Query("SELECT CASE WHEN COUNT(wtril) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItemLot wtril JOIN wtril.transactionRequestItem tri WHERE tri.id = :transactionRequestItemId AND wtril.itemLotId = :itemLotId")
+  @Query("SELECT CASE WHEN COUNT(wtril) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestItemId = :transactionRequestItemId AND wtril.itemLotId = :itemLotId")
   boolean exists(
     @Param("transactionRequestItemId") WarehouseTransactionRequestItemId transactionRequestItemId,
     @Param("itemLotId") ItemLotId itemLotId);
 
-  @Query("SELECT wtril FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestItem.id = :id")
+  @Query("SELECT wtril FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestItemId = :transactionRequestItemId")
   Stream<WarehouseTransactionRequestItemLotEntity> findAllBy(
-    @Param("id") WarehouseTransactionRequestItemId transactionRequestItemId);
+    @Param("transactionRequestItemId") WarehouseTransactionRequestItemId transactionRequestItemId);
+
+  @Query("SELECT wtril FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestId = :transactionRequestId")
+  Stream<WarehouseTransactionRequestItemLotEntity> findAllBy(
+    @Param("transactionRequestId") WarehouseTransactionRequestId transactionRequestId);
 
 }
 
@@ -68,6 +73,13 @@ public class WarehouseTransactionRequestItemLotRepositoryJpa implements
   public Stream<WarehouseTransactionRequestItemLot> findAllBy(
     WarehouseTransactionRequestItemId transactionRequestItemId) {
     return repository.findAllBy(transactionRequestItemId)
+      .map(mapper::jpa);
+  }
+
+  @Override
+  public Stream<WarehouseTransactionRequestItemLot> findAllBy(
+    WarehouseTransactionRequestId transactionRequestId) {
+    return repository.findAllBy(transactionRequestId)
       .map(mapper::jpa);
   }
 

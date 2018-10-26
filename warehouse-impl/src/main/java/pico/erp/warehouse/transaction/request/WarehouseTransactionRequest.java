@@ -57,6 +57,8 @@ public class WarehouseTransactionRequest implements Serializable {
 
   OffsetDateTime completedDate;
 
+  protected boolean committable;
+
   public WarehouseTransactionRequestMessages.CreateResponse apply(
     WarehouseTransactionRequestMessages.CreateRequest request) {
     id = request.getId();
@@ -65,6 +67,7 @@ public class WarehouseTransactionRequest implements Serializable {
     station = request.getStation();
     status = WarehouseTransactionRequestStatusKind.CREATED;
     type = request.getType();
+    committable = false;
     return new WarehouseTransactionRequestMessages.CreateResponse(
       Arrays.asList(new WarehouseTransactionRequestEvents.CreatedEvent(this.id))
     );
@@ -72,7 +75,7 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.UpdateResponse apply(
     WarehouseTransactionRequestMessages.UpdateRequest request) {
-    if (!status.isModifiable()) {
+    if (!isModifiable()) {
       throw new WarehouseTransactionRequestExceptions.CannotModifyException();
     }
     dueDate = request.getDueDate();
@@ -85,7 +88,7 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.CommitResponse apply(
     WarehouseTransactionRequestMessages.CommitRequest request) {
-    if (!status.isCommittable()) {
+    if (!isCommittable()) {
       throw new WarehouseTransactionRequestExceptions.CannotCommitException();
     }
     status = WarehouseTransactionRequestStatusKind.COMMITTED;
@@ -98,8 +101,8 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.CancelResponse apply(
     WarehouseTransactionRequestMessages.CancelRequest request) {
-    if (!status.isCancelable()) {
-      throw new WarehouseTransactionRequestExceptions.CannotCommitException();
+    if (!isCancelable()) {
+      throw new WarehouseTransactionRequestExceptions.CannotCancelException();
     }
     status = WarehouseTransactionRequestStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
@@ -111,7 +114,7 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.AcceptResponse apply(
     WarehouseTransactionRequestMessages.AcceptRequest request) {
-    if (!status.isAcceptable()) {
+    if (!isAcceptable()) {
       throw new WarehouseTransactionRequestExceptions.CannotAcceptException();
     }
     status = WarehouseTransactionRequestStatusKind.ACCEPTED;
@@ -124,7 +127,7 @@ public class WarehouseTransactionRequest implements Serializable {
 
   public WarehouseTransactionRequestMessages.CompleteResponse apply(
     WarehouseTransactionRequestMessages.CompleteRequest request) {
-    if (!status.isCompletable()) {
+    if (!isCompletable()) {
       throw new WarehouseTransactionRequestExceptions.CannotCompleteException();
     }
     status = WarehouseTransactionRequestStatusKind.COMPLETED;
@@ -138,5 +141,18 @@ public class WarehouseTransactionRequest implements Serializable {
   public boolean isModifiable() {
     return status.isModifiable();
   }
+
+  public boolean isAcceptable() {
+    return status.isAcceptable();
+  }
+
+  public boolean isCancelable() {
+    return status.isCancelable();
+  }
+
+  public boolean isCompletable() {
+    return status.isCompletable();
+  }
+
 
 }

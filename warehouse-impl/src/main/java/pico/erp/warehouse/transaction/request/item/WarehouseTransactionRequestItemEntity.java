@@ -12,8 +12,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.item.ItemId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 
 @Entity(name = "WarehouseTransactionRequestItem")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM", indexes = {
@@ -58,9 +56,10 @@ public class WarehouseTransactionRequestItemEntity implements Serializable {
   })
   ItemId itemId;
 
-  @ManyToOne
-  @JoinColumn(name = "TRANSACTION_REQUEST_ID")
-  WarehouseTransactionRequestEntity transactionRequest;
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  WarehouseTransactionRequestId transactionRequestId;
 
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;

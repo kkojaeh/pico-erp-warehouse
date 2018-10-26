@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemId;
 
 public interface WarehouseTransactionRequestItemLotRepository {
@@ -20,6 +21,9 @@ public interface WarehouseTransactionRequestItemLotRepository {
 
   Stream<WarehouseTransactionRequestItemLot> findAllBy(
     @NotNull WarehouseTransactionRequestItemId transactionRequestItemId);
+
+  Stream<WarehouseTransactionRequestItemLot> findAllBy(
+    @NotNull WarehouseTransactionRequestId transactionRequestId);
 
   Optional<WarehouseTransactionRequestItemLot> findBy(
     @NotNull WarehouseTransactionRequestItemLotId id);

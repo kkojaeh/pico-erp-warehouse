@@ -103,6 +103,18 @@ public interface WarehouseTransactionRequestMessages {
 
   }
 
+  @Data
+  class VerifyRequest {
+
+  }
+
+  @Value
+  class VerifyResponse {
+
+    Collection<Event> events;
+
+  }
+
   @Value
   class CreateResponse {
 

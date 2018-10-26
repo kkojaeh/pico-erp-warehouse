@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
 import pico.erp.item.ItemData;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequest;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEvents;
 
 @Builder
 @Getter
@@ -45,7 +46,10 @@ public class WarehouseTransactionRequestItem implements Serializable {
     item = request.getItem();
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemMessages.CreateResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemEvents.CreatedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemEvents.CreatedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+      )
     );
   }
 
@@ -56,7 +60,10 @@ public class WarehouseTransactionRequestItem implements Serializable {
     }
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemMessages.UpdateResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemEvents.UpdatedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemEvents.UpdatedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+      )
     );
   }
 
@@ -66,7 +73,10 @@ public class WarehouseTransactionRequestItem implements Serializable {
       throw new WarehouseTransactionRequestItemExceptions.CannotDeleteException();
     }
     return new WarehouseTransactionRequestItemMessages.DeleteResponse(
-      Arrays.asList(new WarehouseTransactionRequestItemEvents.DeletedEvent(this.id))
+      Arrays.asList(
+        new WarehouseTransactionRequestItemEvents.DeletedEvent(this.id),
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+      )
     );
   }
 

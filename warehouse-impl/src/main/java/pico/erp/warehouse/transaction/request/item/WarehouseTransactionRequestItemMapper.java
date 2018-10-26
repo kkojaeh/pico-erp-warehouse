@@ -13,7 +13,6 @@ import pico.erp.item.ItemId;
 import pico.erp.item.ItemService;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequest;
-import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestMapper;
 
@@ -37,26 +36,19 @@ public abstract class WarehouseTransactionRequestItemMapper {
   public WarehouseTransactionRequestItem jpa(WarehouseTransactionRequestItemEntity entity) {
     return WarehouseTransactionRequestItem.builder()
       .id(entity.getId())
-      .transactionRequest(jpa(entity.getTransactionRequest()))
+      .transactionRequest(map(entity.getTransactionRequestId()))
       .item(map(entity.getItemId()))
       .quantity(entity.getQuantity())
       .build();
   }
 
   @Mappings({
+    @Mapping(target = "transactionRequestId", source = "transactionRequest.id"),
     @Mapping(target = "itemId", source = "item.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
   public abstract WarehouseTransactionRequestItemEntity jpa(WarehouseTransactionRequestItem domain);
-
-  protected WarehouseTransactionRequest jpa(WarehouseTransactionRequestEntity entity) {
-    return transactionRequestMapper.jpa(entity);
-  }
-
-  protected WarehouseTransactionRequestEntity jpa(WarehouseTransactionRequest domain) {
-    return transactionRequestMapper.jpa(domain);
-  }
 
   @Mappings({
     @Mapping(target = "transactionRequest", source = "transactionRequestId"),

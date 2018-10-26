@@ -10,7 +10,7 @@ public enum WarehouseTransactionRequestStatusKind {
 
   COMMITTED(false, false, true, true, false),
 
-  CANCELED(true, false, false, false, false),
+  CANCELED(false, false, false, false, false),
 
   ACCEPTED(false, false, false, false, true),
 

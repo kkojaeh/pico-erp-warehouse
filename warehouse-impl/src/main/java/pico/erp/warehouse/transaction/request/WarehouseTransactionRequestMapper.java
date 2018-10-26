@@ -1,6 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -16,6 +17,8 @@ import pico.erp.warehouse.location.station.WarehouseStation;
 import pico.erp.warehouse.location.station.WarehouseStationEntity;
 import pico.erp.warehouse.location.station.WarehouseStationId;
 import pico.erp.warehouse.location.station.WarehouseStationMapper;
+import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemRepository;
+import pico.erp.warehouse.transaction.request.item.lot.WarehouseTransactionRequestItemLotRepository;
 
 @Mapper
 public abstract class WarehouseTransactionRequestMapper {
@@ -34,6 +37,37 @@ public abstract class WarehouseTransactionRequestMapper {
   @Autowired
   protected WarehouseTransactionRequestRepository transactionRequestRepository;
 
+  @Lazy
+  @Autowired
+  protected WarehouseTransactionRequestItemRepository transactionRequestItemRepository;
+
+  @Autowired
+  private WarehouseTransactionRequestItemLotRepository warehouseTransactionRequestItemLotRepository;
+
+  public WarehouseTransactionRequestAggregator aggregator(
+    WarehouseTransactionRequestEntity entity) {
+    return WarehouseTransactionRequestAggregator.aggregatorBuilder()
+      .id(entity.getId())
+      .dueDate(entity.getDueDate())
+      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .station(jpa(entity.getStation()))
+      .committedBy(entity.getCommittedBy())
+      .committedDate(entity.getCommittedDate())
+      .canceledBy(entity.getCanceledBy())
+      .canceledDate(entity.getCanceledDate())
+      .status(entity.getStatus())
+      .type(entity.getType())
+      .committable(entity.isCommittable())
+      .items(
+        transactionRequestItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
+      )
+      .itemLots(
+        warehouseTransactionRequestItemLotRepository.findAllBy(entity.getId())
+          .collect(Collectors.toList())
+      )
+      .build();
+  }
+
   public WarehouseTransactionRequest jpa(WarehouseTransactionRequestEntity entity) {
     return WarehouseTransactionRequest.builder()
       .id(entity.getId())
@@ -46,6 +80,7 @@ public abstract class WarehouseTransactionRequestMapper {
       .canceledDate(entity.getCanceledDate())
       .status(entity.getStatus())
       .type(entity.getType())
+      .committable(entity.isCommittable())
       .build();
   }
 

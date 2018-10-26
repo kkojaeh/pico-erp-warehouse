@@ -12,11 +12,8 @@ import pico.erp.item.lot.ItemLotData;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.item.lot.ItemLotService;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.transaction.request.WarehouseTransactionRequest;
-import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestEntity;
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestMapper;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItem;
-import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemEntity;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemId;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItemMapper;
 
@@ -39,7 +36,7 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
   public WarehouseTransactionRequestItemLot jpa(WarehouseTransactionRequestItemLotEntity entity) {
     return WarehouseTransactionRequestItemLot.builder()
       .id(entity.getId())
-      .transactionRequestItem(jpa(entity.getTransactionRequestItem()))
+      .transactionRequestItem(map(entity.getTransactionRequestItemId()))
       .itemLot(map(entity.getItemLotId()))
       .quantity(entity.getQuantity())
       .build();
@@ -47,24 +44,13 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
 
   @Mappings({
     @Mapping(target = "itemLotId", source = "itemLot.id"),
-    @Mapping(target = "transactionRequest", source = "transactionRequestItem.transactionRequest"),
+    @Mapping(target = "transactionRequestItemId", source = "transactionRequestItem.id"),
+    @Mapping(target = "transactionRequestId", source = "transactionRequestItem.transactionRequest.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
   public abstract WarehouseTransactionRequestItemLotEntity jpa(
     WarehouseTransactionRequestItemLot domain);
-
-  protected WarehouseTransactionRequestItem jpa(WarehouseTransactionRequestItemEntity entity) {
-    return transactionRequestItemMapper.jpa(entity);
-  }
-
-  protected WarehouseTransactionRequestItemEntity jpa(WarehouseTransactionRequestItem domain) {
-    return transactionRequestItemMapper.jpa(domain);
-  }
-
-  protected WarehouseTransactionRequestEntity jpa(WarehouseTransactionRequest domain) {
-    return transactionRequestMapper.jpa(domain);
-  }
 
   @Mappings({
     @Mapping(target = "transactionRequestItem", source = "transactionRequestItemId"),
