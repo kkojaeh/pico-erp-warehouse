@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
-import org.springframework.transaction.annotation.Transactional;
 import pico.erp.shared.ApplicationInitializer;
 import pico.erp.warehouse.location.bay.WarehouseBayRequests;
 import pico.erp.warehouse.location.bay.WarehouseBayService;
@@ -24,7 +23,6 @@ import pico.erp.warehouse.location.zone.WarehouseZoneRequests;
 import pico.erp.warehouse.location.zone.WarehouseZoneService;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-@Transactional
 @Configuration
 @Profile({"!development", "!production"})
 public class TestDataInitializer implements ApplicationInitializer {
