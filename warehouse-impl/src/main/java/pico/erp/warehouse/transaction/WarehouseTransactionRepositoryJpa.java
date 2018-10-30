@@ -1,15 +1,10 @@
 package pico.erp.warehouse.transaction;
 
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 interface WarehouseTransactionEntityRepository extends
   CrudRepository<WarehouseTransactionEntity, WarehouseTransactionId> {
-
-  @Query("SELECT COUNT(wp) FROM WarehousePack wp WHERE wp.createdDate >= :begin AND wp.createdDate <= :end")
-  long countByCreatedDateBetween(@Param("begin") OffsetDateTime begin,
-    @Param("end") OffsetDateTime end);
 
 }
 
@@ -35,15 +26,8 @@ public class WarehouseTransactionRepositoryJpa implements WarehouseTransactionRe
   private WarehouseTransactionMapper mapper;
 
   @Override
-  public long countByCreatedToday() {
-    val begin = ZonedDateTime.now().with(LocalTime.MIN).toOffsetDateTime();
-    val end = ZonedDateTime.now().with(LocalTime.MAX).toOffsetDateTime();
-    return repository.countByCreatedDateBetween(begin, end);
-  }
-
-  @Override
-  public WarehouseTransaction create(@NotNull WarehouseTransaction bay) {
-    val entity = mapper.jpa(bay);
+  public WarehouseTransaction create(@NotNull WarehouseTransaction transaction) {
+    val entity = mapper.jpa(transaction);
     val created = repository.save(entity);
     return mapper.jpa(created);
   }

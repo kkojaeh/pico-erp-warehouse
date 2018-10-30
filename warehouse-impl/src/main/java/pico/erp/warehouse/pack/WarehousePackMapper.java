@@ -10,7 +10,6 @@ import pico.erp.item.lot.ItemLotData;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.item.lot.ItemLotService;
 import pico.erp.warehouse.location.WarehouseLocation;
-import pico.erp.warehouse.location.WarehouseLocationEntity;
 import pico.erp.warehouse.location.WarehouseLocationId;
 import pico.erp.warehouse.location.WarehouseLocationMapper;
 import pico.erp.warehouse.pack.code.WarehousePackCodeGenerator;
@@ -34,9 +33,7 @@ public abstract class WarehousePackMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .location(
-        Optional.ofNullable(entity.getLocation())
-          .map(this::jpa)
-          .orElse(null)
+        map(entity.getLocationId())
       )
       .itemLot(
         map(entity.getItemLotId())
@@ -49,19 +46,12 @@ public abstract class WarehousePackMapper {
   }
 
   @Mappings({
+    @Mapping(target = "locationId", source = "location.id"),
+    @Mapping(target = "itemLotId", source = "itemLot.id"),
     @Mapping(target = "lastModifiedBy", ignore = true),
-    @Mapping(target = "lastModifiedDate", ignore = true),
-    @Mapping(target = "itemLotId", source = "itemLot.id")
+    @Mapping(target = "lastModifiedDate", ignore = true)
   })
   public abstract WarehousePackEntity jpa(WarehousePack domain);
-
-  protected WarehouseLocationEntity jpa(WarehouseLocation location) {
-    return locationMapper.jpa(location);
-  }
-
-  protected WarehouseLocation jpa(WarehouseLocationEntity location) {
-    return locationMapper.jpa(location);
-  }
 
   @Mappings({
     @Mapping(target = "locationId", source = "location.id"),

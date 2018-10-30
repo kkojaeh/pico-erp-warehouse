@@ -11,8 +11,6 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,7 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.location.WarehouseLocationEntity;
+import pico.erp.warehouse.location.WarehouseLocationId;
 
 @Entity(name = "WarehousePack")
 @Table(name = "WAH_WAREHOUSE_PACK")
@@ -57,9 +55,10 @@ public class WarehousePackEntity implements Serializable {
   })
   WarehousePackCode code;
 
-  @ManyToOne
-  @JoinColumn(name = "WAREHOUSE_LOCATION_ID")
-  WarehouseLocationEntity location;
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "LOCATION_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  WarehouseLocationId locationId;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "ITEM_LOT_ID"))

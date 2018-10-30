@@ -5,7 +5,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import pico.erp.warehouse.location.bay.WarehouseBay;
-import pico.erp.warehouse.location.bay.WarehouseBayEntity;
 import pico.erp.warehouse.location.bay.WarehouseBayId;
 import pico.erp.warehouse.location.bay.WarehouseBayMapper;
 
@@ -20,23 +19,20 @@ public abstract class WarehouseLevelMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .bay(bayMapper.jpa(entity.getBay()))
+      .bay(map(entity.getBayId()))
       .deleted(entity.isDeleted())
       .deletedDate(entity.getDeletedDate())
       .build();
   }
 
   @Mappings({
+    @Mapping(target = "bayId", source = "bay.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
   public abstract WarehouseLevelEntity jpa(WarehouseLevel domain);
-
-  protected WarehouseBayEntity jpa(WarehouseBay domain) {
-    return bayMapper.jpa(domain);
-  }
 
   @Mappings({
     @Mapping(target = "bayId", source = "bay.id")

@@ -14,6 +14,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,17 +25,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pico.erp.company.CompanyId;
 import pico.erp.item.ItemId;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
+import pico.erp.warehouse.location.station.WarehouseStationEntity;
 
 @Entity(name = "WarehouseTransaction")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION", indexes = {
-  @Index(name = "WAH_WAREHOUSE_TRANSACTION_ITEM_ID_IDX", columnList = "ITEM_ID")
+  @Index(columnList = "ITEM_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")
@@ -69,16 +71,23 @@ public class WarehouseTransactionEntity implements Serializable {
   @Enumerated(EnumType.STRING)
   WarehouseTransactionTypeKind type;
 
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "RELATED_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
+  })
+  CompanyId relatedCompanyId;
+
+  @ManyToOne
+  @JoinColumn(name = "STATION_ID")
+  WarehouseStationEntity station;
+
   @Embedded
   @AttributeOverrides({
-    @AttributeOverride(name = "id", column = @Column(name = "TRANSACTED_BY_ID", updatable = false, length = TypeDefinitions.ID_LENGTH)),
-    @AttributeOverride(name = "name", column = @Column(name = "TRANSACTED_BY_NAME", updatable = false, length = TypeDefinitions.NAME_LENGTH))
+    @AttributeOverride(name = "id", column = @Column(name = "TRANSACTED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "TRANSACTED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
   })
-  @CreatedBy
   Auditor transactedBy;
 
-  @CreatedDate
-  @Column(updatable = false)
+  @Column
   OffsetDateTime transactedDate;
 
 }

@@ -10,8 +10,7 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,10 +28,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.WarehouseLocationCode;
-import pico.erp.warehouse.location.site.WarehouseSiteEntity;
+import pico.erp.warehouse.location.site.WarehouseSiteId;
 
 @Entity(name = "WarehouseZone")
-@Table(name = "WAH_WAREHOUSE_ZONE")
+@Table(name = "WAH_WAREHOUSE_ZONE", indexes = {
+  @Index(columnList = "SITE_ID")
+})
 @Data
 @EqualsAndHashCode(of = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -61,9 +62,10 @@ public class WarehouseZoneEntity implements Serializable {
   })
   WarehouseLocationCode locationCode;
 
-  @ManyToOne
-  @JoinColumn(name = "WAREHOUSE_SITE_ID")
-  WarehouseSiteEntity site;
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "SITE_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  WarehouseSiteId siteId;
 
   @Embedded
   @AttributeOverrides({

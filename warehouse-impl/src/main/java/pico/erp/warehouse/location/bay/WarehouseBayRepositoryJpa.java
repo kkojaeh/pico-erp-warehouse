@@ -20,7 +20,7 @@ interface WarehouseBayEntityRepository extends
   @Query("SELECT CASE WHEN COUNT(wb) > 0 THEN true ELSE false END FROM WarehouseBay wb WHERE wb.locationCode = :locationCode AND wb.deleted = false")
   boolean exists(@Param("locationCode") WarehouseLocationCode locationCode);
 
-  @Query("SELECT wb FROM WarehouseBay wb WHERE wb.rack.id = :rackId AND wb.deleted = false ORDER BY wb.code")
+  @Query("SELECT wb FROM WarehouseBay wb WHERE wb.rackId = :rackId AND wb.deleted = false ORDER BY wb.code")
   Stream<WarehouseBayEntity> findAllBy(@Param("rackId") WarehouseRackId rackId);
 
 }

@@ -1,4 +1,4 @@
-package pico.erp.warehouse
+package pico.erp.warehouse.location
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

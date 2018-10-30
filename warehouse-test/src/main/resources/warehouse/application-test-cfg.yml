@@ -97,3 +97,12 @@ data:
   - id: B-2-2-2
     code: 2
     bay-id: B-2-2
+  stations:
+  - id: S1
+    code: S1
+    name: 성형부
+    site-id: A1
+  - id: S2
+    code: S2
+    name: 포장1부
+    site-id: A1

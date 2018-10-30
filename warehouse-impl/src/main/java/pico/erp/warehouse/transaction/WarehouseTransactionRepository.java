@@ -5,8 +5,6 @@ import javax.validation.constraints.NotNull;
 
 public interface WarehouseTransactionRepository {
 
-  long countByCreatedToday();
-
   WarehouseTransaction create(@NotNull WarehouseTransaction warehouseTransaction);
 
   void deleteBy(@NotNull WarehouseTransactionId id);

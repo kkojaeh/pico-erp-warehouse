@@ -9,9 +9,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import pico.erp.company.CompanyData;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.Event;
+import pico.erp.warehouse.location.station.WarehouseStation;
 
 public interface WarehouseTransactionMessages {
 
@@ -19,9 +21,12 @@ public interface WarehouseTransactionMessages {
   @AllArgsConstructor
   @NoArgsConstructor
   @Data
-  class InboundRequest {
+  class CreateRequest {
 
     @Valid
+    @NotNull
+    WarehouseTransactionId id;
+
     @NotNull
     ItemLotData itemLot;
 
@@ -29,24 +34,15 @@ public interface WarehouseTransactionMessages {
     @NotNull
     BigDecimal quantity;
 
-    @NotNull
-    Auditor transactedBy;
-
-  }
-
-  @Builder
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Data
-  class OutboundRequest {
-
     @Valid
     @NotNull
-    ItemLotData itemLot;
+    CompanyData relatedCompany;
 
     @Valid
+    WarehouseStation station;
+
     @NotNull
-    BigDecimal quantity;
+    WarehouseTransactionTypeKind type;
 
     @NotNull
     Auditor transactedBy;
@@ -54,14 +50,7 @@ public interface WarehouseTransactionMessages {
   }
 
   @Value
-  class InboundResponse {
-
-    Collection<Event> events;
-
-  }
-
-  @Value
-  class OutboundResponse {
+  class CreateResponse {
 
     Collection<Event> events;
 

@@ -7,7 +7,6 @@ import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import pico.erp.warehouse.location.site.WarehouseSite;
-import pico.erp.warehouse.location.site.WarehouseSiteEntity;
 import pico.erp.warehouse.location.site.WarehouseSiteId;
 import pico.erp.warehouse.location.site.WarehouseSiteMapper;
 
@@ -26,23 +25,20 @@ public abstract class WarehouseZoneMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .locationCode(entity.getLocationCode())
-      .site(siteMapper.jpa(entity.getSite()))
+      .site(map(entity.getSiteId()))
       .deleted(entity.isDeleted())
       .deletedDate(entity.getDeletedDate())
       .build();
   }
 
   @Mappings({
+    @Mapping(target = "siteId", source = "site.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })
   public abstract WarehouseZoneEntity jpa(WarehouseZone domain);
-
-  protected WarehouseSiteEntity jpa(WarehouseSite domain) {
-    return siteMapper.jpa(domain);
-  }
 
   @Mappings({
   })

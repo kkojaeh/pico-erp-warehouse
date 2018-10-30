@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
-import org.springframework.transaction.annotation.Transactional;
 import pico.erp.shared.ApplicationInitializer;
 import pico.erp.warehouse.location.bay.WarehouseBayRequests;
 import pico.erp.warehouse.location.bay.WarehouseBayService;
@@ -18,10 +17,12 @@ import pico.erp.warehouse.location.rack.WarehouseRackRequests;
 import pico.erp.warehouse.location.rack.WarehouseRackService;
 import pico.erp.warehouse.location.site.WarehouseSiteRequests;
 import pico.erp.warehouse.location.site.WarehouseSiteService;
+import pico.erp.warehouse.location.station.WarehouseStationRequests;
+import pico.erp.warehouse.location.station.WarehouseStationService;
 import pico.erp.warehouse.location.zone.WarehouseZoneRequests;
 import pico.erp.warehouse.location.zone.WarehouseZoneService;
 
-@Transactional
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
 @Profile({"!development", "!production"})
 public class TestDataInitializer implements ApplicationInitializer {
@@ -46,6 +47,10 @@ public class TestDataInitializer implements ApplicationInitializer {
   @Autowired
   private WarehouseLevelService warehouseLevelService;
 
+  @Lazy
+  @Autowired
+  private WarehouseStationService warehouseStationService;
+
 
   @Autowired
   private DataProperties dataProperties;
@@ -57,6 +62,7 @@ public class TestDataInitializer implements ApplicationInitializer {
     dataProperties.racks.forEach(warehouseRackService::create);
     dataProperties.bays.forEach(warehouseBayService::create);
     dataProperties.levels.forEach(warehouseLevelService::create);
+    dataProperties.stations.forEach(warehouseStationService::create);
   }
 
   @Data
@@ -73,6 +79,8 @@ public class TestDataInitializer implements ApplicationInitializer {
     List<WarehouseBayRequests.CreateRequest> bays = new LinkedList<>();
 
     List<WarehouseLevelRequests.CreateRequest> levels = new LinkedList<>();
+
+    List<WarehouseStationRequests.CreateRequest> stations = new LinkedList<>();
 
   }
 
