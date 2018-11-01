@@ -9,20 +9,20 @@ import pico.erp.warehouse.transaction.order.WarehouseTransactionOrderId;
 public interface WarehouseTransactionOrderItemRepository {
 
   WarehouseTransactionOrderItem create(
-    @NotNull WarehouseTransactionOrderItem warehouseTransactionRequestItem);
+    @NotNull WarehouseTransactionOrderItem orderItem);
 
   void deleteBy(@NotNull WarehouseTransactionOrderItemId id);
 
   boolean exists(@NotNull WarehouseTransactionOrderItemId id);
 
-  boolean exists(@NotNull WarehouseTransactionOrderId transactionOrderId,
+  boolean exists(@NotNull WarehouseTransactionOrderId orderId,
     @NotNull ItemId itemId);
 
   Stream<WarehouseTransactionOrderItem> findAllBy(
-    @NotNull WarehouseTransactionOrderId transactionOrderId);
+    @NotNull WarehouseTransactionOrderId orderId);
 
   Optional<WarehouseTransactionOrderItem> findBy(@NotNull WarehouseTransactionOrderItemId id);
 
-  void update(@NotNull WarehouseTransactionOrderItem warehouseTransactionRequestItem);
+  void update(@NotNull WarehouseTransactionOrderItem orderItem);
 
 }

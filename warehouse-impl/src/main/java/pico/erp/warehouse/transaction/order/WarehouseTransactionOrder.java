@@ -22,7 +22,7 @@ import pico.erp.warehouse.transaction.request.WarehouseTransactionRequest;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 @Audit(alias = "warehouse-transaction-order")
 public class WarehouseTransactionOrder implements Serializable {
@@ -86,19 +86,6 @@ public class WarehouseTransactionOrder implements Serializable {
     station = request.getStation();
     return new WarehouseTransactionOrderMessages.UpdateResponse(
       Arrays.asList(new WarehouseTransactionOrderEvents.UpdatedEvent(this.id))
-    );
-  }
-
-  public WarehouseTransactionOrderMessages.CommitResponse apply(
-    WarehouseTransactionOrderMessages.CommitRequest request) {
-    if (!isCancelable()) {
-      throw new WarehouseTransactionOrderExceptions.CannotCommitException();
-    }
-    status = WarehouseTransactionOrderStatusKind.COMMITTED;
-    canceledBy = request.getCommittedBy();
-    canceledDate = OffsetDateTime.now();
-    return new WarehouseTransactionOrderMessages.CommitResponse(
-      Arrays.asList(new WarehouseTransactionOrderEvents.CommittedEvent(this.id))
     );
   }
 

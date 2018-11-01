@@ -64,22 +64,22 @@ public class WarehouseTransactionOrderItemLotRepositoryJpa implements
   }
 
   @Override
-  public boolean exists(WarehouseTransactionOrderItemId transactionOrderItemId,
+  public boolean exists(WarehouseTransactionOrderItemId orderItemId,
     ItemLotId itemLotId) {
-    return repository.exists(transactionOrderItemId, itemLotId);
+    return repository.exists(orderItemId, itemLotId);
   }
 
   @Override
   public Stream<WarehouseTransactionOrderItemLot> findAllBy(
-    WarehouseTransactionOrderItemId transactionOrderItemId) {
-    return repository.findAllBy(transactionOrderItemId)
+    WarehouseTransactionOrderItemId orderItemId) {
+    return repository.findAllBy(orderItemId)
       .map(mapper::jpa);
   }
 
   @Override
   public Stream<WarehouseTransactionOrderItemLot> findAllBy(
-    WarehouseTransactionOrderId transactionOrderId) {
-    return repository.findAllBy(transactionOrderId)
+    WarehouseTransactionOrderId orderId) {
+    return repository.findAllBy(orderId)
       .map(mapper::jpa);
   }
 

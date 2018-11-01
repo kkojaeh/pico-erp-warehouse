@@ -18,6 +18,7 @@ import pico.erp.warehouse.location.station.WarehouseStationId;
 import pico.erp.warehouse.location.station.WarehouseStationMapper;
 import pico.erp.warehouse.transaction.order.item.WarehouseTransactionOrderItemRepository;
 import pico.erp.warehouse.transaction.order.item.lot.WarehouseTransactionOrderItemLotRepository;
+import pico.erp.warehouse.transaction.order.pack.WarehouseTransactionOrderPackRepository;
 
 @Mapper
 public abstract class WarehouseTransactionOrderMapper {
@@ -43,6 +44,9 @@ public abstract class WarehouseTransactionOrderMapper {
   @Autowired
   private WarehouseTransactionOrderItemLotRepository orderItemLotRepository;
 
+  @Autowired
+  private WarehouseTransactionOrderPackRepository orderPackRepository;
+
   public WarehouseTransactionOrderAggregator aggregator(
     WarehouseTransactionOrderEntity entity) {
     return WarehouseTransactionOrderAggregator.aggregatorBuilder()
@@ -63,6 +67,9 @@ public abstract class WarehouseTransactionOrderMapper {
       .itemLots(
         orderItemLotRepository.findAllBy(entity.getId())
           .collect(Collectors.toList())
+      )
+      .packs(
+        orderPackRepository.findAllBy(entity.getId()).collect(Collectors.toList())
       )
       .build();
   }

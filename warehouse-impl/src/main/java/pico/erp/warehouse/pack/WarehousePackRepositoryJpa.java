@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,23 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.location.station.WarehouseStationEntity;
 
 
 @Repository
 interface WarehousePackEntityRepository extends
   CrudRepository<WarehousePackEntity, WarehousePackId> {
 
-  @Query("SELECT COUNT(wp) FROM WarehousePack wp WHERE wp.createdDate >= :begin AND wp.createdDate <= :end")
+  @Query("SELECT COUNT(p) FROM WarehousePack p WHERE p.createdDate >= :begin AND p.createdDate <= :end")
   long countByCreatedDateBetween(@Param("begin") OffsetDateTime begin,
     @Param("end") OffsetDateTime end);
 
-  @Query("SELECT CASE WHEN COUNT(wp) > 0 THEN true ELSE false END FROM WarehousePack wp WHERE wp.code = :code")
+  @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM WarehousePack p WHERE p.code = :code")
   boolean exists(@Param("code") WarehousePackCode code);
+
+  @Query("SELECT p FROM WarehousePack p WHERE p.itemLotId = :itemLotId ORDER BY ws.createdDate")
+  Stream<WarehouseStationEntity> findAllBy(@Param("itemLotId") ItemLotId itemLotId);
 
 }
 
@@ -77,6 +83,11 @@ public class WarehousePackRepositoryJpa implements WarehousePackRepository {
     val entity = repository.findOne(rack.getId());
     mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
+  }
+
+  @Override
+  public Stream<WarehousePack> findAllBy(ItemLotId itemLotId) {
+    return null;
   }
 
 }
