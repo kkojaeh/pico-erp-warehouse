@@ -37,7 +37,7 @@ public class WarehouseTransactionRequestItemServiceLogic implements
   public WarehouseTransactionRequestItemData create(
     WarehouseTransactionRequestItemRequests.CreateRequest request) {
     if (warehouseTransactionRequestRepository
-      .exists(request.getTransactionRequestId(), request.getItemId())) {
+      .exists(request.getRequestId(), request.getItemId())) {
       throw new WarehouseTransactionRequestItemExceptions.AlreadyExistsException();
     }
     val transactionRequest = new WarehouseTransactionRequestItem();

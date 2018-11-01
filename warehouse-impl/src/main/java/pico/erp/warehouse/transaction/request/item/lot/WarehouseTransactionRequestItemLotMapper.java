@@ -36,7 +36,7 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
   public WarehouseTransactionRequestItemLot jpa(WarehouseTransactionRequestItemLotEntity entity) {
     return WarehouseTransactionRequestItemLot.builder()
       .id(entity.getId())
-      .transactionRequestItem(map(entity.getTransactionRequestItemId()))
+      .requestItem(map(entity.getRequestItemId()))
       .itemLot(map(entity.getItemLotId()))
       .quantity(entity.getQuantity())
       .build();
@@ -44,8 +44,8 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
 
   @Mappings({
     @Mapping(target = "itemLotId", source = "itemLot.id"),
-    @Mapping(target = "transactionRequestItemId", source = "transactionRequestItem.id"),
-    @Mapping(target = "transactionRequestId", source = "transactionRequestItem.transactionRequest.id"),
+    @Mapping(target = "requestItemId", source = "requestItem.id"),
+    @Mapping(target = "requestId", source = "requestItem.request.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
@@ -53,14 +53,14 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
     WarehouseTransactionRequestItemLot domain);
 
   @Mappings({
-    @Mapping(target = "transactionRequestItem", source = "transactionRequestItemId"),
+    @Mapping(target = "requestItem", source = "requestItemId"),
     @Mapping(target = "itemLot", source = "itemLotId")
   })
   public abstract WarehouseTransactionRequestItemLotMessages.CreateRequest map(
     WarehouseTransactionRequestItemLotRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "transactionRequestItemId", source = "transactionRequestItem.id"),
+    @Mapping(target = "requestItemId", source = "requestItem.id"),
     @Mapping(target = "itemLotId", source = "itemLot.id")
   })
   public abstract WarehouseTransactionRequestItemLotData map(

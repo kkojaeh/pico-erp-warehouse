@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
 import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 
@@ -40,6 +41,9 @@ public interface WarehouseTransactionRequestRequests {
     @NotNull
     WarehouseTransactionTypeKind type;
 
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
+
   }
 
   @Data
@@ -58,9 +62,13 @@ public interface WarehouseTransactionRequestRequests {
     OffsetDateTime dueDate;
 
     // 공급처 회사(회사)
+    @NotNull
     CompanyId relatedCompanyId;
 
     WarehouseStationId stationId;
+
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
   }
 

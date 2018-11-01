@@ -28,6 +28,7 @@ import pico.erp.company.CompanyId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 @Entity(name = "WarehouseTransactionRequest")
@@ -103,5 +104,9 @@ public class WarehouseTransactionRequestEntity implements Serializable {
   OffsetDateTime canceledDate;
 
   boolean committable;
+
+  @Column(length = TypeDefinitions.ENUM_LENGTH)
+  @Enumerated(EnumType.STRING)
+  WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
 }

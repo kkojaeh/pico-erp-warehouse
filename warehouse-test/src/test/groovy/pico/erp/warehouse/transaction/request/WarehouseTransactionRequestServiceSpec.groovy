@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction
+package pico.erp.warehouse.transaction.request
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -11,7 +11,8 @@ import pico.erp.company.CompanyId
 import pico.erp.item.lot.ItemLotId
 import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.WarehouseStationId
-import pico.erp.warehouse.transaction.request.*
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind
 import spock.lang.Specification
 
 import javax.validation.ConstraintViolationException
@@ -44,13 +45,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
   def "입고요청을 처리 한다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    def inbounded = warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: inboundRequestId,
-      dueDate: dueDate,
-      type: WarehouseTransactionTypeKind.INBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    def inbounded = warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: inboundRequestId,
+        dueDate: dueDate,
+        type: WarehouseTransactionTypeKind.INBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
 
     then:
     inbounded.dueDate == dueDate
@@ -61,13 +65,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
 
   def "지난시간으로 입고요청을 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: inboundRequestId,
-      dueDate: OffsetDateTime.now().minusDays(2),
-      type: WarehouseTransactionTypeKind.INBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: inboundRequestId,
+        dueDate: OffsetDateTime.now().minusDays(2),
+        type: WarehouseTransactionTypeKind.INBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
 
     then:
     thrown(ConstraintViolationException)
@@ -76,13 +83,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
   def "출고요청을 처리 한다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    def inbounded = warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: outboundRequestId,
-      dueDate: dueDate,
-      type: WarehouseTransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    def inbounded = warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: outboundRequestId,
+        dueDate: dueDate,
+        type: WarehouseTransactionTypeKind.OUTBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
 
     then:
     inbounded.dueDate == dueDate
@@ -93,13 +103,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
 
   def "출고시간으로 입고요청을 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: outboundRequestId,
-      dueDate: OffsetDateTime.now().minusDays(2),
-      type: WarehouseTransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: outboundRequestId,
+        dueDate: OffsetDateTime.now().minusDays(2),
+        type: WarehouseTransactionTypeKind.OUTBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
 
     then:
     thrown(ConstraintViolationException)
@@ -108,13 +121,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
   def "예정시간을 지나도 제출하지 않은 입/출고요청은 취소 된다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: outboundRequestId,
-      dueDate: dueDate,
-      type: WarehouseTransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: outboundRequestId,
+        dueDate: dueDate,
+        type: WarehouseTransactionTypeKind.OUTBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
     warehouseTransactionRequestService.cancelUncommitted(
       new WarehouseTransactionRequestRequests.CancelUncommittedRequest(
         fixedDate: dueDate.plusMinutes(1)
@@ -129,13 +145,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
 
   def "입/출고를 생성 후 접수 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: outboundRequestId,
-      dueDate: OffsetDateTime.now().plusDays(2),
-      type: WarehouseTransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: outboundRequestId,
+        dueDate: OffsetDateTime.now().plusDays(2),
+        type: WarehouseTransactionTypeKind.OUTBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
     warehouseTransactionRequestService.accept(
       new WarehouseTransactionRequestRequests.AcceptRequest(
         id: outboundRequestId
@@ -148,13 +167,16 @@ class WarehouseTransactionRequestServiceSpec extends Specification {
 
   def "입/출고를 생성 후 완료 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: outboundRequestId,
-      dueDate: OffsetDateTime.now().plusDays(2),
-      type: WarehouseTransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: outboundRequestId,
+        dueDate: OffsetDateTime.now().plusDays(2),
+        type: WarehouseTransactionTypeKind.OUTBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
     warehouseTransactionRequestService.complete(
       new WarehouseTransactionRequestRequests.CompleteRequest(
         id: outboundRequestId

@@ -8,12 +8,18 @@ public interface WarehouseTransactionOrderService {
   WarehouseTransactionOrderData create(
     @Valid WarehouseTransactionOrderRequests.CreateRequest request);
 
-  void delete(@Valid WarehouseTransactionOrderRequests.DeleteRequest request);
-
   boolean exists(@NotNull WarehouseTransactionOrderId id);
 
   WarehouseTransactionOrderData get(@NotNull WarehouseTransactionOrderId id);
 
   void update(@Valid WarehouseTransactionOrderRequests.UpdateRequest request);
+
+  void accept(@Valid WarehouseTransactionOrderRequests.AcceptRequest request);
+
+  void cancel(@Valid WarehouseTransactionOrderRequests.CancelRequest request);
+
+  void commit(@Valid WarehouseTransactionOrderRequests.CommitRequest request);
+
+  void complete(@Valid WarehouseTransactionOrderRequests.CompleteRequest request);
 
 }

@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction
+package pico.erp.warehouse.transaction.request
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,6 +12,8 @@ import pico.erp.item.ItemId
 import pico.erp.item.lot.ItemLotId
 import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.WarehouseStationId
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestRequests
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestService
@@ -43,11 +45,11 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
   @Autowired
   WarehouseTransactionRequestItemLotService warehouseTransactionRequestItemLotService
 
-  def transactionRequestId = WarehouseTransactionRequestId.from("create")
+  def requestId = WarehouseTransactionRequestId.from("create")
 
-  def transactionRequestItemId = WarehouseTransactionRequestItemId.from("item")
+  def requestItemId = WarehouseTransactionRequestItemId.from("item")
 
-  def transactionRequestItemLotId = WarehouseTransactionRequestItemLotId.from("item-lot")
+  def requestItemLotId = WarehouseTransactionRequestItemLotId.from("item-lot")
 
   def itemId = ItemId.from("item-1")
 
@@ -59,17 +61,20 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
 
   def setup() {
     def dueDate = OffsetDateTime.now().plusDays(2)
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: transactionRequestId,
-      dueDate: dueDate,
-      type: WarehouseTransactionTypeKind.INBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: requestId,
+        dueDate: dueDate,
+        type: WarehouseTransactionTypeKind.INBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
@@ -80,29 +85,29 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
     )
 
-    def itemLot = warehouseTransactionRequestItemLotService.get(transactionRequestItemLotId)
+    def itemLot = warehouseTransactionRequestItemLotService.get(requestItemLotId)
 
 
     then:
     itemLot.itemLotId == itemLotId
     itemLot.quantity == 20
-    itemLot.transactionRequestItemId == transactionRequestItemId
-    itemLot.id == transactionRequestItemLotId
+    itemLot.requestItemId == requestItemId
+    itemLot.id == requestItemLotId
   }
 
   def "동일한 입/출고요청에 동일한 품목 LOT 를 추가할 수 없다"() {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
@@ -111,7 +116,7 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
         id: WarehouseTransactionRequestItemLotId.from("other"),
-        transactionRequestItemId: transactionRequestItemId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
@@ -126,19 +131,19 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
     )
     warehouseTransactionRequestItemLotService.update(
       new WarehouseTransactionRequestItemLotRequests.UpdateRequest(
-        id: transactionRequestItemLotId,
+        id: requestItemLotId,
         quantity: 10
       )
     )
-    def item = warehouseTransactionRequestItemLotService.get(transactionRequestItemLotId)
+    def item = warehouseTransactionRequestItemLotService.get(requestItemLotId)
 
     then:
     item.quantity == 10
@@ -148,33 +153,33 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
     )
     warehouseTransactionRequestItemLotService.delete(
       new WarehouseTransactionRequestItemLotRequests.DeleteRequest(
-        id: transactionRequestItemLotId,
+        id: requestItemLotId,
       )
     )
 
     then:
-    warehouseTransactionRequestItemLotService.getAll(transactionRequestItemId).isEmpty() == true
+    warehouseTransactionRequestItemLotService.getAll(requestItemId).isEmpty() == true
   }
 
   def "제출된 입/출고요청 품목 LOT 는 생성 할 수 없다"() {
     when:
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
@@ -187,20 +192,20 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
     )
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemLotService.update(
       new WarehouseTransactionRequestItemLotRequests.UpdateRequest(
-        id: transactionRequestItemLotId,
+        id: requestItemLotId,
         quantity: 10
       )
     )
@@ -212,20 +217,20 @@ class WarehouseTransactionRequestItemLotServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemLotService.create(
       new WarehouseTransactionRequestItemLotRequests.CreateRequest(
-        id: transactionRequestItemLotId,
-        transactionRequestItemId: transactionRequestItemId,
+        id: requestItemLotId,
+        requestItemId: requestItemId,
         itemLotId: itemLotId,
         quantity: 20
       )
     )
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemLotService.delete(
       new WarehouseTransactionRequestItemLotRequests.DeleteRequest(
-        id: transactionRequestItemLotId,
+        id: requestItemLotId,
       )
     )
     then:

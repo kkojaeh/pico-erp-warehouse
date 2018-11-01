@@ -18,13 +18,13 @@ import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 interface WarehouseTransactionRequestItemEntityRepository extends
   CrudRepository<WarehouseTransactionRequestItemEntity, WarehouseTransactionRequestItemId> {
 
-  @Query("SELECT CASE WHEN COUNT(wtri) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItem wtri WHERE wtri.transactionRequestId = :transactionRequestId AND wtri.itemId = :itemId")
-  boolean exists(@Param("transactionRequestId") WarehouseTransactionRequestId transactionRequestId,
+  @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItem i WHERE i.requestId = :requestId AND i.itemId = :itemId")
+  boolean exists(@Param("requestId") WarehouseTransactionRequestId requestId,
     @Param("itemId") ItemId itemId);
 
-  @Query("SELECT wtri FROM WarehouseTransactionRequestItem wtri WHERE wtri.transactionRequestId = :transactionRequestId")
+  @Query("SELECT i FROM WarehouseTransactionRequestItem i WHERE i.requestId = :requestId")
   Stream<WarehouseTransactionRequestItemEntity> findAllBy(
-    @Param("transactionRequestId") WarehouseTransactionRequestId transactionRequestId);
+    @Param("requestId") WarehouseTransactionRequestId requestId);
 
 }
 

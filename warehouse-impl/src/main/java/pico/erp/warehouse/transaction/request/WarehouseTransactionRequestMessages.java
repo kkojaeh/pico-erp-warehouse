@@ -13,6 +13,7 @@ import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.Event;
 import pico.erp.warehouse.location.station.WarehouseStation;
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 
 public interface WarehouseTransactionRequestMessages {
@@ -37,7 +38,11 @@ public interface WarehouseTransactionRequestMessages {
     // 공급지 내부일때 사용
     WarehouseStation station;
 
+    @NotNull
     WarehouseTransactionTypeKind type;
+
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
   }
 
@@ -56,6 +61,9 @@ public interface WarehouseTransactionRequestMessages {
 
     // 공급지 내부일때 사용
     WarehouseStation station;
+
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
   }
 

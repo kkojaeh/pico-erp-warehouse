@@ -37,7 +37,7 @@ public class WarehouseTransactionRequestItemLotServiceLogic implements
   public WarehouseTransactionRequestItemLotData create(
     WarehouseTransactionRequestItemLotRequests.CreateRequest request) {
     if (warehouseTransactionRequestItemLotRepository
-      .exists(request.getTransactionRequestItemId(), request.getItemLotId())) {
+      .exists(request.getRequestItemId(), request.getItemLotId())) {
       throw new WarehouseTransactionRequestItemLotExceptions.AlreadyExistsException();
     }
     val itemLot = new WarehouseTransactionRequestItemLot();

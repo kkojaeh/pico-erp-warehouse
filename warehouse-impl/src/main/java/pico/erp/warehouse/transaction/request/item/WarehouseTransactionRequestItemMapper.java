@@ -36,14 +36,14 @@ public abstract class WarehouseTransactionRequestItemMapper {
   public WarehouseTransactionRequestItem jpa(WarehouseTransactionRequestItemEntity entity) {
     return WarehouseTransactionRequestItem.builder()
       .id(entity.getId())
-      .transactionRequest(map(entity.getTransactionRequestId()))
+      .request(map(entity.getRequestId()))
       .item(map(entity.getItemId()))
       .quantity(entity.getQuantity())
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "transactionRequestId", source = "transactionRequest.id"),
+    @Mapping(target = "requestId", source = "request.id"),
     @Mapping(target = "itemId", source = "item.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
@@ -51,14 +51,14 @@ public abstract class WarehouseTransactionRequestItemMapper {
   public abstract WarehouseTransactionRequestItemEntity jpa(WarehouseTransactionRequestItem domain);
 
   @Mappings({
-    @Mapping(target = "transactionRequest", source = "transactionRequestId"),
+    @Mapping(target = "request", source = "requestId"),
     @Mapping(target = "item", source = "itemId")
   })
   public abstract WarehouseTransactionRequestItemMessages.CreateRequest map(
     WarehouseTransactionRequestItemRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "transactionRequestId", source = "transactionRequest.id"),
+    @Mapping(target = "requestId", source = "request.id"),
     @Mapping(target = "itemId", source = "item.id")
   })
   public abstract WarehouseTransactionRequestItemData map(

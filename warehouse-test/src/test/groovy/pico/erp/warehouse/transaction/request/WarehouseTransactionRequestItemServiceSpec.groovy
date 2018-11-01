@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction
+package pico.erp.warehouse.transaction.request
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -11,6 +11,8 @@ import pico.erp.company.CompanyId
 import pico.erp.item.ItemId
 import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.WarehouseStationId
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestRequests
 import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestService
@@ -36,9 +38,9 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
   @Autowired
   WarehouseTransactionRequestItemService warehouseTransactionRequestItemService
 
-  def transactionRequestId = WarehouseTransactionRequestId.from("create")
+  def requestId = WarehouseTransactionRequestId.from("create")
 
-  def transactionRequestItemId = WarehouseTransactionRequestItemId.from("item")
+  def requestItemId = WarehouseTransactionRequestItemId.from("item")
 
   def itemId = ItemId.from("item-1")
 
@@ -48,42 +50,45 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
 
   def setup() {
     def dueDate = OffsetDateTime.now().plusDays(2)
-    warehouseTransactionRequestService.create(new WarehouseTransactionRequestRequests.CreateRequest(
-      id: transactionRequestId,
-      dueDate: dueDate,
-      type: WarehouseTransactionTypeKind.INBOUND,
-      relatedCompanyId: companyId,
-      stationId: stationId
-    ))
+    warehouseTransactionRequestService.create(
+      new WarehouseTransactionRequestRequests.CreateRequest(
+        id: requestId,
+        dueDate: dueDate,
+        type: WarehouseTransactionTypeKind.INBOUND,
+        relatedCompanyId: companyId,
+        stationId: stationId,
+        quantityCorrectionPolicy: WarehouseTransactionQuantityCorrectionPolicyKind.NEGATIVE
+      )
+    )
   }
 
   def "입/출고요청에 품목을 추가한다"() {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
 
-    def item = warehouseTransactionRequestItemService.get(transactionRequestItemId)
+    def item = warehouseTransactionRequestItemService.get(requestItemId)
 
 
     then:
     item.itemId == itemId
     item.quantity == 20
-    item.transactionRequestId == transactionRequestId
-    item.id == transactionRequestItemId
+    item.requestId == requestId
+    item.id == requestItemId
   }
 
   def "동일한 입/출고요청에 동일한 품목을 추가할 수 없다"() {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
@@ -92,7 +97,7 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
         id: WarehouseTransactionRequestItemId.from("item-2"),
-        transactionRequestId: transactionRequestId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
@@ -107,19 +112,19 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
     warehouseTransactionRequestItemService.update(
       new WarehouseTransactionRequestItemRequests.UpdateRequest(
-        id: transactionRequestItemId,
+        id: requestItemId,
         quantity: 10
       )
     )
-    def item = warehouseTransactionRequestItemService.get(transactionRequestItemId)
+    def item = warehouseTransactionRequestItemService.get(requestItemId)
 
     then:
     item.quantity == 10
@@ -129,41 +134,41 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
     warehouseTransactionRequestItemService.delete(
       new WarehouseTransactionRequestItemRequests.DeleteRequest(
-        id: transactionRequestItemId
+        id: requestItemId
       )
     )
 
     then:
-    warehouseTransactionRequestItemService.getAll(transactionRequestId).isEmpty() == true
+    warehouseTransactionRequestItemService.getAll(requestId).isEmpty() == true
   }
 
   def "제출된 입/출고요청 품목은 생성 할 수 없다"() {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
         id: WarehouseTransactionRequestItemId.from("item-2"),
-        transactionRequestId: transactionRequestId,
+        requestId: requestId,
         itemId: ItemId.from("item-2"),
         quantity: 20
       )
@@ -176,20 +181,20 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemService.update(
       new WarehouseTransactionRequestItemRequests.UpdateRequest(
-        id: transactionRequestItemId,
+        id: requestItemId,
         quantity: 10
       )
     )
@@ -201,20 +206,20 @@ class WarehouseTransactionRequestItemServiceSpec extends Specification {
     when:
     warehouseTransactionRequestItemService.create(
       new WarehouseTransactionRequestItemRequests.CreateRequest(
-        id: transactionRequestItemId,
-        transactionRequestId: transactionRequestId,
+        id: requestItemId,
+        requestId: requestId,
         itemId: itemId,
         quantity: 20
       )
     )
     warehouseTransactionRequestService.commit(
       new WarehouseTransactionRequestRequests.CommitRequest(
-        id: transactionRequestId
+        id: requestId
       )
     )
     warehouseTransactionRequestItemService.delete(
       new WarehouseTransactionRequestItemRequests.DeleteRequest(
-        id: transactionRequestItemId
+        id: requestItemId
       )
     )
     then:

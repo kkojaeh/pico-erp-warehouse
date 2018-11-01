@@ -25,7 +25,7 @@ public interface WarehouseTransactionRequestItemLotRequests {
     WarehouseTransactionRequestItemLotId id;
 
     @NotNull
-    WarehouseTransactionRequestItemId transactionRequestItemId;
+    WarehouseTransactionRequestItemId requestItemId;
 
     // 대상 회사(회사)
     @NotNull

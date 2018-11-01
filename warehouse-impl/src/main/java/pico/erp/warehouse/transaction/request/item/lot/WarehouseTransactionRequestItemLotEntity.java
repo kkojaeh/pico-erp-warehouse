@@ -32,9 +32,9 @@ import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestIt
 
 @Entity(name = "WarehouseTransactionRequestItemLot")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM_LOT", indexes = {
-  @Index(columnList = "TRANSACTION_REQUEST_ITEM_ID, ITEM_LOT_ID", unique = true),
-  @Index(columnList = "TRANSACTION_REQUEST_ITEM_ID"),
-  @Index(columnList = "TRANSACTION_REQUEST_ID")
+  @Index(columnList = "REQUEST_ITEM_ID, ITEM_LOT_ID", unique = true),
+  @Index(columnList = "REQUEST_ITEM_ID"),
+  @Index(columnList = "REQUEST_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")
@@ -60,14 +60,14 @@ public class WarehouseTransactionRequestItemLotEntity implements Serializable {
   ItemLotId itemLotId;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  WarehouseTransactionRequestId transactionRequestId;
+  WarehouseTransactionRequestId requestId;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_REQUEST_ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  WarehouseTransactionRequestItemId transactionRequestItemId;
+  WarehouseTransactionRequestItemId requestItemId;
 
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;

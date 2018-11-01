@@ -14,6 +14,7 @@ import lombok.val;
 import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.WarehouseStation;
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
 import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestItem;
 import pico.erp.warehouse.transaction.request.item.lot.WarehouseTransactionRequestItemLot;
@@ -32,23 +33,23 @@ public class WarehouseTransactionRequestAggregator extends WarehouseTransactionR
   @Builder(builderMethodName = "aggregatorBuilder")
   public WarehouseTransactionRequestAggregator(
     WarehouseTransactionRequestId id, OffsetDateTime dueDate,
-    CompanyData relatedCompany,
-    WarehouseStation station,
+    CompanyData relatedCompany, WarehouseStation station,
     WarehouseTransactionRequestStatusKind status,
-    WarehouseTransactionTypeKind type,
-    Auditor committedBy, OffsetDateTime committedDate,
-    Auditor canceledBy, OffsetDateTime canceledDate,
-    Auditor acceptedBy, OffsetDateTime acceptedDate,
-    Auditor completedBy, OffsetDateTime completedDate,
+    WarehouseTransactionTypeKind type, Auditor committedBy, OffsetDateTime committedDate,
+    Auditor canceledBy, OffsetDateTime canceledDate, Auditor acceptedBy,
+    OffsetDateTime acceptedDate, Auditor completedBy, OffsetDateTime completedDate,
     boolean committable,
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<WarehouseTransactionRequestItem> items,
     List<WarehouseTransactionRequestItemLot> itemLots) {
     super(id, dueDate, relatedCompany, station, status, type, committedBy, committedDate,
       canceledBy,
-      canceledDate, acceptedBy, acceptedDate, completedBy, completedDate, committable);
+      canceledDate, acceptedBy, acceptedDate, completedBy, completedDate, committable,
+      quantityCorrectionPolicy);
     this.items = items;
     this.itemLots = itemLots;
   }
+
 
   /**
    * 품목의 수량이 0을 초과하고 품목 LOT 가 존재 하지 않거나 품목 LOT 수량이 일치하면 제출가능 상태로 변경
@@ -66,7 +67,7 @@ public class WarehouseTransactionRequestAggregator extends WarehouseTransactionR
         .toMap(WarehouseTransactionRequestItem::getId,
           WarehouseTransactionRequestItem::getQuantity));
       itemLots.forEach(itemLot -> {
-        val requestItemId = itemLot.getTransactionRequestItem().getId();
+        val requestItemId = itemLot.getRequestItem().getId();
         val remained = itemQuantities.get(requestItemId).subtract(itemLot.getQuantity());
         itemQuantities.put(requestItemId, remained);
       });

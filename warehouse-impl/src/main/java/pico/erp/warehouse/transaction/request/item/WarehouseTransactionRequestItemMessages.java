@@ -27,7 +27,7 @@ public interface WarehouseTransactionRequestItemMessages {
     WarehouseTransactionRequestItemId id;
 
     @NotNull
-    WarehouseTransactionRequest transactionRequest;
+    WarehouseTransactionRequest request;
 
     @NotNull
     ItemData item;

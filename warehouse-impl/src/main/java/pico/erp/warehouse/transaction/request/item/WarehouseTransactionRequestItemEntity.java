@@ -31,8 +31,8 @@ import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 
 @Entity(name = "WarehouseTransactionRequestItem")
 @Table(name = "WAH_WAREHOUSE_TRANSACTION_REQUEST_ITEM", indexes = {
-  @Index(columnList = "TRANSACTION_REQUEST_ID"),
-  @Index(columnList = "TRANSACTION_REQUEST_ID, ITEM_ID", unique = true)
+  @Index(columnList = "REQUEST_ID"),
+  @Index(columnList = "REQUEST_ID, ITEM_ID", unique = true)
 })
 @Data
 @EqualsAndHashCode(of = "id")
@@ -58,9 +58,9 @@ public class WarehouseTransactionRequestItemEntity implements Serializable {
   ItemId itemId;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  WarehouseTransactionRequestId transactionRequestId;
+  WarehouseTransactionRequestId requestId;
 
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;

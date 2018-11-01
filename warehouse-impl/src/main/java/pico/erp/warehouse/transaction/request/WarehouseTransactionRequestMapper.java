@@ -41,7 +41,7 @@ public abstract class WarehouseTransactionRequestMapper {
   protected WarehouseTransactionRequestItemRepository transactionRequestItemRepository;
 
   @Autowired
-  private WarehouseTransactionRequestItemLotRepository warehouseTransactionRequestItemLotRepository;
+  private WarehouseTransactionRequestItemLotRepository transactionRequestItemLotRepository;
 
   public WarehouseTransactionRequestAggregator aggregator(
     WarehouseTransactionRequestEntity entity) {
@@ -61,7 +61,7 @@ public abstract class WarehouseTransactionRequestMapper {
         transactionRequestItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
       )
       .itemLots(
-        warehouseTransactionRequestItemLotRepository.findAllBy(entity.getId())
+        transactionRequestItemLotRepository.findAllBy(entity.getId())
           .collect(Collectors.toList())
       )
       .build();

@@ -19,18 +19,18 @@ import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestIt
 interface WarehouseTransactionRequestItemLotEntityRepository extends
   CrudRepository<WarehouseTransactionRequestItemLotEntity, WarehouseTransactionRequestItemLotId> {
 
-  @Query("SELECT CASE WHEN COUNT(wtril) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestItemId = :transactionRequestItemId AND wtril.itemLotId = :itemLotId")
+  @Query("SELECT CASE WHEN COUNT(l) > 0 THEN true ELSE false END FROM WarehouseTransactionRequestItemLot l WHERE l.requestItemId = :requestItemId AND l.itemLotId = :itemLotId")
   boolean exists(
-    @Param("transactionRequestItemId") WarehouseTransactionRequestItemId transactionRequestItemId,
+    @Param("requestItemId") WarehouseTransactionRequestItemId requestItemId,
     @Param("itemLotId") ItemLotId itemLotId);
 
-  @Query("SELECT wtril FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestItemId = :transactionRequestItemId")
+  @Query("SELECT l FROM WarehouseTransactionRequestItemLot l WHERE l.requestItemId = :requestItemId")
   Stream<WarehouseTransactionRequestItemLotEntity> findAllBy(
-    @Param("transactionRequestItemId") WarehouseTransactionRequestItemId transactionRequestItemId);
+    @Param("requestItemId") WarehouseTransactionRequestItemId requestItemId);
 
-  @Query("SELECT wtril FROM WarehouseTransactionRequestItemLot wtril WHERE wtril.transactionRequestId = :transactionRequestId")
+  @Query("SELECT l FROM WarehouseTransactionRequestItemLot l WHERE l.requestId = :requestId")
   Stream<WarehouseTransactionRequestItemLotEntity> findAllBy(
-    @Param("transactionRequestId") WarehouseTransactionRequestId transactionRequestId);
+    @Param("requestId") WarehouseTransactionRequestId requestId);
 
 }
 
@@ -64,22 +64,22 @@ public class WarehouseTransactionRequestItemLotRepositoryJpa implements
   }
 
   @Override
-  public boolean exists(WarehouseTransactionRequestItemId transactionRequestItemId,
+  public boolean exists(WarehouseTransactionRequestItemId requestItemId,
     ItemLotId itemLotId) {
-    return repository.exists(transactionRequestItemId, itemLotId);
+    return repository.exists(requestItemId, itemLotId);
   }
 
   @Override
   public Stream<WarehouseTransactionRequestItemLot> findAllBy(
-    WarehouseTransactionRequestItemId transactionRequestItemId) {
-    return repository.findAllBy(transactionRequestItemId)
+    WarehouseTransactionRequestItemId requestItemId) {
+    return repository.findAllBy(requestItemId)
       .map(mapper::jpa);
   }
 
   @Override
   public Stream<WarehouseTransactionRequestItemLot> findAllBy(
-    WarehouseTransactionRequestId transactionRequestId) {
-    return repository.findAllBy(transactionRequestId)
+    WarehouseTransactionRequestId requestId) {
+    return repository.findAllBy(requestId)
       .map(mapper::jpa);
   }
 

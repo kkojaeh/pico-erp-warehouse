@@ -30,7 +30,7 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
   @Id
   WarehouseTransactionRequestItemLotId id;
 
-  WarehouseTransactionRequestItem transactionRequestItem;
+  WarehouseTransactionRequestItem requestItem;
 
   ItemLotData itemLot;
 
@@ -38,29 +38,29 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
 
   public WarehouseTransactionRequestItemLotMessages.CreateResponse apply(
     WarehouseTransactionRequestItemLotMessages.CreateRequest request) {
-    if (!request.getTransactionRequestItem().getTransactionRequest().isModifiable()) {
+    if (!request.getRequestItem().getRequest().isModifiable()) {
       throw new WarehouseTransactionRequestItemLotExceptions.CannotCreateException();
     }
-    if (!request.getTransactionRequestItem().getItem().getId()
+    if (!request.getRequestItem().getItem().getId()
       .equals(request.getItemLot().getItemId())) {
       throw new WarehouseTransactionRequestItemLotExceptions.CannotCreateException();
     }
     id = request.getId();
-    transactionRequestItem = request.getTransactionRequestItem();
+    requestItem = request.getRequestItem();
     itemLot = request.getItemLot();
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemLotMessages.CreateResponse(
       Arrays.asList(
         new WarehouseTransactionRequestItemLotEvents.CreatedEvent(this.id),
         new WarehouseTransactionRequestEvents.MemberChangedEvent(
-          this.transactionRequestItem.getTransactionRequest().getId())
+          this.requestItem.getRequest().getId())
       )
     );
   }
 
   public WarehouseTransactionRequestItemLotMessages.UpdateResponse apply(
     WarehouseTransactionRequestItemLotMessages.UpdateRequest request) {
-    if (!transactionRequestItem.getTransactionRequest().isModifiable()) {
+    if (!requestItem.getRequest().isModifiable()) {
       throw new WarehouseTransactionRequestItemLotExceptions.CannotUpdateException();
     }
     quantity = request.getQuantity();
@@ -68,21 +68,21 @@ public class WarehouseTransactionRequestItemLot implements Serializable {
       Arrays.asList(
         new WarehouseTransactionRequestItemLotEvents.UpdatedEvent(this.id),
         new WarehouseTransactionRequestEvents.MemberChangedEvent(
-          this.transactionRequestItem.getTransactionRequest().getId())
+          this.requestItem.getRequest().getId())
       )
     );
   }
 
   public WarehouseTransactionRequestItemLotMessages.DeleteResponse apply(
     WarehouseTransactionRequestItemLotMessages.DeleteRequest request) {
-    if (!transactionRequestItem.getTransactionRequest().isModifiable()) {
+    if (!requestItem.getRequest().isModifiable()) {
       throw new WarehouseTransactionRequestItemLotExceptions.CannotDeleteException();
     }
     return new WarehouseTransactionRequestItemLotMessages.DeleteResponse(
       Arrays.asList(
         new WarehouseTransactionRequestItemLotEvents.DeletedEvent(this.id),
         new WarehouseTransactionRequestEvents.MemberChangedEvent(
-          this.transactionRequestItem.getTransactionRequest().getId())
+          this.requestItem.getRequest().getId())
       )
     );
   }

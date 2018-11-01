@@ -30,7 +30,7 @@ public class WarehouseTransactionRequestItem implements Serializable {
   @Id
   WarehouseTransactionRequestItemId id;
 
-  WarehouseTransactionRequest transactionRequest;
+  WarehouseTransactionRequest request;
 
   ItemData item;
 
@@ -38,44 +38,44 @@ public class WarehouseTransactionRequestItem implements Serializable {
 
   public WarehouseTransactionRequestItemMessages.CreateResponse apply(
     WarehouseTransactionRequestItemMessages.CreateRequest request) {
-    if (!request.getTransactionRequest().isModifiable()) {
+    if (!request.getRequest().isModifiable()) {
       throw new WarehouseTransactionRequestItemExceptions.CannotCreateException();
     }
     id = request.getId();
-    transactionRequest = request.getTransactionRequest();
+    this.request = request.getRequest();
     item = request.getItem();
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemMessages.CreateResponse(
       Arrays.asList(
         new WarehouseTransactionRequestItemEvents.CreatedEvent(this.id),
-        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.request.getId())
       )
     );
   }
 
   public WarehouseTransactionRequestItemMessages.UpdateResponse apply(
     WarehouseTransactionRequestItemMessages.UpdateRequest request) {
-    if (!transactionRequest.isModifiable()) {
+    if (!this.request.isModifiable()) {
       throw new WarehouseTransactionRequestItemExceptions.CannotUpdateException();
     }
     quantity = request.getQuantity();
     return new WarehouseTransactionRequestItemMessages.UpdateResponse(
       Arrays.asList(
         new WarehouseTransactionRequestItemEvents.UpdatedEvent(this.id),
-        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.request.getId())
       )
     );
   }
 
   public WarehouseTransactionRequestItemMessages.DeleteResponse apply(
     WarehouseTransactionRequestItemMessages.DeleteRequest request) {
-    if (!transactionRequest.isModifiable()) {
+    if (!this.request.isModifiable()) {
       throw new WarehouseTransactionRequestItemExceptions.CannotDeleteException();
     }
     return new WarehouseTransactionRequestItemMessages.DeleteResponse(
       Arrays.asList(
         new WarehouseTransactionRequestItemEvents.DeletedEvent(this.id),
-        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.transactionRequest.getId())
+        new WarehouseTransactionRequestEvents.MemberChangedEvent(this.request.getId())
       )
     );
   }

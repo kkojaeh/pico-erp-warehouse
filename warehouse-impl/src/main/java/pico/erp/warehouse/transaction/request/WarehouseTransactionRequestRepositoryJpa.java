@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 interface WarehouseTransactionRequestEntityRepository extends
   CrudRepository<WarehouseTransactionRequestEntity, WarehouseTransactionRequestId> {
 
-  @Query("SELECT wtr FROM WarehouseTransactionRequest wtr WHERE wtr.status = :status AND wtr.dueDate < :fixedDate")
+  @Query("SELECT r FROM WarehouseTransactionRequest r WHERE r.status = :status AND r.dueDate < :fixedDate")
   Stream<WarehouseTransactionRequestEntity> findAllDueDateBeforeThan(
     @Param("fixedDate") OffsetDateTime fixedDate,
     @Param("status") WarehouseTransactionRequestStatusKind status);

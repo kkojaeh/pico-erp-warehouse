@@ -2,14 +2,17 @@ package pico.erp.warehouse.transaction.order;
 
 import java.time.OffsetDateTime;
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
-import pico.erp.user.UserId;
 import pico.erp.warehouse.location.station.WarehouseStationId;
+import pico.erp.warehouse.transaction.WarehouseTransactionQuantityCorrectionPolicyKind;
+import pico.erp.warehouse.transaction.WarehouseTransactionTypeKind;
+import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestId;
 
 
 public interface WarehouseTransactionOrderRequests {
@@ -26,15 +29,23 @@ public interface WarehouseTransactionOrderRequests {
 
     // 예정일
     @NotNull
+    @Future
     OffsetDateTime dueDate;
 
     // 공급처 회사(회사)
-    CompanyId supplierId;
+    @NotNull
+    CompanyId relatedCompanyId;
 
     // 공급지 내부일때 사
     WarehouseStationId stationId;
 
-    UserId requesterId;
+    @NotNull
+    WarehouseTransactionTypeKind type;
+
+    WarehouseTransactionRequestId transactionRequestId;
+
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
   }
 
@@ -50,16 +61,21 @@ public interface WarehouseTransactionOrderRequests {
 
     // 예정일
     @NotNull
+    @Future
     OffsetDateTime dueDate;
 
     // 공급처 회사(회사)
-    CompanyId supplierId;
+    @NotNull
+    CompanyId relatedCompanyId;
 
     WarehouseStationId stationId;
 
+    @NotNull
+    WarehouseTransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
+
   }
 
-  @Data
+  /*@Data
   @NoArgsConstructor
   @AllArgsConstructor
   class DeleteRequest {
@@ -68,7 +84,7 @@ public interface WarehouseTransactionOrderRequests {
     @NotNull
     WarehouseTransactionOrderId id;
   }
-
+*/
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
@@ -77,5 +93,37 @@ public interface WarehouseTransactionOrderRequests {
     @Valid
     @NotNull
     WarehouseTransactionOrderId id;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class CancelRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionOrderId id;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class AcceptRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionOrderId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  class CompleteRequest {
+
+    @Valid
+    @NotNull
+    WarehouseTransactionOrderId id;
+
   }
 }
