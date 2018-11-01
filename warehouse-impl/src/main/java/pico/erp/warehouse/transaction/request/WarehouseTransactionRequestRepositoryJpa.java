@@ -37,8 +37,8 @@ public class WarehouseTransactionRequestRepositoryJpa implements
 
   @Override
   public WarehouseTransactionRequest create(
-    @NotNull WarehouseTransactionRequest transactionRequest) {
-    val entity = mapper.jpa(transactionRequest);
+    @NotNull WarehouseTransactionRequest request) {
+    val entity = mapper.jpa(request);
     val created = repository.save(entity);
     return mapper.jpa(created);
   }
@@ -74,9 +74,9 @@ public class WarehouseTransactionRequestRepositoryJpa implements
   }
 
   @Override
-  public void update(@NotNull WarehouseTransactionRequest transactionRequest) {
-    val entity = repository.findOne(transactionRequest.getId());
-    mapper.pass(mapper.jpa(transactionRequest), entity);
+  public void update(@NotNull WarehouseTransactionRequest request) {
+    val entity = repository.findOne(request.getId());
+    mapper.pass(mapper.jpa(request), entity);
     repository.save(entity);
   }
 

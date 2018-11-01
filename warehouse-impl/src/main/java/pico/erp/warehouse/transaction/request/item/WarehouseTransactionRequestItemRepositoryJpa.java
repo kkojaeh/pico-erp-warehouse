@@ -57,15 +57,15 @@ public class WarehouseTransactionRequestItemRepositoryJpa implements
   }
 
   @Override
-  public boolean exists(WarehouseTransactionRequestId transactionRequestId, ItemId itemId) {
-    return repository.exists(transactionRequestId, itemId);
+  public boolean exists(WarehouseTransactionRequestId requestId, ItemId itemId) {
+    return repository.exists(requestId, itemId);
   }
 
   @Override
   public Stream<WarehouseTransactionRequestItem> findAllBy(
-    WarehouseTransactionRequestId transactionRequestId) {
+    WarehouseTransactionRequestId requestId) {
     return repository
-      .findAllBy(transactionRequestId)
+      .findAllBy(requestId)
       .map(mapper::jpa);
   }
 

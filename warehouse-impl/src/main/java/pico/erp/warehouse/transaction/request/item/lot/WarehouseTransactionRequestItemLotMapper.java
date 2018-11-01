@@ -28,10 +28,10 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
   protected ItemLotService itemLotService;
 
   @Autowired
-  protected WarehouseTransactionRequestItemMapper transactionRequestItemMapper;
+  protected WarehouseTransactionRequestItemMapper requestItemMapper;
 
   @Autowired
-  protected WarehouseTransactionRequestMapper transactionRequestMapper;
+  protected WarehouseTransactionRequestMapper requestMapper;
 
   public WarehouseTransactionRequestItemLot jpa(WarehouseTransactionRequestItemLotEntity entity) {
     return WarehouseTransactionRequestItemLot.builder()
@@ -64,7 +64,7 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
     @Mapping(target = "itemLotId", source = "itemLot.id")
   })
   public abstract WarehouseTransactionRequestItemLotData map(
-    WarehouseTransactionRequestItemLot transactionRequestItem);
+    WarehouseTransactionRequestItemLot requestItem);
 
   @Mappings({
   })
@@ -83,8 +83,8 @@ public abstract class WarehouseTransactionRequestItemLotMapper {
   }
 
   protected WarehouseTransactionRequestItem map(
-    WarehouseTransactionRequestItemId transactionRequestItemId) {
-    return transactionRequestItemMapper.map(transactionRequestItemId);
+    WarehouseTransactionRequestItemId requestItemId) {
+    return requestItemMapper.map(requestItemId);
   }
 
   public abstract void pass(

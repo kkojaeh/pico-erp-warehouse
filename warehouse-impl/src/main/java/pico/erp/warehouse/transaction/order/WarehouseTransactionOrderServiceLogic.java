@@ -20,7 +20,7 @@ import pico.erp.warehouse.transaction.order.WarehouseTransactionOrderRequests.Co
 public class WarehouseTransactionOrderServiceLogic implements WarehouseTransactionOrderService {
 
   @Autowired
-  private WarehouseTransactionOrderRepository warehouseTransactionOrderRepository;
+  private WarehouseTransactionOrderRepository orderRepository;
 
   @Autowired
   private WarehouseTransactionOrderMapper mapper;
@@ -33,37 +33,37 @@ public class WarehouseTransactionOrderServiceLogic implements WarehouseTransacti
 
   @Override
   public void accept(AcceptRequest request) {
-    val transactionOrder = warehouseTransactionOrderRepository.findBy(request.getId())
+    val transactionOrder = orderRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
     val response = transactionOrder.apply(mapper.map(request));
-    warehouseTransactionOrderRepository.update(transactionOrder);
+    orderRepository.update(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void cancel(WarehouseTransactionOrderRequests.CancelRequest request) {
-    val transactionOrder = warehouseTransactionOrderRepository.findBy(request.getId())
+    val transactionOrder = orderRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
     val response = transactionOrder.apply(mapper.map(request));
-    warehouseTransactionOrderRepository.update(transactionOrder);
+    orderRepository.update(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void commit(WarehouseTransactionOrderRequests.CommitRequest request) {
-    val transactionOrder = warehouseTransactionOrderRepository.findBy(request.getId())
+    val transactionOrder = orderRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
     val response = transactionOrder.apply(mapper.map(request));
-    warehouseTransactionOrderRepository.update(transactionOrder);
+    orderRepository.update(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void complete(CompleteRequest request) {
-    val transactionOrder = warehouseTransactionOrderRepository.findBy(request.getId())
+    val transactionOrder = orderRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
     val response = transactionOrder.apply(mapper.map(request));
-    warehouseTransactionOrderRepository.update(transactionOrder);
+    orderRepository.update(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -72,32 +72,32 @@ public class WarehouseTransactionOrderServiceLogic implements WarehouseTransacti
     WarehouseTransactionOrderRequests.CreateRequest request) {
     val transactionOrder = new WarehouseTransactionOrder();
     val response = transactionOrder.apply(mapper.map(request));
-    if (warehouseTransactionOrderRepository.exists(transactionOrder.getId())) {
+    if (orderRepository.exists(transactionOrder.getId())) {
       throw new WarehouseTransactionOrderExceptions.AlreadyExistsException();
     }
-    val created = warehouseTransactionOrderRepository.create(transactionOrder);
+    val created = orderRepository.create(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public boolean exists(WarehouseTransactionOrderId id) {
-    return warehouseTransactionOrderRepository.exists(id);
+    return orderRepository.exists(id);
   }
 
   @Override
   public WarehouseTransactionOrderData get(WarehouseTransactionOrderId id) {
-    return warehouseTransactionOrderRepository.findBy(id)
+    return orderRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
   }
 
   @Override
   public void update(WarehouseTransactionOrderRequests.UpdateRequest request) {
-    val transactionOrder = warehouseTransactionOrderRepository.findBy(request.getId())
+    val transactionOrder = orderRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionOrderExceptions.NotFoundException::new);
     val response = transactionOrder.apply(mapper.map(request));
-    warehouseTransactionOrderRepository.update(transactionOrder);
+    orderRepository.update(transactionOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 

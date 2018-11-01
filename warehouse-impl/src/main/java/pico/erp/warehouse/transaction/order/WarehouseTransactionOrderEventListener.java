@@ -16,7 +16,7 @@ public class WarehouseTransactionOrderEventListener {
   private static final String LISTENER_NAME = "listener.warehouse-transaction-order-event-listener";
 
   @Autowired
-  private WarehouseTransactionOrderRepository warehouseTransactionOrderRepository;
+  private WarehouseTransactionOrderRepository orderRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -26,11 +26,11 @@ public class WarehouseTransactionOrderEventListener {
     + WarehouseTransactionOrderEvents.MemberChangedEvent.CHANNEL)
   public void onWarehouseTransactionOrderMemberChanged(
     WarehouseTransactionOrderEvents.MemberChangedEvent event) {
-    val aggregator = warehouseTransactionOrderRepository
+    val aggregator = orderRepository
       .findAggregatorBy(event.getWarehouseTransactionOrderId()).get();
     if (aggregator.isModifiable()) {
       val response = aggregator.apply(new WarehouseTransactionOrderMessages.VerifyRequest());
-      warehouseTransactionOrderRepository.update(aggregator);
+      orderRepository.update(aggregator);
       eventPublisher.publishEvents(response.getEvents());
     }
   }

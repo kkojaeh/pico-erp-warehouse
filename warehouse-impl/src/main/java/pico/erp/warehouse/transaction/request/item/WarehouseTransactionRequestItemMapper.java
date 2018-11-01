@@ -27,11 +27,11 @@ public abstract class WarehouseTransactionRequestItemMapper {
   protected ItemService itemService;
 
   @Autowired
-  protected WarehouseTransactionRequestMapper transactionRequestMapper;
+  protected WarehouseTransactionRequestMapper requestMapper;
 
   @Lazy
   @Autowired
-  protected WarehouseTransactionRequestItemRepository transactionRequestItemRepository;
+  protected WarehouseTransactionRequestItemRepository requestItemRepository;
 
   public WarehouseTransactionRequestItem jpa(WarehouseTransactionRequestItemEntity entity) {
     return WarehouseTransactionRequestItem.builder()
@@ -62,7 +62,7 @@ public abstract class WarehouseTransactionRequestItemMapper {
     @Mapping(target = "itemId", source = "item.id")
   })
   public abstract WarehouseTransactionRequestItemData map(
-    WarehouseTransactionRequestItem transactionRequestItem);
+    WarehouseTransactionRequestItem requestItem);
 
   @Mappings({
   })
@@ -80,8 +80,8 @@ public abstract class WarehouseTransactionRequestItemMapper {
       .orElse(null);
   }
 
-  protected WarehouseTransactionRequest map(WarehouseTransactionRequestId transactionRequestId) {
-    return transactionRequestMapper.map(transactionRequestId);
+  protected WarehouseTransactionRequest map(WarehouseTransactionRequestId requestId) {
+    return requestMapper.map(requestId);
   }
 
   public abstract void pass(
@@ -89,9 +89,9 @@ public abstract class WarehouseTransactionRequestItemMapper {
     @MappingTarget WarehouseTransactionRequestItemEntity to);
 
   public WarehouseTransactionRequestItem map(
-    WarehouseTransactionRequestItemId transactionRequestItemId) {
-    return Optional.ofNullable(transactionRequestItemId)
-      .map(id -> transactionRequestItemRepository.findBy(id)
+    WarehouseTransactionRequestItemId requestItemId) {
+    return Optional.ofNullable(requestItemId)
+      .map(id -> requestItemRepository.findBy(id)
         .orElseThrow(WarehouseTransactionRequestItemExceptions.NotFoundException::new))
       .orElse(null);
   }

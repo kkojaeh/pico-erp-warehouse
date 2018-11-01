@@ -21,7 +21,7 @@ import pico.erp.warehouse.transaction.request.WarehouseTransactionRequestRequest
 public class WarehouseTransactionRequestServiceLogic implements WarehouseTransactionRequestService {
 
   @Autowired
-  private WarehouseTransactionRequestRepository warehouseTransactionRequestRepository;
+  private WarehouseTransactionRequestRepository requestRepository;
 
   @Autowired
   private WarehouseTransactionRequestMapper mapper;
@@ -34,85 +34,85 @@ public class WarehouseTransactionRequestServiceLogic implements WarehouseTransac
 
   @Override
   public void accept(AcceptRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val req = requestRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = req.apply(mapper.map(request));
+    requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void cancel(WarehouseTransactionRequestRequests.CancelRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val req = requestRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = req.apply(mapper.map(request));
+    requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void cancelUncommitted(CancelUncommittedRequest request) {
-    warehouseTransactionRequestRepository.findAllUncommittedAt(request.getFixedDate())
-      .forEach(transactionRequest -> {
-        val response = transactionRequest.apply(
+    requestRepository.findAllUncommittedAt(request.getFixedDate())
+      .forEach(req -> {
+        val response = req.apply(
           WarehouseTransactionRequestMessages.CancelRequest.builder()
             .canceledBy(auditorAware.getCurrentAuditor())
             .build()
         );
-        warehouseTransactionRequestRepository.update(transactionRequest);
+        requestRepository.update(req);
         eventPublisher.publishEvents(response.getEvents());
       });
   }
 
   @Override
   public void commit(WarehouseTransactionRequestRequests.CommitRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val req = requestRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = req.apply(mapper.map(request));
+    requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void complete(CompleteRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val req = requestRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = req.apply(mapper.map(request));
+    requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public WarehouseTransactionRequestData create(
     WarehouseTransactionRequestRequests.CreateRequest request) {
-    val transactionRequest = new WarehouseTransactionRequest();
-    val response = transactionRequest.apply(mapper.map(request));
-    if (warehouseTransactionRequestRepository.exists(transactionRequest.getId())) {
+    val req = new WarehouseTransactionRequest();
+    val response = req.apply(mapper.map(request));
+    if (requestRepository.exists(request.getId())) {
       throw new WarehouseTransactionRequestExceptions.AlreadyExistsException();
     }
-    val created = warehouseTransactionRequestRepository.create(transactionRequest);
+    val created = requestRepository.create(req);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public boolean exists(WarehouseTransactionRequestId id) {
-    return warehouseTransactionRequestRepository.exists(id);
+    return requestRepository.exists(id);
   }
 
   @Override
   public WarehouseTransactionRequestData get(WarehouseTransactionRequestId id) {
-    return warehouseTransactionRequestRepository.findBy(id)
+    return requestRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
   }
 
   @Override
   public void update(WarehouseTransactionRequestRequests.UpdateRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val req = requestRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = req.apply(mapper.map(request));
+    requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
   }
 

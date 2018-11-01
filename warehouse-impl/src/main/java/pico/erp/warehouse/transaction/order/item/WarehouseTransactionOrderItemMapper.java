@@ -27,11 +27,11 @@ public abstract class WarehouseTransactionOrderItemMapper {
   protected ItemService itemService;
 
   @Autowired
-  protected WarehouseTransactionOrderMapper transactionOrderMapper;
+  protected WarehouseTransactionOrderMapper orderMapper;
 
   @Lazy
   @Autowired
-  protected WarehouseTransactionOrderItemRepository transactionOrderItemRepository;
+  protected WarehouseTransactionOrderItemRepository orderItemRepository;
 
   public WarehouseTransactionOrderItem jpa(WarehouseTransactionOrderItemEntity entity) {
     return WarehouseTransactionOrderItem.builder()
@@ -81,13 +81,13 @@ public abstract class WarehouseTransactionOrderItemMapper {
   }
 
   protected WarehouseTransactionOrder map(WarehouseTransactionOrderId transactionOrderId) {
-    return transactionOrderMapper.map(transactionOrderId);
+    return orderMapper.map(transactionOrderId);
   }
 
   public WarehouseTransactionOrderItem map(
     WarehouseTransactionOrderItemId transactionOrderItemId) {
     return Optional.ofNullable(transactionOrderItemId)
-      .map(id -> transactionOrderItemRepository.findBy(id)
+      .map(id -> orderItemRepository.findBy(id)
         .orElseThrow(WarehouseTransactionOrderItemExceptions.NotFoundException::new))
       .orElse(null);
   }

@@ -17,7 +17,7 @@ public class WarehouseTransactionRequestItemLotEventListener {
   private static final String LISTENER_NAME = "listener.warehouse-transaction-request-item-lot-event-listener";
 
   @Autowired
-  private WarehouseTransactionRequestItemLotRepository warehouseTransactionRequestItemLotRepository;
+  private WarehouseTransactionRequestItemLotRepository requestItemLotRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -28,13 +28,13 @@ public class WarehouseTransactionRequestItemLotEventListener {
   public void onWarehouseTransactionRequestItemDeleted(
     WarehouseTransactionRequestItemEvents.DeletedEvent event) {
 
-    warehouseTransactionRequestItemLotRepository
+    requestItemLotRepository
       .findAllBy(event.getWarehouseTransactionRequestItemId())
       .forEach(itemLot -> {
         val response = itemLot.apply(
           new WarehouseTransactionRequestItemLotMessages.DeleteRequest()
         );
-        warehouseTransactionRequestItemLotRepository.deleteBy(itemLot.getId());
+        requestItemLotRepository.deleteBy(itemLot.getId());
         eventPublisher.publishEvents(response.getEvents());
       });
   }

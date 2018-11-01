@@ -34,14 +34,14 @@ public abstract class WarehouseTransactionRequestMapper {
 
   @Lazy
   @Autowired
-  protected WarehouseTransactionRequestRepository transactionRequestRepository;
+  protected WarehouseTransactionRequestRepository requestRepository;
 
   @Lazy
   @Autowired
-  protected WarehouseTransactionRequestItemRepository transactionRequestItemRepository;
+  protected WarehouseTransactionRequestItemRepository requestItemRepository;
 
   @Autowired
-  private WarehouseTransactionRequestItemLotRepository transactionRequestItemLotRepository;
+  private WarehouseTransactionRequestItemLotRepository requestItemLotRepository;
 
   public WarehouseTransactionRequestAggregator aggregator(
     WarehouseTransactionRequestEntity entity) {
@@ -58,10 +58,10 @@ public abstract class WarehouseTransactionRequestMapper {
       .type(entity.getType())
       .committable(entity.isCommittable())
       .items(
-        transactionRequestItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
+        requestItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
       )
       .itemLots(
-        transactionRequestItemLotRepository.findAllBy(entity.getId())
+        requestItemLotRepository.findAllBy(entity.getId())
           .collect(Collectors.toList())
       )
       .build();
@@ -103,7 +103,7 @@ public abstract class WarehouseTransactionRequestMapper {
     @Mapping(target = "stationId", source = "station.id")
   })
   public abstract WarehouseTransactionRequestData map(
-    WarehouseTransactionRequest transactionRequest);
+    WarehouseTransactionRequest request);
 
   @Mappings({
     @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
@@ -149,9 +149,9 @@ public abstract class WarehouseTransactionRequestMapper {
   public abstract void pass(
     WarehouseTransactionRequestEntity from, @MappingTarget WarehouseTransactionRequestEntity to);
 
-  public WarehouseTransactionRequest map(WarehouseTransactionRequestId transactionRequestId) {
-    return Optional.ofNullable(transactionRequestId)
-      .map(id -> transactionRequestRepository.findBy(id)
+  public WarehouseTransactionRequest map(WarehouseTransactionRequestId requestId) {
+    return Optional.ofNullable(requestId)
+      .map(id -> requestRepository.findBy(id)
         .orElseThrow(WarehouseTransactionRequestExceptions.NotFoundException::new))
       .orElse(null);
   }

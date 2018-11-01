@@ -15,11 +15,11 @@ public interface WarehouseTransactionRequestItemRepository {
 
   boolean exists(@NotNull WarehouseTransactionRequestItemId id);
 
-  boolean exists(@NotNull WarehouseTransactionRequestId transactionRequestId,
+  boolean exists(@NotNull WarehouseTransactionRequestId requestId,
     @NotNull ItemId itemId);
 
   Stream<WarehouseTransactionRequestItem> findAllBy(
-    @NotNull WarehouseTransactionRequestId transactionRequestId);
+    @NotNull WarehouseTransactionRequestId requestId);
 
   Optional<WarehouseTransactionRequestItem> findBy(@NotNull WarehouseTransactionRequestItemId id);
 

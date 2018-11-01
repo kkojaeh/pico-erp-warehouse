@@ -10,24 +10,24 @@ import pico.erp.warehouse.transaction.request.item.WarehouseTransactionRequestIt
 public interface WarehouseTransactionRequestItemLotRepository {
 
   WarehouseTransactionRequestItemLot create(
-    @NotNull WarehouseTransactionRequestItemLot warehouseTransactionRequestItemLot);
+    @NotNull WarehouseTransactionRequestItemLot requestItemLot);
 
   void deleteBy(@NotNull WarehouseTransactionRequestItemLotId id);
 
   boolean exists(@NotNull WarehouseTransactionRequestItemLotId id);
 
-  boolean exists(@NotNull WarehouseTransactionRequestItemId transactionRequestItemId,
+  boolean exists(@NotNull WarehouseTransactionRequestItemId requestItemId,
     @NotNull ItemLotId itemLotId);
 
   Stream<WarehouseTransactionRequestItemLot> findAllBy(
-    @NotNull WarehouseTransactionRequestItemId transactionRequestItemId);
+    @NotNull WarehouseTransactionRequestItemId requestItemId);
 
   Stream<WarehouseTransactionRequestItemLot> findAllBy(
-    @NotNull WarehouseTransactionRequestId transactionRequestId);
+    @NotNull WarehouseTransactionRequestId requestId);
 
   Optional<WarehouseTransactionRequestItemLot> findBy(
     @NotNull WarehouseTransactionRequestItemLotId id);
 
-  void update(@NotNull WarehouseTransactionRequestItemLot warehouseTransactionRequestItemLot);
+  void update(@NotNull WarehouseTransactionRequestItemLot requestItemLot);
 
 }

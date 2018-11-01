@@ -28,10 +28,10 @@ public abstract class WarehouseTransactionOrderItemLotMapper {
   protected ItemLotService itemLotService;
 
   @Autowired
-  protected WarehouseTransactionOrderItemMapper transactionOrderItemMapper;
+  protected WarehouseTransactionOrderItemMapper orderItemMapper;
 
   @Autowired
-  protected WarehouseTransactionOrderMapper transactionOrderMapper;
+  protected WarehouseTransactionOrderMapper orderMapper;
 
   public WarehouseTransactionOrderItemLot jpa(WarehouseTransactionOrderItemLotEntity entity) {
     return WarehouseTransactionOrderItemLot.builder()
@@ -84,7 +84,7 @@ public abstract class WarehouseTransactionOrderItemLotMapper {
 
   protected WarehouseTransactionOrderItem map(
     WarehouseTransactionOrderItemId transactionOrderItemId) {
-    return transactionOrderItemMapper.map(transactionOrderItemId);
+    return orderItemMapper.map(transactionOrderItemId);
   }
 
   public abstract void pass(

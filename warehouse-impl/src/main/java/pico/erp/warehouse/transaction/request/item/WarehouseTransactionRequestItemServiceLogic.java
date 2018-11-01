@@ -22,7 +22,7 @@ public class WarehouseTransactionRequestItemServiceLogic implements
   WarehouseTransactionRequestItemService {
 
   @Autowired
-  private WarehouseTransactionRequestItemRepository warehouseTransactionRequestRepository;
+  private WarehouseTransactionRequestItemRepository requestItemRepository;
 
   @Autowired
   private WarehouseTransactionRequestItemMapper mapper;
@@ -36,56 +36,56 @@ public class WarehouseTransactionRequestItemServiceLogic implements
   @Override
   public WarehouseTransactionRequestItemData create(
     WarehouseTransactionRequestItemRequests.CreateRequest request) {
-    if (warehouseTransactionRequestRepository
+    if (requestItemRepository
       .exists(request.getRequestId(), request.getItemId())) {
       throw new WarehouseTransactionRequestItemExceptions.AlreadyExistsException();
     }
-    val transactionRequest = new WarehouseTransactionRequestItem();
-    val response = transactionRequest.apply(mapper.map(request));
-    if (warehouseTransactionRequestRepository.exists(transactionRequest.getId())) {
+    val item = new WarehouseTransactionRequestItem();
+    val response = item.apply(mapper.map(request));
+    if (requestItemRepository.exists(request.getId())) {
       throw new WarehouseTransactionRequestItemExceptions.AlreadyExistsException();
     }
 
-    val created = warehouseTransactionRequestRepository.create(transactionRequest);
+    val created = requestItemRepository.create(item);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(WarehouseTransactionRequestItemRequests.DeleteRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val item = requestItemRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestItemExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.deleteBy(transactionRequest.getId());
+    val response = item.apply(mapper.map(request));
+    requestItemRepository.deleteBy(request.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public boolean exists(WarehouseTransactionRequestItemId id) {
-    return warehouseTransactionRequestRepository.exists(id);
+    return requestItemRepository.exists(id);
   }
 
   @Override
   public WarehouseTransactionRequestItemData get(WarehouseTransactionRequestItemId id) {
-    return warehouseTransactionRequestRepository.findBy(id)
+    return requestItemRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseTransactionRequestItemExceptions.NotFoundException::new);
   }
 
   @Override
   public List<WarehouseTransactionRequestItemData> getAll(
-    WarehouseTransactionRequestId transactionRequestId) {
-    return warehouseTransactionRequestRepository.findAllBy(transactionRequestId)
+    WarehouseTransactionRequestId requestId) {
+    return requestItemRepository.findAllBy(requestId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
   @Override
   public void update(WarehouseTransactionRequestItemRequests.UpdateRequest request) {
-    val transactionRequest = warehouseTransactionRequestRepository.findBy(request.getId())
+    val item = requestItemRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestItemExceptions.NotFoundException::new);
-    val response = transactionRequest.apply(mapper.map(request));
-    warehouseTransactionRequestRepository.update(transactionRequest);
+    val response = item.apply(mapper.map(request));
+    requestItemRepository.update(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 

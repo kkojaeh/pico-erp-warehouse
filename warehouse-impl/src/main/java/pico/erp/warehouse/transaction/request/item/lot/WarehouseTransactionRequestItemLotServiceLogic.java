@@ -22,7 +22,7 @@ public class WarehouseTransactionRequestItemLotServiceLogic implements
   WarehouseTransactionRequestItemLotService {
 
   @Autowired
-  private WarehouseTransactionRequestItemLotRepository warehouseTransactionRequestItemLotRepository;
+  private WarehouseTransactionRequestItemLotRepository requestItemLotRepository;
 
   @Autowired
   private WarehouseTransactionRequestItemLotMapper mapper;
@@ -36,56 +36,56 @@ public class WarehouseTransactionRequestItemLotServiceLogic implements
   @Override
   public WarehouseTransactionRequestItemLotData create(
     WarehouseTransactionRequestItemLotRequests.CreateRequest request) {
-    if (warehouseTransactionRequestItemLotRepository
+    if (requestItemLotRepository
       .exists(request.getRequestItemId(), request.getItemLotId())) {
       throw new WarehouseTransactionRequestItemLotExceptions.AlreadyExistsException();
     }
     val itemLot = new WarehouseTransactionRequestItemLot();
     val response = itemLot.apply(mapper.map(request));
-    if (warehouseTransactionRequestItemLotRepository.exists(itemLot.getId())) {
+    if (requestItemLotRepository.exists(itemLot.getId())) {
       throw new WarehouseTransactionRequestItemLotExceptions.AlreadyExistsException();
     }
 
-    val created = warehouseTransactionRequestItemLotRepository.create(itemLot);
+    val created = requestItemLotRepository.create(itemLot);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(WarehouseTransactionRequestItemLotRequests.DeleteRequest request) {
-    val itemLot = warehouseTransactionRequestItemLotRepository.findBy(request.getId())
+    val itemLot = requestItemLotRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestItemLotExceptions.NotFoundException::new);
     val response = itemLot.apply(mapper.map(request));
-    warehouseTransactionRequestItemLotRepository.deleteBy(itemLot.getId());
+    requestItemLotRepository.deleteBy(itemLot.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public boolean exists(WarehouseTransactionRequestItemLotId id) {
-    return warehouseTransactionRequestItemLotRepository.exists(id);
+    return requestItemLotRepository.exists(id);
   }
 
   @Override
   public WarehouseTransactionRequestItemLotData get(WarehouseTransactionRequestItemLotId id) {
-    return warehouseTransactionRequestItemLotRepository.findBy(id)
+    return requestItemLotRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(WarehouseTransactionRequestItemLotExceptions.NotFoundException::new);
   }
 
   @Override
   public List<WarehouseTransactionRequestItemLotData> getAll(
-    WarehouseTransactionRequestItemId transactionRequestItemId) {
-    return warehouseTransactionRequestItemLotRepository.findAllBy(transactionRequestItemId)
+    WarehouseTransactionRequestItemId requestItemId) {
+    return requestItemLotRepository.findAllBy(requestItemId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
   @Override
   public void update(WarehouseTransactionRequestItemLotRequests.UpdateRequest request) {
-    val itemLot = warehouseTransactionRequestItemLotRepository.findBy(request.getId())
+    val itemLot = requestItemLotRepository.findBy(request.getId())
       .orElseThrow(WarehouseTransactionRequestItemLotExceptions.NotFoundException::new);
     val response = itemLot.apply(mapper.map(request));
-    warehouseTransactionRequestItemLotRepository.update(itemLot);
+    requestItemLotRepository.update(itemLot);
     eventPublisher.publishEvents(response.getEvents());
   }
 

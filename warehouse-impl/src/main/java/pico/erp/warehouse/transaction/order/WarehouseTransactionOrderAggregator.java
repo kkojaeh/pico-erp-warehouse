@@ -28,18 +28,18 @@ public class WarehouseTransactionOrderAggregator extends WarehouseTransactionOrd
   List<WarehouseTransactionOrderItemLot> itemLots;
 
   @Builder(builderMethodName = "aggregatorBuilder")
-  public WarehouseTransactionOrderAggregator(
+  public WarehouseTransactionOrderAggregator(boolean committable,
     WarehouseTransactionOrderId id, OffsetDateTime dueDate,
     CompanyData relatedCompany, WarehouseStation station,
     WarehouseTransactionOrderStatusKind status,
     WarehouseTransactionTypeKind type, Auditor acceptedBy, OffsetDateTime acceptedDate,
     Auditor completedBy, OffsetDateTime completedDate, Auditor committedBy,
     OffsetDateTime committedDate, Auditor canceledBy, OffsetDateTime canceledDate,
-    boolean committable, WarehouseTransactionRequest request,
+    WarehouseTransactionRequest request,
     List<WarehouseTransactionOrderItem> items,
     List<WarehouseTransactionOrderItemLot> itemLots) {
-    super(id, dueDate, relatedCompany, station, status, type, acceptedBy, acceptedDate, completedBy,
-      completedDate, committedBy, committedDate, canceledBy, canceledDate, committable, request);
+    super(committable, id, dueDate, relatedCompany, station, status, type, acceptedBy, acceptedDate,
+      completedBy, completedDate, committedBy, committedDate, canceledBy, canceledDate, request);
     this.items = items;
     this.itemLots = itemLots;
   }
