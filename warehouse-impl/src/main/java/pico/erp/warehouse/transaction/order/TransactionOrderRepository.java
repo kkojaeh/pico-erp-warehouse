@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
+import pico.erp.warehouse.transaction.request.TransactionRequestId;
 
 public interface TransactionOrderRepository {
 
@@ -20,6 +21,8 @@ public interface TransactionOrderRepository {
   Stream<TransactionOrder> findAllUncommittedAt(@NotNull OffsetDateTime fixedDate);
 
   Optional<TransactionOrder> findBy(@NotNull TransactionOrderId id);
+
+  Optional<TransactionOrder> findBy(@NotNull TransactionRequestId requestId);
 
   void update(@NotNull TransactionOrder warehouseTransactionOrder);
 

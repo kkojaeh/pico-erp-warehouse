@@ -11,6 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pico.erp.warehouse.transaction.request.TransactionRequestId;
 
 
 @Repository
@@ -21,6 +22,10 @@ interface TransactionOrderEntityRepository extends
   Stream<TransactionOrderEntity> findAllDueDateBeforeThan(
     @Param("fixedDate") OffsetDateTime fixedDate,
     @Param("status") TransactionOrderStatusKind status);
+
+  @Query("SELECT o FROM TransactionOrder o WHERE o.requestId = :requestId")
+  Optional<TransactionOrderEntity> findBy(
+    @Param("requestId") TransactionRequestId requestId);
 
 }
 
@@ -70,6 +75,12 @@ public class TransactionOrderRepositoryJpa implements
   @Override
   public Optional<TransactionOrder> findBy(@NotNull TransactionOrderId id) {
     return Optional.ofNullable(repository.findOne(id))
+      .map(mapper::jpa);
+  }
+
+  @Override
+  public Optional<TransactionOrder> findBy(TransactionRequestId requestId) {
+    return repository.findBy(requestId)
       .map(mapper::jpa);
   }
 

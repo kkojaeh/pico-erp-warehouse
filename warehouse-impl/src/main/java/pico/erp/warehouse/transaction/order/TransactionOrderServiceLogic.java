@@ -11,11 +11,10 @@ import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.order.TransactionOrderRequests.AcceptRequest;
 import pico.erp.warehouse.transaction.order.TransactionOrderRequests.CompleteRequest;
-import pico.erp.warehouse.transaction.order.pack.TransactionOrderPack;
-import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackExceptions;
 import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackId;
-import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackMessages;
 import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackRepository;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackRequests;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackService;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -38,6 +37,9 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
 
   @Autowired
   private AuditorAware<Auditor> auditorAware;
+
+  @Autowired
+  private TransactionOrderPackService orderPackService;
 
   @Override
   public void accept(AcceptRequest request) {
@@ -63,22 +65,13 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
     val response = order.apply(mapper.map(request));
     response.getSelectedPacks().forEach(pack -> {
-      if (orderPackRepository.exists(order.getId(), pack.getId())) {
-        throw new TransactionOrderPackExceptions.AlreadyExistsException();
-      }
-      val orderPack = new TransactionOrderPack();
-      val orderPackResponse = orderPack.apply(
-        TransactionOrderPackMessages.CreateRequest.builder()
+      orderPackService.create(
+        TransactionOrderPackRequests.CreateRequest.builder()
           .id(TransactionOrderPackId.generate())
-          .order(order)
-          .pack(pack)
+          .orderId(order.getId())
+          .packId(pack.getId())
           .build()
       );
-      if (orderPackRepository.exists(orderPack.getId())) {
-        throw new TransactionOrderPackExceptions.AlreadyExistsException();
-      }
-      orderPackRepository.create(orderPack);
-      eventPublisher.publishEvents(orderPackResponse.getEvents());
     });
     orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());

@@ -57,6 +57,7 @@ public abstract class TransactionRequestMapper {
       .status(entity.getStatus())
       .type(entity.getType())
       .committable(entity.isCommittable())
+      .quantityCorrectionPolicy(entity.getQuantityCorrectionPolicy())
       .items(
         requestItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
       )
@@ -80,6 +81,7 @@ public abstract class TransactionRequestMapper {
       .status(entity.getStatus())
       .type(entity.getType())
       .committable(entity.isCommittable())
+      .quantityCorrectionPolicy(entity.getQuantityCorrectionPolicy())
       .build();
   }
 

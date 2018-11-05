@@ -72,6 +72,9 @@ public class TransactionOrderItemLotEntity implements Serializable {
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;
 
+  @Column(precision = 19, scale = 2)
+  BigDecimal remainedQuantity;
+
   @Embedded
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "CREATED_BY_ID", updatable = false, length = TypeDefinitions.ID_LENGTH)),

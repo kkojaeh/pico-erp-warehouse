@@ -36,6 +36,8 @@ public class TransactionOrderItem implements Serializable {
 
   BigDecimal quantity;
 
+  BigDecimal remainedQuantity;
+
   public TransactionOrderItemMessages.CreateResponse apply(
     TransactionOrderItemMessages.CreateRequest request) {
     if (!request.getOrder().isModifiable()) {
@@ -45,6 +47,7 @@ public class TransactionOrderItem implements Serializable {
     order = request.getOrder();
     item = request.getItem();
     quantity = request.getQuantity();
+    remainedQuantity = request.getQuantity();
     return new TransactionOrderItemMessages.CreateResponse(
       Arrays.asList(
         new TransactionOrderItemEvents.CreatedEvent(this.id),
@@ -59,6 +62,7 @@ public class TransactionOrderItem implements Serializable {
       throw new TransactionOrderItemExceptions.CannotUpdateException();
     }
     quantity = request.getQuantity();
+    remainedQuantity = request.getQuantity();
     return new TransactionOrderItemMessages.UpdateResponse(
       Arrays.asList(
         new TransactionOrderItemEvents.UpdatedEvent(this.id),
