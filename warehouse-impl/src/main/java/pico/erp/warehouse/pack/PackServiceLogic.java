@@ -17,7 +17,7 @@ import pico.erp.shared.event.EventPublisher;
 public class PackServiceLogic implements PackService {
 
   @Autowired
-  private PackRepository warehousePackRepository;
+  private PackRepository packRepository;
 
   @Autowired
   private PackMapper mapper;
@@ -30,53 +30,53 @@ public class PackServiceLogic implements PackService {
   public PackData create(PackRequests.CreateRequest request) {
     val pack = new Pack();
     val response = pack.apply(mapper.map(request));
-    if (warehousePackRepository.exists(pack.getId())) {
+    if (packRepository.exists(pack.getId())) {
       throw new PackExceptions.AlreadyExistsException();
     }
-    if (warehousePackRepository.exists(pack.getCode())) {
+    if (packRepository.exists(pack.getCode())) {
       throw new PackExceptions.CodeAlreadyExistsException();
     }
-    val created = warehousePackRepository.create(pack);
+    val created = packRepository.create(pack);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(PackRequests.DeleteRequest request) {
-    val pack = warehousePackRepository.findBy(request.getId())
+    val pack = packRepository.findBy(request.getId())
       .orElseThrow(PackExceptions.NotFoundException::new);
     val response = pack.apply(mapper.map(request));
-    warehousePackRepository.deleteBy(pack.getId());
+    packRepository.deleteBy(pack.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public boolean exists(@NotNull PackId id) {
-    return warehousePackRepository.exists(id);
+    return packRepository.exists(id);
   }
 
   @Override
   public PackData get(@NotNull PackId id) {
-    return warehousePackRepository.findBy(id)
+    return packRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(PackExceptions.NotFoundException::new);
   }
 
   @Override
   public void pack(PackRequests.PackRequest request) {
-    val pack = warehousePackRepository.findBy(request.getId())
+    val pack = packRepository.findBy(request.getId())
       .orElseThrow(PackExceptions.NotFoundException::new);
     val response = pack.apply(mapper.map(request));
-    warehousePackRepository.update(pack);
+    packRepository.update(pack);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void put(PackRequests.PutRequest request) {
-    val pack = warehousePackRepository.findBy(request.getId())
+    val pack = packRepository.findBy(request.getId())
       .orElseThrow(PackExceptions.NotFoundException::new);
     val response = pack.apply(mapper.map(request));
-    warehousePackRepository.update(pack);
+    packRepository.update(pack);
     eventPublisher.publishEvents(response.getEvents());
   }
 

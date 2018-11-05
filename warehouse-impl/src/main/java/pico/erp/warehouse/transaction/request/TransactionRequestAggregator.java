@@ -31,20 +31,18 @@ public class TransactionRequestAggregator extends TransactionRequest {
   List<TransactionRequestItemLot> itemLots;
 
   @Builder(builderMethodName = "aggregatorBuilder")
-  public TransactionRequestAggregator(
-    TransactionRequestId id, OffsetDateTime dueDate,
-    CompanyData relatedCompany, Station station,
-    TransactionRequestStatusKind status,
+  public TransactionRequestAggregator(boolean committable,
+    TransactionRequestId id, OffsetDateTime dueDate, CompanyData relatedCompany,
+    Station station, TransactionRequestStatusKind status,
     TransactionTypeKind type, Auditor committedBy, OffsetDateTime committedDate,
     Auditor canceledBy, OffsetDateTime canceledDate, Auditor acceptedBy,
     OffsetDateTime acceptedDate, Auditor completedBy, OffsetDateTime completedDate,
-    boolean committable,
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionRequestItem> items,
     List<TransactionRequestItemLot> itemLots) {
-    super(id, dueDate, relatedCompany, station, status, type, committedBy, committedDate,
-      canceledBy,
-      canceledDate, acceptedBy, acceptedDate, completedBy, completedDate, committable,
+    super(committable, id, dueDate, relatedCompany, station, status, type, committedBy,
+      committedDate,
+      canceledBy, canceledDate, acceptedBy, acceptedDate, completedBy, completedDate,
       quantityCorrectionPolicy);
     this.items = items;
     this.itemLots = itemLots;

@@ -40,23 +40,23 @@ public class TransactionOrderItemLotServiceLogic implements
       .exists(request.getOrderItemId(), request.getItemLotId())) {
       throw new TransactionOrderItemLotExceptions.AlreadyExistsException();
     }
-    val itemLot = new TransactionOrderItemLot();
-    val response = itemLot.apply(mapper.map(request));
-    if (orderItemLotRepository.exists(itemLot.getId())) {
+    val orderItemLot = new TransactionOrderItemLot();
+    val response = orderItemLot.apply(mapper.map(request));
+    if (orderItemLotRepository.exists(orderItemLot.getId())) {
       throw new TransactionOrderItemLotExceptions.AlreadyExistsException();
     }
 
-    val created = orderItemLotRepository.create(itemLot);
+    val created = orderItemLotRepository.create(orderItemLot);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(TransactionOrderItemLotRequests.DeleteRequest request) {
-    val itemLot = orderItemLotRepository.findBy(request.getId())
+    val orderItemLot = orderItemLotRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderItemLotExceptions.NotFoundException::new);
-    val response = itemLot.apply(mapper.map(request));
-    orderItemLotRepository.deleteBy(itemLot.getId());
+    val response = orderItemLot.apply(mapper.map(request));
+    orderItemLotRepository.deleteBy(orderItemLot.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -82,10 +82,10 @@ public class TransactionOrderItemLotServiceLogic implements
 
   @Override
   public void update(TransactionOrderItemLotRequests.UpdateRequest request) {
-    val itemLot = orderItemLotRepository.findBy(request.getId())
+    val orderItemLot = orderItemLotRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderItemLotExceptions.NotFoundException::new);
-    val response = itemLot.apply(mapper.map(request));
-    orderItemLotRepository.update(itemLot);
+    val response = orderItemLot.apply(mapper.map(request));
+    orderItemLotRepository.update(orderItemLot);
     eventPublisher.publishEvents(response.getEvents());
   }
 

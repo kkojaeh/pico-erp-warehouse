@@ -13,8 +13,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pico.erp.item.ItemId;
 import pico.erp.item.lot.ItemLotId;
-import pico.erp.warehouse.location.station.StationEntity;
+import pico.erp.warehouse.pack.PackRepository.ItemLotQuantity;
 
 
 @Repository
@@ -29,7 +30,10 @@ interface PackEntityRepository extends
   boolean exists(@Param("code") PackCode code);
 
   @Query("SELECT p FROM Pack p WHERE p.itemLotId = :itemLotId ORDER BY p.createdDate")
-  Stream<StationEntity> findAllBy(@Param("itemLotId") ItemLotId itemLotId);
+  Stream<PackEntity> findAllBy(@Param("itemLotId") ItemLotId itemLotId);
+
+  @Query("SELECT new pico.erp.warehouse.pack.PackRepository$ItemLotQuantity(p.itemLotId, SUM(p.quantity)) FROM Pack p WHERE p.itemId = :itemId GROUP BY p.itemLotId")
+  Stream<ItemLotQuantity> findItemLotQuantityAllBy(@Param("itemId") ItemId itemId);
 
 }
 
@@ -74,13 +78,19 @@ public class PackRepositoryJpa implements PackRepository {
 
   @Override
   public Stream<Pack> findAllBy(ItemLotId itemLotId) {
-    return null;
+    return repository.findAllBy(itemLotId)
+      .map(mapper::jpa);
   }
 
   @Override
   public Optional<Pack> findBy(@NotNull PackId id) {
     return Optional.ofNullable(repository.findOne(id))
       .map(mapper::jpa);
+  }
+
+  @Override
+  public Stream<ItemLotQuantity> findItemLotQuantityAllBy(ItemId itemId) {
+    return repository.findItemLotQuantityAllBy(itemId);
   }
 
   @Override

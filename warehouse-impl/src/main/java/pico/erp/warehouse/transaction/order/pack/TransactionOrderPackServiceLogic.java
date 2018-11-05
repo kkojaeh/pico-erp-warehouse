@@ -40,23 +40,23 @@ public class TransactionOrderPackServiceLogic implements
       .exists(request.getOrderId(), request.getPackId())) {
       throw new TransactionOrderPackExceptions.AlreadyExistsException();
     }
-    val transactionOrder = new TransactionOrderPack();
-    val response = transactionOrder.apply(mapper.map(request));
-    if (orderPackRepository.exists(transactionOrder.getId())) {
+    val orderPack = new TransactionOrderPack();
+    val response = orderPack.apply(mapper.map(request));
+    if (orderPackRepository.exists(orderPack.getId())) {
       throw new TransactionOrderPackExceptions.AlreadyExistsException();
     }
 
-    val created = orderPackRepository.create(transactionOrder);
+    val created = orderPackRepository.create(orderPack);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(TransactionOrderPackRequests.DeleteRequest request) {
-    val transactionOrder = orderPackRepository.findBy(request.getId())
+    val orderPack = orderPackRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderPackExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderPackRepository.deleteBy(transactionOrder.getId());
+    val response = orderPack.apply(mapper.map(request));
+    orderPackRepository.deleteBy(orderPack.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -82,10 +82,10 @@ public class TransactionOrderPackServiceLogic implements
 
   @Override
   public void update(TransactionOrderPackRequests.UpdateRequest request) {
-    val transactionOrder = orderPackRepository.findBy(request.getId())
+    val orderPack = orderPackRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderPackExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderPackRepository.update(transactionOrder);
+    val response = orderPack.apply(mapper.map(request));
+    orderPackRepository.update(orderPack);
     eventPublisher.publishEvents(response.getEvents());
   }
 

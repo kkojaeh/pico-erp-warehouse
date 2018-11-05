@@ -48,6 +48,7 @@ public abstract class PackMapper {
   @Mappings({
     @Mapping(target = "locationId", source = "location.id"),
     @Mapping(target = "itemLotId", source = "itemLot.id"),
+    @Mapping(target = "itemId", source = "itemLot.itemId"),
     @Mapping(target = "lastModifiedBy", ignore = true),
     @Mapping(target = "lastModifiedDate", ignore = true)
   })

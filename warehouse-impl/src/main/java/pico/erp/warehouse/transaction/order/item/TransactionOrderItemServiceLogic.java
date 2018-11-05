@@ -40,23 +40,23 @@ public class TransactionOrderItemServiceLogic implements
       .exists(request.getOrderId(), request.getItemId())) {
       throw new TransactionOrderItemExceptions.AlreadyExistsException();
     }
-    val transactionOrder = new TransactionOrderItem();
-    val response = transactionOrder.apply(mapper.map(request));
-    if (orderItemRepository.exists(transactionOrder.getId())) {
+    val orderItem = new TransactionOrderItem();
+    val response = orderItem.apply(mapper.map(request));
+    if (orderItemRepository.exists(orderItem.getId())) {
       throw new TransactionOrderItemExceptions.AlreadyExistsException();
     }
 
-    val created = orderItemRepository.create(transactionOrder);
+    val created = orderItemRepository.create(orderItem);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(TransactionOrderItemRequests.DeleteRequest request) {
-    val transactionOrder = orderItemRepository.findBy(request.getId())
+    val orderItem = orderItemRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderItemExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderItemRepository.deleteBy(transactionOrder.getId());
+    val response = orderItem.apply(mapper.map(request));
+    orderItemRepository.deleteBy(orderItem.getId());
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -82,10 +82,10 @@ public class TransactionOrderItemServiceLogic implements
 
   @Override
   public void update(TransactionOrderItemRequests.UpdateRequest request) {
-    val transactionOrder = orderItemRepository.findBy(request.getId())
+    val orderItem = orderItemRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderItemExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderItemRepository.update(transactionOrder);
+    val response = orderItem.apply(mapper.map(request));
+    orderItemRepository.update(orderItem);
     eventPublisher.publishEvents(response.getEvents());
   }
 

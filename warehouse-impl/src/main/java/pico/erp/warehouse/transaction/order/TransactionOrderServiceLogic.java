@@ -11,6 +11,11 @@ import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.order.TransactionOrderRequests.AcceptRequest;
 import pico.erp.warehouse.transaction.order.TransactionOrderRequests.CompleteRequest;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPack;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackExceptions;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackId;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackMessages;
+import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackRepository;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -23,6 +28,9 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
   private TransactionOrderRepository orderRepository;
 
   @Autowired
+  private TransactionOrderPackRepository orderPackRepository;
+
+  @Autowired
   private TransactionOrderMapper mapper;
 
   @Autowired
@@ -33,49 +41,67 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
 
   @Override
   public void accept(AcceptRequest request) {
-    val transactionOrder = orderRepository.findBy(request.getId())
+    val order = orderRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderRepository.update(transactionOrder);
+    val response = order.apply(mapper.map(request));
+    orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void cancel(TransactionOrderRequests.CancelRequest request) {
-    val transactionOrder = orderRepository.findBy(request.getId())
+    val order = orderRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderRepository.update(transactionOrder);
+    val response = order.apply(mapper.map(request));
+    orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void commit(TransactionOrderRequests.CommitRequest request) {
-    val transactionOrder = orderRepository.findAggregatorBy(request.getId())
+    val order = orderRepository.findAggregatorBy(request.getId())
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderRepository.update(transactionOrder);
+    val response = order.apply(mapper.map(request));
+    response.getSelectedPacks().forEach(pack -> {
+      if (orderPackRepository.exists(order.getId(), pack.getId())) {
+        throw new TransactionOrderPackExceptions.AlreadyExistsException();
+      }
+      val orderPack = new TransactionOrderPack();
+      val orderPackResponse = orderPack.apply(
+        TransactionOrderPackMessages.CreateRequest.builder()
+          .id(TransactionOrderPackId.generate())
+          .order(order)
+          .pack(pack)
+          .build()
+      );
+      if (orderPackRepository.exists(orderPack.getId())) {
+        throw new TransactionOrderPackExceptions.AlreadyExistsException();
+      }
+      orderPackRepository.create(orderPack);
+      eventPublisher.publishEvents(orderPackResponse.getEvents());
+    });
+    orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void complete(CompleteRequest request) {
-    val transactionOrder = orderRepository.findBy(request.getId())
+    val order = orderRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderRepository.update(transactionOrder);
+    val response = order.apply(mapper.map(request));
+    orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public TransactionOrderData create(
     TransactionOrderRequests.CreateRequest request) {
-    val transactionOrder = new TransactionOrder();
-    val response = transactionOrder.apply(mapper.map(request));
-    if (orderRepository.exists(transactionOrder.getId())) {
+    val order = new TransactionOrder();
+    val response = order.apply(mapper.map(request));
+    if (orderRepository.exists(order.getId())) {
       throw new TransactionOrderExceptions.AlreadyExistsException();
     }
-    val created = orderRepository.create(transactionOrder);
+    val created = orderRepository.create(order);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
@@ -94,10 +120,10 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
 
   @Override
   public void update(TransactionOrderRequests.UpdateRequest request) {
-    val transactionOrder = orderRepository.findBy(request.getId())
+    val order = orderRepository.findBy(request.getId())
       .orElseThrow(TransactionOrderExceptions.NotFoundException::new);
-    val response = transactionOrder.apply(mapper.map(request));
-    orderRepository.update(transactionOrder);
+    val response = order.apply(mapper.map(request));
+    orderRepository.update(order);
     eventPublisher.publishEvents(response.getEvents());
   }
 

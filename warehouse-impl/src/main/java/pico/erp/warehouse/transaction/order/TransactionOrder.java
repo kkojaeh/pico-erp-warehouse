@@ -15,6 +15,7 @@ import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.Station;
+import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 import pico.erp.warehouse.transaction.request.TransactionRequest;
 
@@ -62,6 +63,8 @@ public class TransactionOrder implements Serializable {
 
   TransactionRequest request;
 
+  TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
+
   public TransactionOrderMessages.CreateResponse apply(
     TransactionOrderMessages.CreateRequest request) {
     id = request.getId();
@@ -71,6 +74,7 @@ public class TransactionOrder implements Serializable {
     status = TransactionOrderStatusKind.CREATED;
     type = request.getType();
     committable = false;
+    quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
     return new TransactionOrderMessages.CreateResponse(
       Arrays.asList(new TransactionOrderEvents.CreatedEvent(this.id))
     );
@@ -84,6 +88,7 @@ public class TransactionOrder implements Serializable {
     dueDate = request.getDueDate();
     relatedCompany = request.getRelatedCompany();
     station = request.getStation();
+    quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
     return new TransactionOrderMessages.UpdateResponse(
       Arrays.asList(new TransactionOrderEvents.UpdatedEvent(this.id))
     );

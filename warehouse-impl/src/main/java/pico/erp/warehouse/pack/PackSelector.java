@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pico.erp.item.ItemId;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
@@ -17,6 +19,8 @@ public interface PackSelector {
   Stream<Pack> select(ItemLotSelectOptions options);
 
   @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
   @Builder
   class ItemSelectOptions {
 
@@ -33,6 +37,8 @@ public interface PackSelector {
   }
 
   @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
   @Builder
   class ItemLotSelectOptions {
 

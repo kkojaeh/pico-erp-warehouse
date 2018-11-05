@@ -26,6 +26,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pico.erp.item.ItemId;
 import pico.erp.item.lot.ItemLotId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
@@ -62,6 +63,11 @@ public class PackEntity implements Serializable {
     @AttributeOverride(name = "value", column = @Column(name = "LOCATION_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   LocationId locationId;
+
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "ITEM_ID"))
+  })
+  ItemId itemId;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "ITEM_LOT_ID"))
