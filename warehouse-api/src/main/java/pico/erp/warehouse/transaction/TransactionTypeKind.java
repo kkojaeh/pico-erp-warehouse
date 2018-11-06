@@ -1,6 +1,8 @@
 package pico.erp.warehouse.transaction;
 
-public enum TransactionTypeKind {
+import pico.erp.shared.data.LocalizedNameable;
+
+public enum TransactionTypeKind implements LocalizedNameable {
 
   INBOUND,
 

@@ -2,9 +2,10 @@ package pico.erp.warehouse.transaction.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import pico.erp.shared.data.LocalizedNameable;
 
 @AllArgsConstructor
-public enum TransactionOrderStatusKind {
+public enum TransactionOrderStatusKind implements LocalizedNameable {
 
   CREATED(true, true, true, false, false),
 

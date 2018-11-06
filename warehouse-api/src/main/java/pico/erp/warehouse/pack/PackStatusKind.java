@@ -1,6 +1,8 @@
 package pico.erp.warehouse.pack;
 
-public enum PackStatusKind {
+import pico.erp.shared.data.LocalizedNameable;
+
+public enum PackStatusKind implements LocalizedNameable {
 
   EMPTY,
 

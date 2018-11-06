@@ -2,10 +2,11 @@ package pico.erp.warehouse.transaction.order.pack;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import pico.erp.shared.data.LocalizedNameable;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 
 @AllArgsConstructor
-public enum TransactionOrderPackStatusKind {
+public enum TransactionOrderPackStatusKind implements LocalizedNameable {
 
   INBOUND_READY(TransactionTypeKind.INBOUND),
 

@@ -1,6 +1,8 @@
 package pico.erp.warehouse.transaction;
 
-public enum TransactionQuantityCorrectionPolicyKind {
+import pico.erp.shared.data.LocalizedNameable;
+
+public enum TransactionQuantityCorrectionPolicyKind implements LocalizedNameable {
 
   /**
    * 수량 보정 불가 수량이 정확히 일치 해야 함

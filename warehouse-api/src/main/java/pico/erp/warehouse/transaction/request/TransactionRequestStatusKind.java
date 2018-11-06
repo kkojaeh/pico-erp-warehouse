@@ -2,9 +2,10 @@ package pico.erp.warehouse.transaction.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import pico.erp.shared.data.LocalizedNameable;
 
 @AllArgsConstructor
-public enum TransactionRequestStatusKind {
+public enum TransactionRequestStatusKind implements LocalizedNameable {
 
   CREATED(true, true, true, false, false),
 
