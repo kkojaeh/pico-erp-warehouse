@@ -13,9 +13,6 @@ import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
-import pico.erp.warehouse.transaction.request.TransactionRequestId
-import pico.erp.warehouse.transaction.request.TransactionRequestRequests
-import pico.erp.warehouse.transaction.request.TransactionRequestService
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemExceptions
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemRequests
@@ -33,10 +30,10 @@ import java.time.OffsetDateTime
 class TransactionRequestItemServiceSpec extends Specification {
 
   @Autowired
-  TransactionRequestService warehouseTransactionRequestService
+  TransactionRequestService transactionRequestService
 
   @Autowired
-  TransactionRequestItemService warehouseTransactionRequestItemService
+  TransactionRequestItemService transactionRequestItemService
 
   def requestId = TransactionRequestId.from("create")
 
@@ -50,7 +47,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def setup() {
     def dueDate = OffsetDateTime.now().plusDays(2)
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: requestId,
         dueDate: dueDate,
@@ -64,7 +61,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "입/출고요청에 품목을 추가한다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -73,7 +70,7 @@ class TransactionRequestItemServiceSpec extends Specification {
       )
     )
 
-    def item = warehouseTransactionRequestItemService.get(requestItemId)
+    def item = transactionRequestItemService.get(requestItemId)
 
 
     then:
@@ -85,7 +82,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "동일한 입/출고요청에 동일한 품목을 추가할 수 없다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -94,7 +91,7 @@ class TransactionRequestItemServiceSpec extends Specification {
       )
     )
 
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: TransactionRequestItemId.from("item-2"),
         requestId: requestId,
@@ -110,7 +107,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "입/출고요청 품목을 수정한다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -118,13 +115,13 @@ class TransactionRequestItemServiceSpec extends Specification {
         quantity: 20
       )
     )
-    warehouseTransactionRequestItemService.update(
+    transactionRequestItemService.update(
       new TransactionRequestItemRequests.UpdateRequest(
         id: requestItemId,
         quantity: 10
       )
     )
-    def item = warehouseTransactionRequestItemService.get(requestItemId)
+    def item = transactionRequestItemService.get(requestItemId)
 
     then:
     item.quantity == 10
@@ -132,7 +129,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "입/출고요청 품목을 삭제한다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -140,19 +137,19 @@ class TransactionRequestItemServiceSpec extends Specification {
         quantity: 20
       )
     )
-    warehouseTransactionRequestItemService.delete(
+    transactionRequestItemService.delete(
       new TransactionRequestItemRequests.DeleteRequest(
         id: requestItemId
       )
     )
 
     then:
-    warehouseTransactionRequestItemService.getAll(requestId).isEmpty() == true
+    transactionRequestItemService.getAll(requestId).isEmpty() == true
   }
 
   def "제출된 입/출고요청 품목은 생성 할 수 없다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -160,12 +157,12 @@ class TransactionRequestItemServiceSpec extends Specification {
         quantity: 20
       )
     )
-    warehouseTransactionRequestService.commit(
+    transactionRequestService.commit(
       new TransactionRequestRequests.CommitRequest(
         id: requestId
       )
     )
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: TransactionRequestItemId.from("item-2"),
         requestId: requestId,
@@ -179,7 +176,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "제출된 입/출고요청 품목은 수정 할 수 없다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -187,12 +184,12 @@ class TransactionRequestItemServiceSpec extends Specification {
         quantity: 20
       )
     )
-    warehouseTransactionRequestService.commit(
+    transactionRequestService.commit(
       new TransactionRequestRequests.CommitRequest(
         id: requestId
       )
     )
-    warehouseTransactionRequestItemService.update(
+    transactionRequestItemService.update(
       new TransactionRequestItemRequests.UpdateRequest(
         id: requestItemId,
         quantity: 10
@@ -204,7 +201,7 @@ class TransactionRequestItemServiceSpec extends Specification {
 
   def "제출된 입/출고요청 품목은 삭제 할 수 없다"() {
     when:
-    warehouseTransactionRequestItemService.create(
+    transactionRequestItemService.create(
       new TransactionRequestItemRequests.CreateRequest(
         id: requestItemId,
         requestId: requestId,
@@ -212,12 +209,12 @@ class TransactionRequestItemServiceSpec extends Specification {
         quantity: 20
       )
     )
-    warehouseTransactionRequestService.commit(
+    transactionRequestService.commit(
       new TransactionRequestRequests.CommitRequest(
         id: requestId
       )
     )
-    warehouseTransactionRequestItemService.delete(
+    transactionRequestItemService.delete(
       new TransactionRequestItemRequests.DeleteRequest(
         id: requestItemId
       )

@@ -27,7 +27,7 @@ import java.time.OffsetDateTime
 class TransactionRequestServiceSpec extends Specification {
 
   @Autowired
-  TransactionRequestService warehouseTransactionRequestService
+  TransactionRequestService transactionRequestService
 
   def inboundRequestId = TransactionRequestId.from("create")
 
@@ -45,7 +45,7 @@ class TransactionRequestServiceSpec extends Specification {
   def "입고요청을 처리 한다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    def inbounded = warehouseTransactionRequestService.create(
+    def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
         dueDate: dueDate,
@@ -65,7 +65,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "지난시간으로 입고요청을 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
         dueDate: OffsetDateTime.now().minusDays(2),
@@ -83,7 +83,7 @@ class TransactionRequestServiceSpec extends Specification {
   def "출고요청을 처리 한다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    def inbounded = warehouseTransactionRequestService.create(
+    def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
         dueDate: dueDate,
@@ -103,7 +103,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "출고시간으로 입고요청을 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().minusDays(2),
@@ -121,7 +121,7 @@ class TransactionRequestServiceSpec extends Specification {
   def "예정시간을 지나도 제출하지 않은 입/출고요청은 취소 된다"() {
     when:
     def dueDate = OffsetDateTime.now().plusDays(2)
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
         dueDate: dueDate,
@@ -131,13 +131,13 @@ class TransactionRequestServiceSpec extends Specification {
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
     )
-    warehouseTransactionRequestService.cancelUncommitted(
+    transactionRequestService.cancelUncommitted(
       new TransactionRequestRequests.CancelUncommittedRequest(
         fixedDate: dueDate.plusMinutes(1)
       )
     )
 
-    def request = warehouseTransactionRequestService.get(outboundRequestId)
+    def request = transactionRequestService.get(outboundRequestId)
     then:
     request.status == TransactionRequestStatusKind.CANCELED
 
@@ -145,7 +145,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "입/출고를 생성 후 접수 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().plusDays(2),
@@ -155,7 +155,7 @@ class TransactionRequestServiceSpec extends Specification {
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
     )
-    warehouseTransactionRequestService.accept(
+    transactionRequestService.accept(
       new TransactionRequestRequests.AcceptRequest(
         id: outboundRequestId
       )
@@ -167,7 +167,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "입/출고를 생성 후 완료 할 수 없다"() {
     when:
-    warehouseTransactionRequestService.create(
+    transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().plusDays(2),
@@ -177,7 +177,7 @@ class TransactionRequestServiceSpec extends Specification {
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
     )
-    warehouseTransactionRequestService.complete(
+    transactionRequestService.complete(
       new TransactionRequestRequests.CompleteRequest(
         id: outboundRequestId
       )

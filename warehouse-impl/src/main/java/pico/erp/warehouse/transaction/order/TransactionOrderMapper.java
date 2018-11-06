@@ -16,6 +16,7 @@ import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.Station;
 import pico.erp.warehouse.location.station.StationId;
 import pico.erp.warehouse.location.station.StationMapper;
+import pico.erp.warehouse.pack.PackSelector;
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemRepository;
 import pico.erp.warehouse.transaction.order.item.lot.TransactionOrderItemLotRepository;
 import pico.erp.warehouse.transaction.order.pack.TransactionOrderPackRepository;
@@ -46,6 +47,9 @@ public abstract class TransactionOrderMapper {
 
   @Autowired
   private TransactionOrderPackRepository orderPackRepository;
+
+  @Autowired
+  protected PackSelector packSelector;
 
   public TransactionOrderAggregator aggregator(
     TransactionOrderEntity entity) {
@@ -122,7 +126,8 @@ public abstract class TransactionOrderMapper {
     TransactionOrderRequests.UpdateRequest request);
 
   @Mappings({
-    @Mapping(target = "committedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "committedBy", expression = "java(auditorAware.getCurrentAuditor())"),
+    @Mapping(target = "packSelector", expression = "java(packSelector)")
   })
   public abstract TransactionOrderMessages.CommitRequest map(
     TransactionOrderRequests.CommitRequest request);

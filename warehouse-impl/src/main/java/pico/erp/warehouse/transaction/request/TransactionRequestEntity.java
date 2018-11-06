@@ -103,6 +103,26 @@ public class TransactionRequestEntity implements Serializable {
   @Column
   OffsetDateTime canceledDate;
 
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "ACCEPTED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "ACCEPTED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+  })
+  Auditor acceptedBy;
+
+  @Column
+  OffsetDateTime acceptedDate;
+
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "COMPLETED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "COMPLETED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+  })
+  Auditor completedBy;
+
+  @Column
+  OffsetDateTime completedDate;
+
   boolean committable;
 
   @Column(length = TypeDefinitions.ENUM_LENGTH)
