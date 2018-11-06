@@ -32,22 +32,21 @@ public class TransactionRequestAggregator extends TransactionRequest {
 
   @Builder(builderMethodName = "aggregatorBuilder")
   public TransactionRequestAggregator(boolean committable,
-    TransactionRequestId id, OffsetDateTime dueDate, CompanyData relatedCompany,
-    Station station, TransactionRequestStatusKind status,
-    TransactionTypeKind type, Auditor committedBy, OffsetDateTime committedDate,
-    Auditor canceledBy, OffsetDateTime canceledDate, Auditor acceptedBy,
-    OffsetDateTime acceptedDate, Auditor completedBy, OffsetDateTime completedDate,
+    TransactionRequestId id, TransactionRequestCode code, OffsetDateTime dueDate,
+    CompanyData relatedCompany, Station station,
+    TransactionRequestStatusKind status, TransactionTypeKind type,
+    Auditor committedBy, OffsetDateTime committedDate, Auditor canceledBy,
+    OffsetDateTime canceledDate, Auditor acceptedBy, OffsetDateTime acceptedDate,
+    Auditor completedBy, OffsetDateTime completedDate,
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionRequestItem> items,
     List<TransactionRequestItemLot> itemLots) {
-    super(committable, id, dueDate, relatedCompany, station, status, type, committedBy,
-      committedDate,
-      canceledBy, canceledDate, acceptedBy, acceptedDate, completedBy, completedDate,
+    super(committable, id, code, dueDate, relatedCompany, station, status, type, committedBy,
+      committedDate, canceledBy, canceledDate, acceptedBy, acceptedDate, completedBy, completedDate,
       quantityCorrectionPolicy);
     this.items = items;
     this.itemLots = itemLots;
   }
-
 
   /**
    * 품목의 수량이 0을 초과하고 품목 LOT 가 존재 하지 않거나 품목 LOT 수량이 일치하면 제출가능 상태로 변경

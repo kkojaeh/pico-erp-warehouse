@@ -34,6 +34,8 @@ public class TransactionRequest implements Serializable {
   @Id
   TransactionRequestId id;
 
+  TransactionRequestCode code;
+
   OffsetDateTime dueDate;
 
   CompanyData relatedCompany;
@@ -72,6 +74,7 @@ public class TransactionRequest implements Serializable {
     type = request.getType();
     committable = false;
     quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
+    code = request.getCodeGenerator().generate(this);
     return new TransactionRequestMessages.CreateResponse(
       Arrays.asList(new TransactionRequestEvents.CreatedEvent(this.id))
     );

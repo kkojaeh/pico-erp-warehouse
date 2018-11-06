@@ -51,6 +51,11 @@ public class TransactionRequestEntity implements Serializable {
   })
   TransactionRequestId id;
 
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "CODE", length = TypeDefinitions.CODE_LENGTH))
+  })
+  TransactionRequestCode code;
+
   OffsetDateTime dueDate;
 
   @AttributeOverrides({

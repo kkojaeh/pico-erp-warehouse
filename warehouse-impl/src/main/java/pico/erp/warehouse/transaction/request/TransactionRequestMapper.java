@@ -43,10 +43,14 @@ public abstract class TransactionRequestMapper {
   @Autowired
   private TransactionRequestItemLotRepository requestItemLotRepository;
 
+  @Autowired
+  protected TransactionRequestCodeGenerator transactionRequestCodeGenerator;
+
   public TransactionRequestAggregator aggregator(
     TransactionRequestEntity entity) {
     return TransactionRequestAggregator.aggregatorBuilder()
       .id(entity.getId())
+      .code(entity.getCode())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
       .station(map(entity.getStationId()))
@@ -75,6 +79,7 @@ public abstract class TransactionRequestMapper {
   public TransactionRequest jpa(TransactionRequestEntity entity) {
     return TransactionRequest.builder()
       .id(entity.getId())
+      .code(entity.getCode())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
       .station(map(entity.getStationId()))
@@ -103,7 +108,8 @@ public abstract class TransactionRequestMapper {
 
   @Mappings({
     @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
-    @Mapping(target = "station", source = "stationId")
+    @Mapping(target = "station", source = "stationId"),
+    @Mapping(target = "codeGenerator", expression = "java(transactionRequestCodeGenerator)")
   })
   public abstract TransactionRequestMessages.CreateRequest map(
     TransactionRequestRequests.CreateRequest request);

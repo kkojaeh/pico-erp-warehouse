@@ -79,6 +79,15 @@ public class TransactionRequestQueryJpa implements TransactionRequestQuery {
     if (filter.getType() != null) {
       builder.and(transactionRequest.type.eq(filter.getType()));
     }
+    if (filter.getCreateBy() != null) {
+      builder.and(transactionRequest.createdBy.id.eq(filter.getCreateBy().getValue()));
+    }
+    if (filter.getStartCreatedDate() != null) {
+      builder.and(transactionRequest.createdDate.goe(filter.getStartCreatedDate()));
+    }
+    if (filter.getEndCreatedDate() != null) {
+      builder.and(transactionRequest.createdDate.loe(filter.getEndCreatedDate()));
+    }
     query.where(builder);
     return queryDslJpaSupport.paging(query, pageable, select);
   }

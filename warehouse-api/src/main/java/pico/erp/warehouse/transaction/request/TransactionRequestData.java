@@ -23,6 +23,8 @@ public class TransactionRequestData implements Serializable {
   @Id
   TransactionRequestId id;
 
+  TransactionRequestCode code;
+
   OffsetDateTime dueDate;
 
   CompanyId relatedCompanyId;

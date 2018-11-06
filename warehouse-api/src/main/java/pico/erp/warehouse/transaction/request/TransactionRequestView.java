@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
 import pico.erp.item.ItemId;
 import pico.erp.shared.data.Auditor;
+import pico.erp.user.UserId;
 import pico.erp.warehouse.location.station.StationId;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
@@ -18,6 +19,8 @@ public class TransactionRequestView {
 
   @Id
   TransactionRequestId id;
+
+  TransactionRequestCode code;
 
   OffsetDateTime dueDate;
 
@@ -60,6 +63,12 @@ public class TransactionRequestView {
     List<TransactionRequestStatusKind> statuses;
 
     TransactionTypeKind type;
+
+    UserId createBy;
+
+    OffsetDateTime startCreatedDate;
+
+    OffsetDateTime endCreatedDate;
   }
 
 }

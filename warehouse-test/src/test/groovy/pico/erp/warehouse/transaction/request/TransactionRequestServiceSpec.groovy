@@ -95,6 +95,7 @@ class TransactionRequestServiceSpec extends Specification {
     )
 
     then:
+    inbounded.code != null
     inbounded.dueDate == dueDate
     inbounded.type == TransactionTypeKind.OUTBOUND
     inbounded.relatedCompanyId == companyId

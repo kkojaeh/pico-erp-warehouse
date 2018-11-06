@@ -23,4 +23,6 @@ public interface TransactionRequestRepository {
 
   void update(@NotNull TransactionRequest warehouseTransactionRequest);
 
+  long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end);
+
 }

@@ -22,6 +22,10 @@ interface TransactionRequestEntityRepository extends
     @Param("fixedDate") OffsetDateTime fixedDate,
     @Param("status") TransactionRequestStatusKind status);
 
+  @Query("SELECT COUNT(r) FROM TransactionRequest r WHERE r.createdDate >= :begin AND r.createdDate <= :end")
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin,
+    @Param("end") OffsetDateTime end);
+
 }
 
 @Repository
@@ -78,6 +82,11 @@ public class TransactionRequestRepositoryJpa implements
     val entity = repository.findOne(request.getId());
     mapper.pass(mapper.jpa(request), entity);
     repository.save(entity);
+  }
+
+  @Override
+  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
+    return repository.countCreatedBetween(begin, end);
   }
 
 }
