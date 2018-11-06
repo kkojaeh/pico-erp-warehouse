@@ -5,31 +5,31 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface TransactionOrderPackExceptions {
 
-  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-item.already.exists.exception")
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-pack.already.exists.exception")
   class AlreadyExistsException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   }
 
-  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-item.cannot.create.exception")
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-pack.cannot.create.exception")
   class CannotCreateException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   }
 
-  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-item.cannot.update.exception")
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-pack.cannot.update.exception")
   class CannotUpdateException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   }
 
-  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-item.cannot.delete.exception")
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order-pack.cannot.delete.exception")
   class CannotDeleteException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   }
 
-  @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-transaction-order-item.not.found.exception")
+  @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "warehouse-transaction-order-pack.not.found.exception")
   class NotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

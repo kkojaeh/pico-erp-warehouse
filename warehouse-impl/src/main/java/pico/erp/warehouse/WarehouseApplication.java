@@ -48,14 +48,26 @@ public class WarehouseApplication implements ApplicationStarter {
 
   @Bean
   @Public
-  public Role facilityAccessorRole() {
+  public Role warehouseAccessorRole() {
     return WarehouseRoles.WAREHOUSE_ACCESSOR;
   }
 
   @Bean
   @Public
-  public Role facilityManagerRole() {
+  public Role warehouseManagerRole() {
     return WarehouseRoles.WAREHOUSE_MANAGER;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseTransactionRequesterRole() {
+    return WarehouseRoles.WAREHOUSE_TRANSACTION_REQUESTER;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseWorkerRole() {
+    return WarehouseRoles.WAREHOUSE_WORKER;
   }
 
   @Override
