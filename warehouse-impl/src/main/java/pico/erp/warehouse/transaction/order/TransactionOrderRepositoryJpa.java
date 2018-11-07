@@ -18,14 +18,20 @@ import pico.erp.warehouse.transaction.request.TransactionRequestId;
 interface TransactionOrderEntityRepository extends
   CrudRepository<TransactionOrderEntity, TransactionOrderId> {
 
-  @Query("SELECT o FROM TransactionOrder o WHERE o.status = :status AND o.dueDate < :fixedDate")
-  Stream<TransactionOrderEntity> findAllDueDateBeforeThan(
-    @Param("fixedDate") OffsetDateTime fixedDate,
-    @Param("status") TransactionOrderStatusKind status);
+  @Query("SELECT COUNT(o) FROM TransactionOrder o WHERE o.createdDate >= :begin AND o.createdDate <= :end")
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
 
   @Query("SELECT o FROM TransactionOrder o WHERE o.requestId = :requestId")
   Optional<TransactionOrderEntity> findBy(
     @Param("requestId") TransactionRequestId requestId);
+
+  @Query("SELECT CASE WHEN COUNT(o) > 0 THEN true ELSE false END FROM TransactionOrder o WHERE o.code = :code")
+  boolean exists(@Param("code") TransactionOrderCode code);
+
+  @Query("SELECT o FROM TransactionOrder o WHERE o.status = :status AND o.dueDate < :fixedDate")
+  Stream<TransactionOrderEntity> findAllUnacceptedAt(
+    @Param("fixedDate") OffsetDateTime fixedDate,
+    @Param("status") TransactionOrderStatusKind status);
 
 }
 
@@ -59,6 +65,11 @@ public class TransactionOrderRepositoryJpa implements
   }
 
   @Override
+  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
+    return repository.countCreatedBetween(begin, end);
+  }
+
+  @Override
   public Optional<TransactionOrderAggregator> findAggregatorBy(
     TransactionOrderId id) {
     return Optional.ofNullable(repository.findOne(id))
@@ -66,10 +77,8 @@ public class TransactionOrderRepositoryJpa implements
   }
 
   @Override
-  public Stream<TransactionOrder> findAllUncommittedAt(OffsetDateTime fixedDate) {
-    return repository
-      .findAllDueDateBeforeThan(fixedDate, TransactionOrderStatusKind.CREATED)
-      .map(mapper::jpa);
+  public boolean exists(TransactionOrderCode code) {
+    return repository.exists(code);
   }
 
   @Override
@@ -89,6 +98,13 @@ public class TransactionOrderRepositoryJpa implements
     val entity = repository.findOne(transactionOrder.getId());
     mapper.pass(mapper.jpa(transactionOrder), entity);
     repository.save(entity);
+  }
+
+  @Override
+  public Stream<TransactionOrder> findAllUnacceptedAt(OffsetDateTime fixedDate) {
+    return repository
+      .findAllUnacceptedAt(fixedDate, TransactionOrderStatusKind.COMMITTED)
+      .map(mapper::jpa);
   }
 
 }

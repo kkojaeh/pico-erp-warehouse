@@ -1,4 +1,4 @@
-package pico.erp.warehouse.transaction.request;
+package pico.erp.warehouse.transaction.order;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -15,12 +15,12 @@ import pico.erp.warehouse.location.station.StationId;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 
-public class TransactionRequestView {
+public class TransactionOrderView {
 
   @Id
-  TransactionRequestId id;
+  TransactionOrderId id;
 
-  TransactionRequestCode code;
+  TransactionOrderCode code;
 
   OffsetDateTime dueDate;
 
@@ -28,7 +28,7 @@ public class TransactionRequestView {
 
   StationId stationId;
 
-  TransactionRequestStatusKind status;
+  TransactionOrderStatusKind status;
 
   TransactionTypeKind type;
 
@@ -62,7 +62,7 @@ public class TransactionRequestView {
 
     CompanyId relatedCompanyId;
 
-    List<TransactionRequestStatusKind> statuses;
+    List<TransactionOrderStatusKind> statuses;
 
     TransactionTypeKind type;
 

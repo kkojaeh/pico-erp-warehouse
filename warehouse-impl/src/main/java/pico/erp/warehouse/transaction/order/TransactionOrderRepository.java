@@ -15,15 +15,19 @@ public interface TransactionOrderRepository {
 
   boolean exists(@NotNull TransactionOrderId id);
 
+  long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end);
+
   Optional<TransactionOrderAggregator> findAggregatorBy(
     @NotNull TransactionOrderId id);
 
-  Stream<TransactionOrder> findAllUncommittedAt(@NotNull OffsetDateTime fixedDate);
+  boolean exists(@NotNull TransactionOrderCode code);
 
   Optional<TransactionOrder> findBy(@NotNull TransactionOrderId id);
 
   Optional<TransactionOrder> findBy(@NotNull TransactionRequestId requestId);
 
   void update(@NotNull TransactionOrder warehouseTransactionOrder);
+
+  Stream<TransactionOrder> findAllUnacceptedAt(@NotNull OffsetDateTime fixedDate);
 
 }

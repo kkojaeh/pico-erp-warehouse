@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import pico.erp.company.CompanyId;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.StationId;
+import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 import pico.erp.warehouse.transaction.request.TransactionRequestId;
 
@@ -22,6 +23,8 @@ public class TransactionOrderData implements Serializable {
 
   @Id
   TransactionOrderId id;
+
+  TransactionOrderCode code;
 
   OffsetDateTime dueDate;
 
@@ -42,5 +45,7 @@ public class TransactionOrderData implements Serializable {
   TransactionOrderStatusKind status;
 
   TransactionRequestId requestId;
+
+  TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
 }

@@ -47,6 +47,9 @@ public interface TransactionOrderMessages {
     @NotNull
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
+    @NotNull
+    TransactionOrderCodeGenerator codeGenerator;
+
   }
 
   @Builder

@@ -57,6 +57,7 @@ class TransactionOrderServiceSpec extends Specification {
     )
 
     then:
+    inbounded.code != null
     inbounded.dueDate == dueDate
     inbounded.type == TransactionTypeKind.INBOUND
     inbounded.relatedCompanyId == companyId

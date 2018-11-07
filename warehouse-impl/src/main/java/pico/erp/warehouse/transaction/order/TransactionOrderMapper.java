@@ -51,10 +51,14 @@ public abstract class TransactionOrderMapper {
   @Autowired
   protected PackSelector packSelector;
 
+  @Autowired
+  protected TransactionOrderCodeGenerator transactionOrderCodeGenerator;
+
   public TransactionOrderAggregator aggregator(
     TransactionOrderEntity entity) {
     return TransactionOrderAggregator.aggregatorBuilder()
       .id(entity.getId())
+      .code(entity.getCode())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
       .station(map(entity.getStationId()))
@@ -62,9 +66,14 @@ public abstract class TransactionOrderMapper {
       .committedDate(entity.getCommittedDate())
       .canceledBy(entity.getCanceledBy())
       .canceledDate(entity.getCanceledDate())
+      .acceptedBy(entity.getAcceptedBy())
+      .acceptedDate(entity.getAcceptedDate())
+      .completedBy(entity.getCompletedBy())
+      .completedDate(entity.getCompletedDate())
       .status(entity.getStatus())
       .type(entity.getType())
       .committable(entity.isCommittable())
+      .quantityCorrectionPolicy(entity.getQuantityCorrectionPolicy())
       .items(
         orderItemRepository.findAllBy(entity.getId()).collect(Collectors.toList())
       )
@@ -81,6 +90,7 @@ public abstract class TransactionOrderMapper {
   public TransactionOrder jpa(TransactionOrderEntity entity) {
     return TransactionOrder.builder()
       .id(entity.getId())
+      .code(entity.getCode())
       .dueDate(entity.getDueDate())
       .relatedCompany(map(entity.getRelatedCompanyId()))
       .station(map(entity.getStationId()))
@@ -88,9 +98,14 @@ public abstract class TransactionOrderMapper {
       .committedDate(entity.getCommittedDate())
       .canceledBy(entity.getCanceledBy())
       .canceledDate(entity.getCanceledDate())
+      .acceptedBy(entity.getAcceptedBy())
+      .acceptedDate(entity.getAcceptedDate())
+      .completedBy(entity.getCompletedBy())
+      .completedDate(entity.getCompletedDate())
       .status(entity.getStatus())
       .type(entity.getType())
       .committable(entity.isCommittable())
+      .quantityCorrectionPolicy(entity.getQuantityCorrectionPolicy())
       .build();
   }
 
@@ -105,7 +120,8 @@ public abstract class TransactionOrderMapper {
 
   @Mappings({
     @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
-    @Mapping(target = "station", source = "stationId")
+    @Mapping(target = "station", source = "stationId"),
+    @Mapping(target = "codeGenerator", expression = "java(transactionOrderCodeGenerator)")
   })
   public abstract TransactionOrderMessages.CreateRequest map(
     TransactionOrderRequests.CreateRequest request);

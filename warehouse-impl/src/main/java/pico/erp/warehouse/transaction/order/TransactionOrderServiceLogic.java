@@ -94,6 +94,9 @@ public class TransactionOrderServiceLogic implements TransactionOrderService {
     if (orderRepository.exists(order.getId())) {
       throw new TransactionOrderExceptions.AlreadyExistsException();
     }
+    if (orderRepository.exists(order.getCode())) {
+      throw new TransactionOrderExceptions.CodeAlreadyExistsException();
+    }
     val created = orderRepository.create(order);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);

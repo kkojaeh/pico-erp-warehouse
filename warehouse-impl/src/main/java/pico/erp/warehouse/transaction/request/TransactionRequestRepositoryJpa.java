@@ -23,8 +23,10 @@ interface TransactionRequestEntityRepository extends
     @Param("status") TransactionRequestStatusKind status);
 
   @Query("SELECT COUNT(r) FROM TransactionRequest r WHERE r.createdDate >= :begin AND r.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") OffsetDateTime begin,
-    @Param("end") OffsetDateTime end);
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
+
+  @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM TransactionRequest r WHERE r.code = :code")
+  boolean exists(@Param("code") TransactionRequestCode code);
 
 }
 
@@ -55,6 +57,11 @@ public class TransactionRequestRepositoryJpa implements
   @Override
   public boolean exists(@NotNull TransactionRequestId id) {
     return repository.exists(id);
+  }
+
+  @Override
+  public boolean exists(TransactionRequestCode code) {
+    return repository.exists(code);
   }
 
   @Override

@@ -40,24 +40,24 @@ public class TransactionOrderAggregator extends TransactionOrder {
 
   @Builder(builderMethodName = "aggregatorBuilder")
   public TransactionOrderAggregator(boolean committable,
-    TransactionOrderId id, OffsetDateTime dueDate, CompanyData relatedCompany,
-    Station station, TransactionOrderStatusKind status,
-    TransactionTypeKind type, Auditor acceptedBy, OffsetDateTime acceptedDate,
-    Auditor completedBy, OffsetDateTime completedDate, Auditor committedBy,
-    OffsetDateTime committedDate, Auditor canceledBy, OffsetDateTime canceledDate,
+    TransactionOrderId id, TransactionOrderCode code, OffsetDateTime dueDate,
+    CompanyData relatedCompany, Station station,
+    TransactionOrderStatusKind status, TransactionTypeKind type,
+    Auditor acceptedBy, OffsetDateTime acceptedDate, Auditor completedBy,
+    OffsetDateTime completedDate, Auditor committedBy, OffsetDateTime committedDate,
+    Auditor canceledBy, OffsetDateTime canceledDate,
     TransactionRequest request,
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionOrderItem> items,
     List<TransactionOrderItemLot> itemLots,
     List<TransactionOrderPack> packs) {
-    super(committable, id, dueDate, relatedCompany, station, status, type, acceptedBy, acceptedDate,
-      completedBy, completedDate, committedBy, committedDate, canceledBy, canceledDate, request,
-      quantityCorrectionPolicy);
+    super(committable, id, code, dueDate, relatedCompany, station, status, type, acceptedBy,
+      acceptedDate, completedBy, completedDate, committedBy, committedDate, canceledBy,
+      canceledDate, request, quantityCorrectionPolicy);
     this.items = items;
     this.itemLots = itemLots;
     this.packs = packs;
   }
-
 
   public TransactionOrderMessages.CommitResponse apply(
     TransactionOrderMessages.CommitRequest request) {

@@ -1,5 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
+import static org.springframework.util.StringUtils.isEmpty;
+
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -58,6 +60,14 @@ public class TransactionRequestQueryJpa implements TransactionRequestQuery {
     query.from(transactionRequest);
 
     val builder = new BooleanBuilder();
+
+    if (!isEmpty(filter.getCode())) {
+      builder.and(
+        transactionRequest.code.value.likeIgnoreCase(
+          queryDslJpaSupport.toLikeKeyword("%", filter.getCode(), "%")
+        )
+      );
+    }
 
     if (filter.getItemId() != null) {
       builder.and(

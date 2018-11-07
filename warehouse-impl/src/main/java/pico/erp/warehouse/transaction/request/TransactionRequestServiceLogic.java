@@ -90,6 +90,9 @@ public class TransactionRequestServiceLogic implements TransactionRequestService
     if (requestRepository.exists(request.getId())) {
       throw new TransactionRequestExceptions.AlreadyExistsException();
     }
+    if (requestRepository.exists(req.getCode())) {
+      throw new TransactionRequestExceptions.CodeAlreadyExistsException();
+    }
     val created = requestRepository.create(req);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);

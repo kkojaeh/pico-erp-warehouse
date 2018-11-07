@@ -14,6 +14,8 @@ public interface TransactionRequestRepository {
 
   boolean exists(@NotNull TransactionRequestId id);
 
+  boolean exists(@NotNull TransactionRequestCode code);
+
   Optional<TransactionRequestAggregator> findAggregatorBy(
     @NotNull TransactionRequestId id);
 

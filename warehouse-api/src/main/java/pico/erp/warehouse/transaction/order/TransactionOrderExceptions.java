@@ -11,6 +11,12 @@ public interface TransactionOrderExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order.code.already.exists.exception")
+  class CodeAlreadyExistsException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "warehouse-transaction-order.cannot.modify.exception")
   class CannotModifyException extends RuntimeException {
 

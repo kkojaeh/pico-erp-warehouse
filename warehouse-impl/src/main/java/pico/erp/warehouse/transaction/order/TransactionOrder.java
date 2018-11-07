@@ -35,6 +35,8 @@ public class TransactionOrder implements Serializable {
   @Id
   TransactionOrderId id;
 
+  TransactionOrderCode code;
+
   OffsetDateTime dueDate;
 
   CompanyData relatedCompany;
@@ -75,6 +77,7 @@ public class TransactionOrder implements Serializable {
     type = request.getType();
     committable = false;
     quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
+    code = request.getCodeGenerator().generate(this);
     return new TransactionOrderMessages.CreateResponse(
       Arrays.asList(new TransactionOrderEvents.CreatedEvent(this.id))
     );

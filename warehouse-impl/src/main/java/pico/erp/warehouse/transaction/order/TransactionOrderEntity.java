@@ -28,6 +28,7 @@ import pico.erp.company.CompanyId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.StationId;
+import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 import pico.erp.warehouse.transaction.request.TransactionRequestId;
 
@@ -50,6 +51,11 @@ public class TransactionOrderEntity implements Serializable {
     @AttributeOverride(name = "value", column = @Column(name = "ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   TransactionOrderId id;
+
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "CODE", length = TypeDefinitions.CODE_LENGTH))
+  })
+  TransactionOrderCode code;
 
   OffsetDateTime dueDate;
 
@@ -103,11 +109,35 @@ public class TransactionOrderEntity implements Serializable {
   @Column
   OffsetDateTime canceledDate;
 
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "ACCEPTED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "ACCEPTED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+  })
+  Auditor acceptedBy;
+
+  @Column
+  OffsetDateTime acceptedDate;
+
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "COMPLETED_BY_ID", length = TypeDefinitions.ID_LENGTH)),
+    @AttributeOverride(name = "name", column = @Column(name = "COMPLETED_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+  })
+  Auditor completedBy;
+
+  @Column
+  OffsetDateTime completedDate;
+
   boolean committable;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   TransactionRequestId requestId;
+
+  @Column(length = TypeDefinitions.ENUM_LENGTH)
+  @Enumerated(EnumType.STRING)
+  TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
 }
