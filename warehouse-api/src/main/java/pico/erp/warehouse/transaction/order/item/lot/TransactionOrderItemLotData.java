@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import pico.erp.item.lot.ItemLotId;
+import pico.erp.warehouse.transaction.order.TransactionOrderId;
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemId;
 
 @Data
@@ -19,6 +20,8 @@ public class TransactionOrderItemLotData implements Serializable {
 
   @Id
   TransactionOrderItemLotId id;
+
+  TransactionOrderId orderId;
 
   TransactionOrderItemId orderItemId;
 

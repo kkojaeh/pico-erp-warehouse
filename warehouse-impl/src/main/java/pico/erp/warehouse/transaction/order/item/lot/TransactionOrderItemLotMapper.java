@@ -61,6 +61,7 @@ public abstract class TransactionOrderItemLotMapper {
 
   @Mappings({
     @Mapping(target = "orderItemId", source = "orderItem.id"),
+    @Mapping(target = "orderId", source = "orderItem.order.id"),
     @Mapping(target = "itemLotId", source = "itemLot.id")
   })
   public abstract TransactionOrderItemLotData map(

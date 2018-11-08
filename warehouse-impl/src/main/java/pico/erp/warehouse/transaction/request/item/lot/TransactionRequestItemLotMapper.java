@@ -61,6 +61,7 @@ public abstract class TransactionRequestItemLotMapper {
 
   @Mappings({
     @Mapping(target = "requestItemId", source = "requestItem.id"),
+    @Mapping(target = "requestId", source = "requestItem.request.id"),
     @Mapping(target = "itemLotId", source = "itemLot.id")
   })
   public abstract TransactionRequestItemLotData map(

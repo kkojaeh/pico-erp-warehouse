@@ -33,6 +33,7 @@ public interface TransactionRequestMessages {
     OffsetDateTime dueDate;
 
     // 대상 회사(회사)
+    @NotNull
     CompanyData relatedCompany;
 
     // 공급지 내부일때 사용
@@ -60,6 +61,7 @@ public interface TransactionRequestMessages {
     OffsetDateTime dueDate;
 
     // 대상 회사(회사)
+    @NotNull
     CompanyData relatedCompany;
 
     // 공급지 내부일때 사용
