@@ -15,6 +15,10 @@ import pico.erp.warehouse.location.station.StationId;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 import pico.erp.warehouse.transaction.TransactionTypeKind;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class TransactionRequestView {
 
   @Id
