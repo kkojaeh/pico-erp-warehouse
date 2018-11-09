@@ -1,8 +1,10 @@
 package pico.erp.warehouse.transaction;
 
+import pico.erp.shared.data.LocalizedDescriptable;
 import pico.erp.shared.data.LocalizedNameable;
 
-public enum TransactionQuantityCorrectionPolicyKind implements LocalizedNameable {
+public enum TransactionQuantityCorrectionPolicyKind implements LocalizedNameable,
+  LocalizedDescriptable {
 
   /**
    * 수량 보정 불가 수량이 정확히 일치 해야 함
@@ -19,4 +21,8 @@ public enum TransactionQuantityCorrectionPolicyKind implements LocalizedNameable
    */
   ROUND_DOWN;
 
+  @Override
+  public String getDescriptionCode() {
+    return getClass().getName() + "." + name() + ".description";
+  }
 }
