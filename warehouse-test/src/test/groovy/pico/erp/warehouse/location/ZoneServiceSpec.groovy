@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.warehouse.location.LocationCode
 import pico.erp.warehouse.location.site.SiteId
 import pico.erp.warehouse.location.zone.*
 import spock.lang.Specification
@@ -22,23 +21,23 @@ import spock.lang.Specification
 class ZoneServiceSpec extends Specification {
 
   @Autowired
-  ZoneService warehouseZoneService
+  ZoneService zoneService
 
-  def warehouseSiteId = SiteId.from("A1")
+  def siteId = SiteId.from("A1")
 
-  def warehouseZoneId = ZoneId.from("Z")
+  def zoneId = ZoneId.from("Z")
 
   def setup() {
-    warehouseZoneService.create(new ZoneRequests.CreateRequest(
-      id: warehouseZoneId,
-      siteId: warehouseSiteId,
+    zoneService.create(new ZoneRequests.CreateRequest(
+      id: zoneId,
+      siteId: siteId,
       code: ZoneCode.from("Z"),
     ))
   }
 
   def "아이디로 존재하는 창고지 확인"() {
     when:
-    def exists = warehouseZoneService.exists(warehouseZoneId)
+    def exists = zoneService.exists(zoneId)
 
     then:
     exists == true
@@ -46,7 +45,7 @@ class ZoneServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지 확인"() {
     when:
-    def exists = warehouseZoneService.exists(ZoneId.from("unknown"))
+    def exists = zoneService.exists(ZoneId.from("unknown"))
 
     then:
     exists == false
@@ -54,7 +53,7 @@ class ZoneServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지를 조회"() {
     when:
-    def zone = warehouseZoneService.get(warehouseZoneId)
+    def zone = zoneService.get(zoneId)
 
     then:
     zone.locationCode == LocationCode.from("A1-Z")
@@ -63,7 +62,7 @@ class ZoneServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지를 조회"() {
     when:
-    warehouseZoneService.get(ZoneId.from("unknown"))
+    zoneService.get(ZoneId.from("unknown"))
 
     then:
     thrown(ZoneExceptions.NotFoundException)
@@ -71,9 +70,9 @@ class ZoneServiceSpec extends Specification {
 
   def "중복 코드를 생성하면 오류 발생"() {
     when:
-    warehouseZoneService.create(new ZoneRequests.CreateRequest(
+    zoneService.create(new ZoneRequests.CreateRequest(
       id: ZoneId.from("Z2"),
-      siteId: warehouseSiteId,
+      siteId: siteId,
       code: ZoneCode.from("Z")
     ))
     then:
@@ -82,12 +81,12 @@ class ZoneServiceSpec extends Specification {
 
   def "이미 존재하는 코드로 변경하면 오류 발생"() {
     when:
-    warehouseZoneService.create(new ZoneRequests.CreateRequest(
+    zoneService.create(new ZoneRequests.CreateRequest(
       id: ZoneId.from("Z2"),
-      siteId: warehouseSiteId,
+      siteId: siteId,
       code: ZoneCode.from("Z2")
     ))
-    warehouseZoneService.update(new ZoneRequests.UpdateRequest(
+    zoneService.update(new ZoneRequests.UpdateRequest(
       id: ZoneId.from("Z2"),
       code: ZoneCode.from("Z")
     ))

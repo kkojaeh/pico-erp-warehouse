@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.warehouse.location.LocationCode
 import pico.erp.warehouse.location.rack.*
 import pico.erp.warehouse.location.zone.ZoneId
 import spock.lang.Specification
@@ -22,23 +21,23 @@ import spock.lang.Specification
 class RackServiceSpec extends Specification {
 
   @Autowired
-  RackService warehouseRackService
+  RackService rackService
 
-  def warehouseZoneId = ZoneId.from("A")
+  def zoneId = ZoneId.from("A")
 
-  def warehouseRackId = RackId.from("A-99")
+  def rackId = RackId.from("A-99")
 
   def setup() {
-    warehouseRackService.create(new RackRequests.CreateRequest(
-      id: warehouseRackId,
-      zoneId: warehouseZoneId,
+    rackService.create(new RackRequests.CreateRequest(
+      id: rackId,
+      zoneId: zoneId,
       code: RackCode.from(99),
     ))
   }
 
   def "아이디로 존재하는 창고지 확인"() {
     when:
-    def exists = warehouseRackService.exists(warehouseRackId)
+    def exists = rackService.exists(rackId)
 
     then:
     exists == true
@@ -46,7 +45,7 @@ class RackServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지 확인"() {
     when:
-    def exists = warehouseRackService.exists(RackId.from("unknown"))
+    def exists = rackService.exists(RackId.from("unknown"))
 
     then:
     exists == false
@@ -54,7 +53,7 @@ class RackServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지를 조회"() {
     when:
-    def rack = warehouseRackService.get(warehouseRackId)
+    def rack = rackService.get(rackId)
 
     then:
     rack.locationCode == LocationCode.from("A1-A-99")
@@ -63,7 +62,7 @@ class RackServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지를 조회"() {
     when:
-    warehouseRackService.get(RackId.from("unknown"))
+    rackService.get(RackId.from("unknown"))
 
     then:
     thrown(RackExceptions.NotFoundException)
@@ -71,9 +70,9 @@ class RackServiceSpec extends Specification {
 
   def "중복 코드를 생성하면 오류 발생"() {
     when:
-    warehouseRackService.create(new RackRequests.CreateRequest(
+    rackService.create(new RackRequests.CreateRequest(
       id: RackId.from("A-100"),
-      zoneId: warehouseZoneId,
+      zoneId: zoneId,
       code: RackCode.from(99),
     ))
     then:
@@ -82,12 +81,12 @@ class RackServiceSpec extends Specification {
 
   def "이미 존재하는 코드로 변경하면 오류 발생"() {
     when:
-    warehouseRackService.create(new RackRequests.CreateRequest(
+    rackService.create(new RackRequests.CreateRequest(
       id: RackId.from("A-100"),
-      zoneId: warehouseZoneId,
+      zoneId: zoneId,
       code: RackCode.from(98),
     ))
-    warehouseRackService.update(new RackRequests.UpdateRequest(
+    rackService.update(new RackRequests.UpdateRequest(
       id: RackId.from("A-100"),
       code: RackCode.from(99),
     ))

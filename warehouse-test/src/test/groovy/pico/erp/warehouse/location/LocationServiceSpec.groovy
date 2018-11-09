@@ -8,8 +8,6 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.warehouse.location.LocationId
-import pico.erp.warehouse.location.LocationService
 import pico.erp.warehouse.location.bay.BayId
 import pico.erp.warehouse.location.level.LevelCode
 import pico.erp.warehouse.location.level.LevelId
@@ -26,21 +24,21 @@ import spock.lang.Specification
 class LocationServiceSpec extends Specification {
 
   @Autowired
-  LevelService warehouseLevelService
+  LevelService levelService
 
   @Autowired
-  LocationService warehouseLocationService
+  LocationService locationService
 
-  def warehouseBayId = BayId.from("A-1-1")
+  def bayId = BayId.from("A-1-1")
 
-  def warehouseLevelId = LevelId.from("A-1-1-20")
+  def levelId = LevelId.from("A-1-1-20")
 
-  def warehouseLocationId = LocationId.from("A-1-1-20")
+  def locationId = LocationId.from("A-1-1-20")
 
   def setup() {
-    warehouseLevelService.create(new LevelRequests.CreateRequest(
-      id: warehouseLevelId,
-      bayId: warehouseBayId,
+    levelService.create(new LevelRequests.CreateRequest(
+      id: levelId,
+      bayId: bayId,
       code: LevelCode.from(20),
     ))
   }
@@ -48,7 +46,7 @@ class LocationServiceSpec extends Specification {
   def "레벨을 생성하면 동일 아이디로 위치가 존재"() {
     when:
 
-    def exists = warehouseLocationService.exists(warehouseLocationId)
+    def exists = locationService.exists(locationId)
 
     then:
     exists == true
@@ -56,8 +54,8 @@ class LocationServiceSpec extends Specification {
 
   def "레벨을 생성하면 동일 아이디의 위치와 값이 동일"() {
     when:
-    def level = warehouseLevelService.get(warehouseLevelId)
-    def location = warehouseLocationService.get(warehouseLocationId)
+    def level = levelService.get(levelId)
+    def location = locationService.get(locationId)
 
     then:
     level.id.value == location.id.value

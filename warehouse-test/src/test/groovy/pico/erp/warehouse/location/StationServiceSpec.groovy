@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.warehouse.location.LocationCode
 import pico.erp.warehouse.location.site.SiteId
 import pico.erp.warehouse.location.station.*
 import spock.lang.Specification
@@ -22,16 +21,16 @@ import spock.lang.Specification
 class StationServiceSpec extends Specification {
 
   @Autowired
-  StationService warehouseStationService
+  StationService stationService
 
-  def warehouseSiteId = SiteId.from("A1")
+  def siteId = SiteId.from("A1")
 
-  def warehouseStationId = StationId.from("Z")
+  def stationId = StationId.from("Z")
 
   def setup() {
-    warehouseStationService.create(new StationRequests.CreateRequest(
-      id: warehouseStationId,
-      siteId: warehouseSiteId,
+    stationService.create(new StationRequests.CreateRequest(
+      id: stationId,
+      siteId: siteId,
       name: "작업장A",
       code: StationCode.from("Z"),
     ))
@@ -39,7 +38,7 @@ class StationServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지 확인"() {
     when:
-    def exists = warehouseStationService.exists(warehouseStationId)
+    def exists = stationService.exists(stationId)
 
     then:
     exists == true
@@ -47,7 +46,7 @@ class StationServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지 확인"() {
     when:
-    def exists = warehouseStationService.exists(StationId.from("unknown"))
+    def exists = stationService.exists(StationId.from("unknown"))
 
     then:
     exists == false
@@ -55,7 +54,7 @@ class StationServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지를 조회"() {
     when:
-    def station = warehouseStationService.get(warehouseStationId)
+    def station = stationService.get(stationId)
 
     then:
     station.locationCode == LocationCode.from("A1-Z")
@@ -65,7 +64,7 @@ class StationServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지를 조회"() {
     when:
-    warehouseStationService.get(StationId.from("unknown"))
+    stationService.get(StationId.from("unknown"))
 
     then:
     thrown(StationExceptions.NotFoundException)
@@ -73,9 +72,9 @@ class StationServiceSpec extends Specification {
 
   def "중복 코드를 생성하면 오류 발생"() {
     when:
-    warehouseStationService.create(new StationRequests.CreateRequest(
+    stationService.create(new StationRequests.CreateRequest(
       id: StationId.from("Z2"),
-      siteId: warehouseSiteId,
+      siteId: siteId,
       name: "작업장B",
       code: StationCode.from("Z")
     ))
@@ -85,13 +84,13 @@ class StationServiceSpec extends Specification {
 
   def "이미 존재하는 코드로 변경하면 오류 발생"() {
     when:
-    warehouseStationService.create(new StationRequests.CreateRequest(
+    stationService.create(new StationRequests.CreateRequest(
       id: StationId.from("Z2"),
-      siteId: warehouseSiteId,
+      siteId: siteId,
       name: "작업장B",
       code: StationCode.from("Z2")
     ))
-    warehouseStationService.update(new StationRequests.UpdateRequest(
+    stationService.update(new StationRequests.UpdateRequest(
       id: StationId.from("Z2"),
       name: "작업장B",
       code: StationCode.from("Z")

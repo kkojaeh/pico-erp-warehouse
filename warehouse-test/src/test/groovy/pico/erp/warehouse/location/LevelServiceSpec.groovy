@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.warehouse.location.LocationCode
 import pico.erp.warehouse.location.bay.BayId
 import pico.erp.warehouse.location.level.*
 import spock.lang.Specification
@@ -22,23 +21,23 @@ import spock.lang.Specification
 class LevelServiceSpec extends Specification {
 
   @Autowired
-  LevelService warehouseLevelService
+  LevelService levelService
 
-  def warehouseBayId = BayId.from("A-1-1")
+  def bayId = BayId.from("A-1-1")
 
-  def warehouseLevelId = LevelId.from("A-1-1-20")
+  def levelId = LevelId.from("A-1-1-20")
 
   def setup() {
-    warehouseLevelService.create(new LevelRequests.CreateRequest(
-      id: warehouseLevelId,
-      bayId: warehouseBayId,
+    levelService.create(new LevelRequests.CreateRequest(
+      id: levelId,
+      bayId: bayId,
       code: LevelCode.from(20),
     ))
   }
 
   def "아이디로 존재하는 창고지 확인"() {
     when:
-    def exists = warehouseLevelService.exists(warehouseLevelId)
+    def exists = levelService.exists(levelId)
 
     then:
     exists == true
@@ -46,7 +45,7 @@ class LevelServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지 확인"() {
     when:
-    def exists = warehouseLevelService.exists(LevelId.from("unknown"))
+    def exists = levelService.exists(LevelId.from("unknown"))
 
     then:
     exists == false
@@ -54,7 +53,7 @@ class LevelServiceSpec extends Specification {
 
   def "아이디로 존재하는 창고지를 조회"() {
     when:
-    def rack = warehouseLevelService.get(warehouseLevelId)
+    def rack = levelService.get(levelId)
 
     then:
     rack.locationCode == LocationCode.from("A1-A-01-01-20")
@@ -63,7 +62,7 @@ class LevelServiceSpec extends Specification {
 
   def "아이디로 존재하지 않는 창고지를 조회"() {
     when:
-    warehouseLevelService.get(LevelId.from("unknown"))
+    levelService.get(LevelId.from("unknown"))
 
     then:
     thrown(LevelExceptions.NotFoundException)
@@ -71,9 +70,9 @@ class LevelServiceSpec extends Specification {
 
   def "중복 코드를 생성하면 오류 발생"() {
     when:
-    warehouseLevelService.create(new LevelRequests.CreateRequest(
+    levelService.create(new LevelRequests.CreateRequest(
       id: LevelId.from("A-1-1-19"),
-      bayId: warehouseBayId,
+      bayId: bayId,
       code: LevelCode.from(20)
     ))
     then:
@@ -82,12 +81,12 @@ class LevelServiceSpec extends Specification {
 
   def "이미 존재하는 코드로 변경하면 오류 발생"() {
     when:
-    warehouseLevelService.create(new LevelRequests.CreateRequest(
+    levelService.create(new LevelRequests.CreateRequest(
       id: LevelId.from("A-1-1-19"),
-      bayId: warehouseBayId,
+      bayId: bayId,
       code: LevelCode.from(19)
     ))
-    warehouseLevelService.update(new LevelRequests.UpdateRequest(
+    levelService.update(new LevelRequests.UpdateRequest(
       id: LevelId.from("A-1-1-19"),
       code: LevelCode.from(20)
     ))
