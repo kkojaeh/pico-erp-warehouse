@@ -56,6 +56,8 @@ class TransactionRequestServiceSpec extends Specification {
       )
     )
 
+    println inbounded
+
     then:
     inbounded.dueDate == dueDate
     inbounded.type == TransactionTypeKind.INBOUND

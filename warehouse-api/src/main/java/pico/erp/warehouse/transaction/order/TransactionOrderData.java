@@ -48,4 +48,14 @@ public class TransactionOrderData implements Serializable {
 
   TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
+  boolean acceptable;
+
+  boolean cancelable;
+
+  boolean completable;
+
+  boolean modifiable;
+
+  boolean committable;
+
 }
