@@ -1,5 +1,6 @@
 package pico.erp.warehouse.pack.code;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,15 @@ public class PackCodeGeneratorImpl implements PackCodeGenerator {
   @Override
   public PackCode generate(Pack warehousePack) {
     val now = OffsetDateTime.now();
-    val yearDay = ((now.getYear() % 10) * 1000) + now.getDayOfYear();
-    val code = String.format("%3s-%3s",
-      Integer.toString(yearDay, 36),
-      Long.toString(packRepository.countByCreatedToday(), 36)
+    val begin = now.with(LocalTime.MIN);
+    val end = now.with(LocalTime.MAX);
+
+    val date =
+      Integer.toString(now.getYear() - 1900, 36) + Integer.toString(now.getMonthValue(), 16)
+        + Integer.toString(now.getDayOfMonth(), 36);
+    val code = String.format("%s-%3s",
+      date,
+      Long.toString(packRepository.countCreatedBetween(begin, end), 36)
     );
     return PackCode.from(code.toUpperCase().replace(' ', '0'));
   }

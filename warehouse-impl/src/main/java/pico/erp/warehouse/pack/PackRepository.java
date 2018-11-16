@@ -1,6 +1,7 @@
 package pico.erp.warehouse.pack;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import pico.erp.item.lot.ItemLotId;
 
 public interface PackRepository {
 
-  long countByCreatedToday();
+  long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end);
 
   Pack create(@NotNull Pack warehousePack);
 
