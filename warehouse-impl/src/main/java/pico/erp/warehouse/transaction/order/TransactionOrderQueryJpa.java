@@ -42,6 +42,7 @@ public class TransactionOrderQueryJpa implements TransactionOrderQuery {
     val query = new JPAQuery<TransactionOrderView>(entityManager);
     val select = Projections.bean(TransactionOrderView.class,
       transactionOrder.id,
+      transactionOrder.code,
       transactionOrder.dueDate,
       transactionOrder.relatedCompanyId,
       transactionOrder.stationId,

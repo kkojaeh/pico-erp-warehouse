@@ -41,6 +41,7 @@ public class TransactionRequestQueryJpa implements TransactionRequestQuery {
     val query = new JPAQuery<TransactionRequestView>(entityManager);
     val select = Projections.bean(TransactionRequestView.class,
       transactionRequest.id,
+      transactionRequest.code,
       transactionRequest.dueDate,
       transactionRequest.relatedCompanyId,
       transactionRequest.stationId,
