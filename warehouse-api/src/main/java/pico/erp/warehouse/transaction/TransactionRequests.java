@@ -33,7 +33,7 @@ public interface TransactionRequests {
     // 대상 회사(회사)
     @Valid
     @NotNull
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     // 공급지 내부일때 사용
     @Valid

@@ -51,13 +51,13 @@ public abstract class TransactionMapper {
       .transactedDate(entity.getTransactedDate())
       .quantity(entity.getQuantity())
       .type(entity.getType())
-      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .transactionCompany(map(entity.getTransactionCompanyId()))
       .station(jpa(entity.getStation()))
       .build();
   }
 
   @Mappings({
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "itemLotId", source = "itemLot.id"),
     @Mapping(target = "itemId", source = "itemLot.itemId")
   })
@@ -87,13 +87,13 @@ public abstract class TransactionMapper {
 
   @Mappings({
     @Mapping(target = "itemLotId", source = "itemLot.id"),
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "stationId", source = "station.id"),
   })
   public abstract TransactionData map(Transaction transaction);
 
   @Mappings({
-    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId"),
     @Mapping(target = "itemLot", source = "itemLotId"),
     @Mapping(target = "transactedBy", expression = "java(auditorAware.getCurrentAuditor())")

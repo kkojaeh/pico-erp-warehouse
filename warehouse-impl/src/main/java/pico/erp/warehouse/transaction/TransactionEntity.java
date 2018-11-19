@@ -74,7 +74,7 @@ public class TransactionEntity implements Serializable {
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "RELATED_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
   })
-  CompanyId relatedCompanyId;
+  CompanyId transactionCompanyId;
 
   @ManyToOne
   @JoinColumn(name = "STATION_ID")

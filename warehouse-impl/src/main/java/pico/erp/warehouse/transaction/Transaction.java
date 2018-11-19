@@ -40,7 +40,7 @@ public class Transaction implements Serializable {
 
   OffsetDateTime transactedDate;
 
-  CompanyData relatedCompany;
+  CompanyData transactionCompany;
 
   Station station;
 
@@ -54,7 +54,7 @@ public class Transaction implements Serializable {
     itemLot = request.getItemLot();
     quantity = request.getQuantity();
     type = request.getType();
-    relatedCompany = request.getRelatedCompany();
+    transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     transactedBy = request.getTransactedBy();
     transactedDate = OffsetDateTime.now();

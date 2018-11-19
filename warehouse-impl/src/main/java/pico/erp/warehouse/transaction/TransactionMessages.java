@@ -36,7 +36,7 @@ public interface TransactionMessages {
 
     @Valid
     @NotNull
-    CompanyData relatedCompany;
+    CompanyData transactionCompany;
 
     @Valid
     Station station;

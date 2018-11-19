@@ -115,10 +115,10 @@ create table wah_warehouse_transaction (
 	item_id binary(16),
 	item_lot_id binary(16),
 	quantity decimal(19,2),
-	related_company_id varchar(50),
 	transacted_by_id varchar(50),
 	transacted_by_name varchar(50),
 	transacted_date datetime,
+	related_company_id varchar(50),
 	type varchar(20),
 	station_id binary(16),
 	primary key (id)

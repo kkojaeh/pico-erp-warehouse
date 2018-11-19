@@ -61,7 +61,7 @@ class TransactionRequestServiceSpec extends Specification {
     then:
     inbounded.dueDate == dueDate
     inbounded.type == TransactionTypeKind.INBOUND
-    inbounded.relatedCompanyId == companyId
+    inbounded.transactionCompanyId == companyId
     inbounded.stationId == stationId
   }
 
@@ -100,7 +100,7 @@ class TransactionRequestServiceSpec extends Specification {
     inbounded.code != null
     inbounded.dueDate == dueDate
     inbounded.type == TransactionTypeKind.OUTBOUND
-    inbounded.relatedCompanyId == companyId
+    inbounded.transactionCompanyId == companyId
     inbounded.stationId == stationId
   }
 

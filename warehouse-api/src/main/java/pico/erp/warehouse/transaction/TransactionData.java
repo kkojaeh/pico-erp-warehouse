@@ -29,7 +29,7 @@ public class TransactionData implements Serializable {
 
   OffsetDateTime transactedDate;
 
-  CompanyId relatedCompanyId;
+  CompanyId transactionCompanyId;
 
   StationId stationId;
 

@@ -49,7 +49,7 @@ class TransactionServiceSpec extends Specification {
       itemLotId: itemLotId,
       quantity: 20,
       type: TransactionTypeKind.INBOUND,
-      relatedCompanyId: companyId,
+      transactionCompanyId: companyId,
       stationId: stationId
     ))
 
@@ -59,7 +59,7 @@ class TransactionServiceSpec extends Specification {
     inbounded.itemLotId == itemLotId
     inbounded.quantity == 20
     inbounded.type == TransactionTypeKind.INBOUND
-    inbounded.relatedCompanyId == companyId
+    inbounded.transactionCompanyId == companyId
     inbounded.stationId == stationId
   }
 
@@ -70,7 +70,7 @@ class TransactionServiceSpec extends Specification {
       itemLotId: itemLotId,
       quantity: 20,
       type: TransactionTypeKind.OUTBOUND,
-      relatedCompanyId: companyId,
+      transactionCompanyId: companyId,
       stationId: stationId
     ))
 
@@ -80,7 +80,7 @@ class TransactionServiceSpec extends Specification {
     outbounded.itemLotId == itemLotId
     outbounded.quantity == 20
     outbounded.type == TransactionTypeKind.OUTBOUND
-    outbounded.relatedCompanyId == companyId
+    outbounded.transactionCompanyId == companyId
     outbounded.stationId == stationId
   }
 
