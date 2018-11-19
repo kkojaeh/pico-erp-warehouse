@@ -42,9 +42,11 @@ public abstract class TransactionOrderMapper {
   @Autowired
   protected TransactionOrderItemRepository orderItemRepository;
 
+  @Lazy
   @Autowired
   private TransactionOrderItemLotRepository orderItemLotRepository;
 
+  @Lazy
   @Autowired
   private TransactionOrderPackRepository orderPackRepository;
 
