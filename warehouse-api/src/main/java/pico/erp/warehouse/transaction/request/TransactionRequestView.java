@@ -28,7 +28,7 @@ public class TransactionRequestView {
 
   OffsetDateTime dueDate;
 
-  CompanyId relatedCompanyId;
+  CompanyId transactionCompanyId;
 
   StationId stationId;
 
@@ -64,7 +64,7 @@ public class TransactionRequestView {
 
     ItemId itemId;
 
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     List<TransactionRequestStatusKind> statuses;
 

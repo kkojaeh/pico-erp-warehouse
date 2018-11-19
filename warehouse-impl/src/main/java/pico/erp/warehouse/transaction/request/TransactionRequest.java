@@ -38,7 +38,7 @@ public class TransactionRequest implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyData relatedCompany;
+  CompanyData transactionCompany;
 
   Station station;
 
@@ -68,7 +68,7 @@ public class TransactionRequest implements Serializable {
     TransactionRequestMessages.CreateRequest request) {
     id = request.getId();
     dueDate = request.getDueDate();
-    relatedCompany = request.getRelatedCompany();
+    transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     status = TransactionRequestStatusKind.CREATED;
     type = request.getType();
@@ -86,7 +86,7 @@ public class TransactionRequest implements Serializable {
       throw new TransactionRequestExceptions.CannotModifyException();
     }
     dueDate = request.getDueDate();
-    relatedCompany = request.getRelatedCompany();
+    transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
     return new TransactionRequestMessages.UpdateResponse(

@@ -52,7 +52,7 @@ public abstract class TransactionRequestMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .dueDate(entity.getDueDate())
-      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .transactionCompany(map(entity.getTransactionCompanyId()))
       .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
@@ -81,7 +81,7 @@ public abstract class TransactionRequestMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .dueDate(entity.getDueDate())
-      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .transactionCompany(map(entity.getTransactionCompanyId()))
       .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
@@ -100,14 +100,14 @@ public abstract class TransactionRequestMapper {
 
   @Mappings({
     @Mapping(target = "stationId", source = "station.id"),
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
   public abstract TransactionRequestEntity jpa(TransactionRequest domain);
 
   @Mappings({
-    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId"),
     @Mapping(target = "codeGenerator", expression = "java(transactionRequestCodeGenerator)")
   })
@@ -115,14 +115,14 @@ public abstract class TransactionRequestMapper {
     TransactionRequestRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "relatedCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "stationId", source = "station.id")
   })
   public abstract TransactionRequestData map(
     TransactionRequest request);
 
   @Mappings({
-    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId")
   })
   public abstract TransactionRequestMessages.UpdateRequest map(

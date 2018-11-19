@@ -73,7 +73,7 @@ public class TransactionOrderEventListener {
     val orderCreateRequest = TransactionOrderRequests.CreateRequest.builder()
       .id(orderId)
       .dueDate(request.getDueDate())
-      .relatedCompanyId(request.getRelatedCompany().getId())
+      .transactionCompanyId(request.getTransactionCompany().getId())
       .stationId(request.getStation() != null ? request.getStation().getId() : null)
       .type(request.getType())
       .transactionRequestId(requestId)

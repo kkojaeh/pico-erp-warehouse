@@ -60,9 +60,9 @@ public class TransactionOrderEntity implements Serializable {
   OffsetDateTime dueDate;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "RELATED_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
   })
-  CompanyId relatedCompanyId;
+  CompanyId transactionCompanyId;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "STATION_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))

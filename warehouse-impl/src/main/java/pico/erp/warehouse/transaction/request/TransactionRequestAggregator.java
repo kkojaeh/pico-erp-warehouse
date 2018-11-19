@@ -33,7 +33,7 @@ public class TransactionRequestAggregator extends TransactionRequest {
   @Builder(builderMethodName = "aggregatorBuilder")
   public TransactionRequestAggregator(boolean committable,
     TransactionRequestId id, TransactionRequestCode code, OffsetDateTime dueDate,
-    CompanyData relatedCompany, Station station,
+    CompanyData transactionCompany, Station station,
     TransactionRequestStatusKind status, TransactionTypeKind type,
     Auditor committedBy, OffsetDateTime committedDate, Auditor canceledBy,
     OffsetDateTime canceledDate, Auditor acceptedBy, OffsetDateTime acceptedDate,
@@ -41,7 +41,7 @@ public class TransactionRequestAggregator extends TransactionRequest {
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionRequestItem> items,
     List<TransactionRequestItemLot> itemLots) {
-    super(committable, id, code, dueDate, relatedCompany, station, status, type, committedBy,
+    super(committable, id, code, dueDate, transactionCompany, station, status, type, committedBy,
       committedDate, canceledBy, canceledDate, acceptedBy, acceptedDate, completedBy, completedDate,
       quantityCorrectionPolicy);
     this.items = items;

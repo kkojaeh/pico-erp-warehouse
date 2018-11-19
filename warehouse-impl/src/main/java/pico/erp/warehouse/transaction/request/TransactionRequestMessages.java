@@ -34,7 +34,7 @@ public interface TransactionRequestMessages {
 
     // 대상 회사(회사)
     @NotNull
-    CompanyData relatedCompany;
+    CompanyData transactionCompany;
 
     // 공급지 내부일때 사용
     Station station;
@@ -62,7 +62,7 @@ public interface TransactionRequestMessages {
 
     // 대상 회사(회사)
     @NotNull
-    CompanyData relatedCompany;
+    CompanyData transactionCompany;
 
     // 공급지 내부일때 사용
     Station station;

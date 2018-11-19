@@ -50,7 +50,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: inboundRequestId,
         dueDate: dueDate,
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -72,7 +72,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: inboundRequestId,
         dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -90,7 +90,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: outboundRequestId,
         dueDate: dueDate,
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -111,7 +111,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -129,7 +129,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: outboundRequestId,
         dueDate: dueDate,
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -153,7 +153,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -175,7 +175,7 @@ class TransactionRequestServiceSpec extends Specification {
         id: outboundRequestId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )

@@ -39,7 +39,7 @@ public class TransactionOrder implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyData relatedCompany;
+  CompanyData transactionCompany;
 
   Station station;
 
@@ -71,7 +71,7 @@ public class TransactionOrder implements Serializable {
     TransactionOrderMessages.CreateRequest request) {
     id = request.getId();
     dueDate = request.getDueDate();
-    relatedCompany = request.getRelatedCompany();
+    transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     status = TransactionOrderStatusKind.CREATED;
     type = request.getType();
@@ -89,7 +89,7 @@ public class TransactionOrder implements Serializable {
       throw new TransactionOrderExceptions.CannotModifyException();
     }
     dueDate = request.getDueDate();
-    relatedCompany = request.getRelatedCompany();
+    transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     quantityCorrectionPolicy = request.getQuantityCorrectionPolicy();
     return new TransactionOrderMessages.UpdateResponse(

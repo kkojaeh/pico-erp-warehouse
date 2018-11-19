@@ -14,9 +14,6 @@ import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
-import pico.erp.warehouse.transaction.request.TransactionRequestId
-import pico.erp.warehouse.transaction.request.TransactionRequestRequests
-import pico.erp.warehouse.transaction.request.TransactionRequestService
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemRequests
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemService
@@ -66,7 +63,7 @@ class TransactionRequestItemLotServiceSpec extends Specification {
         id: requestId,
         dueDate: dueDate,
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )

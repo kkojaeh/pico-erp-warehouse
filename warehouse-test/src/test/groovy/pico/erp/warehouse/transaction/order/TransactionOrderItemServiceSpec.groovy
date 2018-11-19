@@ -13,9 +13,6 @@ import pico.erp.shared.IntegrationConfiguration
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
-import pico.erp.warehouse.transaction.order.TransactionOrderId
-import pico.erp.warehouse.transaction.order.TransactionOrderRequests
-import pico.erp.warehouse.transaction.order.TransactionOrderService
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemExceptions
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemId
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemRequests
@@ -55,7 +52,7 @@ class TransactionOrderItemServiceSpec extends Specification {
         id: orderId,
         dueDate: dueDate,
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )

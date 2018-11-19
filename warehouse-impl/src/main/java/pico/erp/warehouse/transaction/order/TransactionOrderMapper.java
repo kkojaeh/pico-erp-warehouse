@@ -60,7 +60,7 @@ public abstract class TransactionOrderMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .dueDate(entity.getDueDate())
-      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .relatedCompany(map(entity.getTransactionCompanyId()))
       .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
@@ -92,7 +92,7 @@ public abstract class TransactionOrderMapper {
       .id(entity.getId())
       .code(entity.getCode())
       .dueDate(entity.getDueDate())
-      .relatedCompany(map(entity.getRelatedCompanyId()))
+      .transactionCompany(map(entity.getTransactionCompanyId()))
       .station(map(entity.getStationId()))
       .committedBy(entity.getCommittedBy())
       .committedDate(entity.getCommittedDate())
@@ -112,14 +112,14 @@ public abstract class TransactionOrderMapper {
   @Mappings({
     @Mapping(target = "stationId", source = "station.id"),
     @Mapping(target = "requestId", source = "request.id"),
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true)
   })
   public abstract TransactionOrderEntity jpa(TransactionOrder domain);
 
   @Mappings({
-    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId"),
     @Mapping(target = "codeGenerator", expression = "java(transactionOrderCodeGenerator)")
   })
@@ -127,7 +127,7 @@ public abstract class TransactionOrderMapper {
     TransactionOrderRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "relatedCompanyId", source = "relatedCompany.id"),
+    @Mapping(target = "relatedCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "stationId", source = "station.id"),
     @Mapping(target = "requestId", source = "request.id")
   })
@@ -135,7 +135,7 @@ public abstract class TransactionOrderMapper {
     TransactionOrder transactionOrder);
 
   @Mappings({
-    @Mapping(target = "relatedCompany", source = "relatedCompanyId"),
+    @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId")
   })
   public abstract TransactionOrderMessages.UpdateRequest map(

@@ -33,7 +33,7 @@ public interface TransactionRequestRequests {
 
     // 대상 회사(회사)
     @NotNull
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     // 공급지 내부일때 사용
     StationId stationId;
@@ -63,7 +63,7 @@ public interface TransactionRequestRequests {
 
     // 공급처 회사(회사)
     @NotNull
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     StationId stationId;
 

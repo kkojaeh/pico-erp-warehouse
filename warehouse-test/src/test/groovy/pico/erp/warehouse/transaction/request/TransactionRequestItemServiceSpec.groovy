@@ -52,7 +52,7 @@ class TransactionRequestItemServiceSpec extends Specification {
         id: requestId,
         dueDate: dueDate,
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )

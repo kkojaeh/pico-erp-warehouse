@@ -50,7 +50,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: inboundOrderId,
         dueDate: dueDate,
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -71,7 +71,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: inboundOrderId,
         dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -89,7 +89,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: outboundOrderId,
         dueDate: dueDate,
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -109,7 +109,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: outboundOrderId,
         dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -126,7 +126,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: outboundOrderId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -148,7 +148,7 @@ class TransactionOrderServiceSpec extends Specification {
         id: outboundOrderId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )

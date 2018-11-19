@@ -47,7 +47,7 @@ class TransactionOrderQuerySpec extends Specification {
         id: inboundOrderId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.INBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -57,7 +57,7 @@ class TransactionOrderQuerySpec extends Specification {
         id: outboundOrderId,
         dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
-        relatedCompanyId: companyId,
+        transactionCompanyId: companyId,
         stationId: stationId,
         quantityCorrectionPolicy: TransactionQuantityCorrectionPolicyKind.NEGATIVE
       )
@@ -88,10 +88,10 @@ class TransactionOrderQuerySpec extends Specification {
     page.totalElements == totalElements
 
     where:
-    condition                                                                    | pageable               || totalElements
-    new TransactionOrderView.Filter(type: TransactionTypeKind.OUTBOUND)          | new PageRequest(0, 10) || 1
-    new TransactionOrderView.Filter(itemId: itemId, relatedCompanyId: companyId) | new PageRequest(0, 10) || 1
-    new TransactionOrderView.Filter()                                            | new PageRequest(0, 10) || 2
+    condition                                                                        | pageable               || totalElements
+    new TransactionOrderView.Filter(type: TransactionTypeKind.OUTBOUND)              | new PageRequest(0, 10) || 1
+    new TransactionOrderView.Filter(itemId: itemId, transactionCompanyId: companyId) | new PageRequest(0, 10) || 1
+    new TransactionOrderView.Filter()                                                | new PageRequest(0, 10) || 2
   }
 
 }

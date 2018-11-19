@@ -145,10 +145,10 @@ create table wah_warehouse_transaction_order (
 	created_date datetime,
 	due_date datetime,
 	quantity_correction_policy varchar(20),
-	related_company_id varchar(50),
 	request_id binary(16),
 	station_id binary(16),
 	status varchar(20),
+	transaction_company_id varchar(50),
 	type varchar(20),
 	primary key (id)
 ) engine=InnoDB;
@@ -210,9 +210,9 @@ create table wah_warehouse_transaction_request (
 	created_date datetime,
 	due_date datetime,
 	quantity_correction_policy varchar(20),
-	related_company_id varchar(50),
 	station_id binary(16),
 	status varchar(20),
+	transaction_company_id varchar(50),
 	type varchar(20),
 	primary key (id)
 ) engine=InnoDB;

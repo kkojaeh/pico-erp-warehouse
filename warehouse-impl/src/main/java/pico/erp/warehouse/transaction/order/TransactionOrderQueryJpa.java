@@ -44,7 +44,7 @@ public class TransactionOrderQueryJpa implements TransactionOrderQuery {
       transactionOrder.id,
       transactionOrder.code,
       transactionOrder.dueDate,
-      transactionOrder.relatedCompanyId,
+      transactionOrder.transactionCompanyId,
       transactionOrder.stationId,
       transactionOrder.status,
       transactionOrder.type,
@@ -80,9 +80,9 @@ public class TransactionOrderQueryJpa implements TransactionOrderQuery {
         )
       );
     }
-    if (filter.getRelatedCompanyId() != null) {
+    if (filter.getTransactionCompanyId() != null) {
       builder.and(
-        transactionOrder.relatedCompanyId.eq(filter.getRelatedCompanyId())
+        transactionOrder.transactionCompanyId.eq(filter.getTransactionCompanyId())
       );
     }
     if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {

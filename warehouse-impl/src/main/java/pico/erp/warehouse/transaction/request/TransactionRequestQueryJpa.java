@@ -43,7 +43,7 @@ public class TransactionRequestQueryJpa implements TransactionRequestQuery {
       transactionRequest.id,
       transactionRequest.code,
       transactionRequest.dueDate,
-      transactionRequest.relatedCompanyId,
+      transactionRequest.transactionCompanyId,
       transactionRequest.stationId,
       transactionRequest.status,
       transactionRequest.type,
@@ -79,9 +79,9 @@ public class TransactionRequestQueryJpa implements TransactionRequestQuery {
         )
       );
     }
-    if (filter.getRelatedCompanyId() != null) {
+    if (filter.getTransactionCompanyId() != null) {
       builder.and(
-        transactionRequest.relatedCompanyId.eq(filter.getRelatedCompanyId())
+        transactionRequest.transactionCompanyId.eq(filter.getTransactionCompanyId())
       );
     }
     if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {

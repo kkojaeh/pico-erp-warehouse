@@ -34,7 +34,7 @@ public interface TransactionOrderRequests {
 
     // 공급처 회사(회사)
     @NotNull
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     // 공급지 내부일때 사
     StationId stationId;
@@ -66,7 +66,7 @@ public interface TransactionOrderRequests {
 
     // 공급처 회사(회사)
     @NotNull
-    CompanyId relatedCompanyId;
+    CompanyId transactionCompanyId;
 
     StationId stationId;
 
