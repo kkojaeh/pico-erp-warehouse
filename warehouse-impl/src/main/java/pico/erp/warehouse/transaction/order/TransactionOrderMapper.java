@@ -129,7 +129,7 @@ public abstract class TransactionOrderMapper {
     TransactionOrderRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "relatedCompanyId", source = "transactionCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "stationId", source = "station.id"),
     @Mapping(target = "requestId", source = "request.id")
   })

@@ -28,7 +28,7 @@ public class TransactionOrderData implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyId relatedCompanyId;
+  CompanyId transactionCompanyId;
 
   StationId stationId;
 

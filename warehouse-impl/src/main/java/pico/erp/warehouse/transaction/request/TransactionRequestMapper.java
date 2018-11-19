@@ -115,7 +115,7 @@ public abstract class TransactionRequestMapper {
     TransactionRequestRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "relatedCompanyId", source = "transactionCompany.id"),
+    @Mapping(target = "transactionCompanyId", source = "transactionCompany.id"),
     @Mapping(target = "stationId", source = "station.id")
   })
   public abstract TransactionRequestData map(
