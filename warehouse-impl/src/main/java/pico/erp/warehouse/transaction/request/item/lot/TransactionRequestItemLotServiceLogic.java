@@ -2,6 +2,10 @@ package pico.erp.warehouse.transaction.request.item.lot;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -11,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import pico.erp.shared.Public;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
+import pico.erp.warehouse.transaction.request.TransactionRequestId;
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId;
 
 @SuppressWarnings("Duplicates")
@@ -80,6 +85,18 @@ public class TransactionRequestItemLotServiceLogic implements
       .collect(Collectors.toList());
   }
 
+  public void deleteBy(DeleteByRequestItemRequest request) {
+    requestItemLotRepository
+      .findAllBy(request.getRequestItemId())
+      .forEach(itemLot -> {
+        val response = itemLot.apply(
+          new TransactionRequestItemLotMessages.DeleteRequest()
+        );
+        requestItemLotRepository.deleteBy(itemLot.getId());
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
   @Override
   public void update(TransactionRequestItemLotRequests.UpdateRequest request) {
     val itemLot = requestItemLotRepository.findBy(request.getId())
@@ -87,6 +104,23 @@ public class TransactionRequestItemLotServiceLogic implements
     val response = itemLot.apply(mapper.map(request));
     requestItemLotRepository.update(itemLot);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  @Override
+  public List<TransactionRequestItemLotData> getAll(TransactionRequestId transactionRequestId) {
+    return requestItemLotRepository.findAllBy(transactionRequestId)
+      .map(mapper::map)
+      .collect(Collectors.toList());
+  }
+
+  @Getter
+  @Builder
+  public static class DeleteByRequestItemRequest {
+
+    @Valid
+    @NotNull
+    TransactionRequestItemId requestItemId;
+
   }
 
 }

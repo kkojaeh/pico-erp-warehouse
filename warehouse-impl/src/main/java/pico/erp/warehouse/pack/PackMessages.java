@@ -13,7 +13,6 @@ import lombok.Value;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.shared.event.Event;
 import pico.erp.warehouse.location.Location;
-import pico.erp.warehouse.pack.code.PackCodeGenerator;
 
 public interface PackMessages {
 

@@ -2,7 +2,10 @@ package pico.erp.warehouse.location.rack;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,7 @@ import pico.erp.warehouse.location.zone.ZoneId;
 public class RackServiceLogic implements RackService {
 
   @Autowired
-  private RackRepository warehouseRackRepository;
+  private RackRepository rackRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -38,55 +41,90 @@ public class RackServiceLogic implements RackService {
   public RackData create(CreateRequest request) {
     val warehouseRack = new Rack();
     val response = warehouseRack.apply(mapper.map(request));
-    if (warehouseRackRepository.exists(warehouseRack.getId())) {
+    if (rackRepository.exists(warehouseRack.getId())) {
       throw new RackExceptions.AlreadyExistsException();
     }
-    if (warehouseRackRepository.exists(warehouseRack.getLocationCode())) {
+    if (rackRepository.exists(warehouseRack.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseRackRepository.create(warehouseRack);
+    val created = rackRepository.create(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val warehouseRack = warehouseRackRepository.findBy(request.getId())
+    val warehouseRack = rackRepository.findBy(request.getId())
       .orElseThrow(RackExceptions.NotFoundException::new);
     val response = warehouseRack.apply(mapper.map(request));
-    warehouseRackRepository.update(warehouseRack);
+    rackRepository.update(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void deleteBy(DeleteByZoneRequest request) {
+    rackRepository.findAllBy(request.getZoneId())
+      .map(rack -> new RackRequests.DeleteRequest(rack.getId()))
+      .forEach(this::delete);
   }
 
   @Override
   public boolean exists(@NotNull RackId id) {
-    return warehouseRackRepository.exists(id);
+    return rackRepository.exists(id);
   }
 
   @Override
   public RackData get(@NotNull RackId id) {
-    return warehouseRackRepository.findBy(id)
+    return rackRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(RackExceptions.NotFoundException::new);
   }
 
   @Override
   public List<RackData> getAll(@NotNull ZoneId zoneId) {
-    return warehouseRackRepository.findAllBy(zoneId)
+    return rackRepository.findAllBy(zoneId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
+  public void resetCodeBy(ResetCodeByZoneRequest request) {
+    rackRepository.findAllBy(request.getZoneId())
+      .forEach(bay -> {
+        val response = bay.apply(new RackMessages.ResetLocationCodeRequest());
+        rackRepository.update(bay);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
   @Override
   public void update(UpdateRequest request) {
-    val warehouseRack = warehouseRackRepository.findBy(request.getId())
+    val warehouseRack = rackRepository.findBy(request.getId())
       .orElseThrow(ZoneExceptions.NotFoundException::new);
     val response = warehouseRack.apply(mapper.map(request));
-    if (response.isCodeChanged() && warehouseRackRepository
+    if (response.isCodeChanged() && rackRepository
       .exists(warehouseRack.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseRackRepository.update(warehouseRack);
+    rackRepository.update(warehouseRack);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  @Getter
+  @Builder
+  public static class DeleteByZoneRequest {
+
+    @Valid
+    @NotNull
+    ZoneId zoneId;
+
+  }
+
+  @Getter
+  @Builder
+  public static class ResetCodeByZoneRequest {
+
+    @Valid
+    @NotNull
+    ZoneId zoneId;
+
   }
 }

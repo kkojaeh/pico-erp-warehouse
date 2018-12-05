@@ -2,7 +2,10 @@ package pico.erp.warehouse.location.bay;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ import pico.erp.warehouse.location.rack.RackId;
 public class BayServiceLogic implements BayService {
 
   @Autowired
-  private BayRepository warehouseBayRepository;
+  private BayRepository bayRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -32,59 +35,95 @@ public class BayServiceLogic implements BayService {
   @Autowired
   private BayMapper mapper;
 
-
   @Override
   public BayData create(CreateRequest request) {
-    val warehouseBay = new Bay();
-    val response = warehouseBay.apply(mapper.map(request));
-    if (warehouseBayRepository.exists(warehouseBay.getId())) {
+    val bay = new Bay();
+    val response = bay.apply(mapper.map(request));
+    if (bayRepository.exists(bay.getId())) {
       throw new BayExceptions.AlreadyExistsException();
     }
-    if (warehouseBayRepository.exists(warehouseBay.getLocationCode())) {
+    if (bayRepository.exists(bay.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseBayRepository.create(warehouseBay);
+    val created = bayRepository.create(bay);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val warehouseBay = warehouseBayRepository.findBy(request.getId())
+    val bay = bayRepository.findBy(request.getId())
       .orElseThrow(BayExceptions.NotFoundException::new);
-    val response = warehouseBay.apply(mapper.map(request));
-    warehouseBayRepository.update(warehouseBay);
+    val response = bay.apply(mapper.map(request));
+    bayRepository.update(bay);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void deleteBy(DeleteByRackRequest request) {
+    bayRepository.findAllBy(request.getRackId())
+      .map(bay -> new BayRequests.DeleteRequest(bay.getId()))
+      .forEach(this::delete);
   }
 
   @Override
   public boolean exists(@NotNull BayId id) {
-    return warehouseBayRepository.exists(id);
+    return bayRepository.exists(id);
   }
 
   @Override
   public BayData get(@NotNull BayId id) {
-    return warehouseBayRepository.findBy(id)
+    return bayRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(BayExceptions.NotFoundException::new);
   }
 
   @Override
   public List<BayData> getAll(@NotNull RackId rackId) {
-    return warehouseBayRepository.findAllBy(rackId)
+    return bayRepository.findAllBy(rackId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
+  public void resetCodeBy(ResetCodeByRackRequest request) {
+    bayRepository.findAllBy(request.getRackId())
+      .forEach(bay -> {
+        val response = bay.apply(new BayMessages.ResetLocationCodeRequest());
+        bayRepository.update(bay);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
   @Override
   public void update(UpdateRequest request) {
-    val warehouseBay = warehouseBayRepository.findBy(request.getId())
+    val bay = bayRepository.findBy(request.getId())
       .orElseThrow(BayExceptions.NotFoundException::new);
-    val response = warehouseBay.apply(mapper.map(request));
-    if (response.isCodeChanged() && warehouseBayRepository.exists(warehouseBay.getLocationCode())) {
+    val response = bay.apply(mapper.map(request));
+    if (response.isCodeChanged() && bayRepository.exists(bay.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseBayRepository.update(warehouseBay);
+    bayRepository.update(bay);
     eventPublisher.publishEvents(response.getEvents());
   }
+
+  @Getter
+  @Builder
+  public static class DeleteByRackRequest {
+
+    @Valid
+    @NotNull
+    RackId rackId;
+
+  }
+
+  @Getter
+  @Builder
+  public static class ResetCodeByRackRequest {
+
+    @Valid
+    @NotNull
+    RackId rackId;
+
+  }
+
+
 }

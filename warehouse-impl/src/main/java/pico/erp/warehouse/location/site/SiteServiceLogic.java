@@ -23,7 +23,7 @@ import pico.erp.warehouse.location.site.SiteRequests.UpdateRequest;
 public class SiteServiceLogic implements SiteService {
 
   @Autowired
-  private SiteRepository warehouseSiteRepository;
+  private SiteRepository siteRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -35,55 +35,55 @@ public class SiteServiceLogic implements SiteService {
   public SiteData create(CreateRequest request) {
     val warehouseSite = new Site();
     val response = warehouseSite.apply(mapper.map(request));
-    if (warehouseSiteRepository.exists(warehouseSite.getId())) {
+    if (siteRepository.exists(warehouseSite.getId())) {
       throw new SiteExceptions.AlreadyExistsException();
     }
-    if (warehouseSiteRepository.exists(warehouseSite.getLocationCode())) {
+    if (siteRepository.exists(warehouseSite.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseSiteRepository.create(warehouseSite);
+    val created = siteRepository.create(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val warehouseSite = warehouseSiteRepository.findBy(request.getId())
+    val warehouseSite = siteRepository.findBy(request.getId())
       .orElseThrow(SiteExceptions.NotFoundException::new);
     val response = warehouseSite.apply(mapper.map(request));
-    warehouseSiteRepository.update(warehouseSite);
+    siteRepository.update(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public boolean exists(@NotNull SiteId id) {
-    return warehouseSiteRepository.exists(id);
+    return siteRepository.exists(id);
   }
 
   @Override
   public SiteData get(@NotNull SiteId id) {
-    return warehouseSiteRepository.findBy(id)
+    return siteRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(SiteExceptions.NotFoundException::new);
   }
 
   @Override
   public List<SiteData> getAll() {
-    return warehouseSiteRepository.findAll()
+    return siteRepository.findAll()
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
   @Override
   public void update(UpdateRequest request) {
-    val warehouseSite = warehouseSiteRepository.findBy(request.getId())
+    val warehouseSite = siteRepository.findBy(request.getId())
       .orElseThrow(SiteExceptions.NotFoundException::new);
     val response = warehouseSite.apply(mapper.map(request));
-    if (response.isCodeChanged() && warehouseSiteRepository
+    if (response.isCodeChanged() && siteRepository
       .exists(warehouseSite.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseSiteRepository.update(warehouseSite);
+    siteRepository.update(warehouseSite);
     eventPublisher.publishEvents(response.getEvents());
   }
 }

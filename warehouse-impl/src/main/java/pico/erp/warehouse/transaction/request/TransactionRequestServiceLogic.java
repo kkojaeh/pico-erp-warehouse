@@ -1,5 +1,9 @@
 package pico.erp.warehouse.transaction.request;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -117,6 +121,27 @@ public class TransactionRequestServiceLogic implements TransactionRequestService
     val response = req.apply(mapper.map(request));
     requestRepository.update(req);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void verify(VerifyRequest request) {
+    val aggregator = requestRepository
+      .findAggregatorBy(request.getId()).get();
+    if (aggregator.isModifiable()) {
+      val response = aggregator.apply(new TransactionRequestMessages.VerifyRequest());
+      requestRepository.update(aggregator);
+      eventPublisher.publishEvents(response.getEvents());
+    }
+  }
+
+
+  @Getter
+  @Builder
+  public static class VerifyRequest {
+
+    @Valid
+    @NotNull
+    TransactionRequestId id;
+
   }
 
 }

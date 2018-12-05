@@ -2,7 +2,10 @@ package pico.erp.warehouse.location.level;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ import pico.erp.warehouse.location.level.LevelRequests.UpdateRequest;
 public class LevelServiceLogic implements LevelService {
 
   @Autowired
-  private LevelRepository warehouseLevelRepository;
+  private LevelRepository levelRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -37,55 +40,90 @@ public class LevelServiceLogic implements LevelService {
   public LevelData create(CreateRequest request) {
     val level = new Level();
     val response = level.apply(mapper.map(request));
-    if (warehouseLevelRepository.exists(level.getId())) {
+    if (levelRepository.exists(level.getId())) {
       throw new LevelExceptions.AlreadyExistsException();
     }
-    if (warehouseLevelRepository.exists(level.getLocationCode())) {
+    if (levelRepository.exists(level.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseLevelRepository.create(level);
+    val created = levelRepository.create(level);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val level = warehouseLevelRepository.findBy(request.getId())
+    val level = levelRepository.findBy(request.getId())
       .orElseThrow(LevelExceptions.NotFoundException::new);
     val response = level.apply(mapper.map(request));
-    warehouseLevelRepository.update(level);
+    levelRepository.update(level);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void deleteBy(DeleteByBayRequest request) {
+    levelRepository.findAllBy(request.getBayId())
+      .map(level -> new LevelRequests.DeleteRequest(level.getId()))
+      .forEach(this::delete);
   }
 
   @Override
   public boolean exists(@NotNull LevelId id) {
-    return warehouseLevelRepository.exists(id);
+    return levelRepository.exists(id);
   }
 
   @Override
   public LevelData get(@NotNull LevelId id) {
-    return warehouseLevelRepository.findBy(id)
+    return levelRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(LevelExceptions.NotFoundException::new);
   }
 
   @Override
   public List<LevelData> getAll(@NotNull BayId bayId) {
-    return warehouseLevelRepository.findAllBy(bayId)
+    return levelRepository.findAllBy(bayId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
+  public void resetCodeBy(ResetCodeByBayRequest request) {
+    levelRepository.findAllBy(request.getBayId())
+      .forEach(bay -> {
+        val response = bay.apply(new LevelMessages.ResetLocationCodeRequest());
+        levelRepository.update(bay);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
   @Override
   public void update(UpdateRequest request) {
-    val level = warehouseLevelRepository.findBy(request.getId())
+    val level = levelRepository.findBy(request.getId())
       .orElseThrow(LevelExceptions.NotFoundException::new);
     val response = level.apply(mapper.map(request));
-    if (response.isCodeChanged() && warehouseLevelRepository
+    if (response.isCodeChanged() && levelRepository
       .exists(level.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseLevelRepository.update(level);
+    levelRepository.update(level);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  @Getter
+  @Builder
+  public static class DeleteByBayRequest {
+
+    @Valid
+    @NotNull
+    BayId bayId;
+
+  }
+
+  @Getter
+  @Builder
+  public static class ResetCodeByBayRequest {
+
+    @Valid
+    @NotNull
+    BayId bayId;
+
   }
 }

@@ -12,7 +12,6 @@ import pico.erp.item.lot.ItemLotService;
 import pico.erp.warehouse.location.Location;
 import pico.erp.warehouse.location.LocationId;
 import pico.erp.warehouse.location.LocationMapper;
-import pico.erp.warehouse.pack.code.PackCodeGenerator;
 
 @org.mapstruct.Mapper
 public abstract class PackMapper {

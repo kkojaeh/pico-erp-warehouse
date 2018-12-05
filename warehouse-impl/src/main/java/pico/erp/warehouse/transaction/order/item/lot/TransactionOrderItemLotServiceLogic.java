@@ -2,6 +2,10 @@ package pico.erp.warehouse.transaction.order.item.lot;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -87,6 +91,28 @@ public class TransactionOrderItemLotServiceLogic implements
     val response = orderItemLot.apply(mapper.map(request));
     orderItemLotRepository.update(orderItemLot);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void deleteBy(DeleteByOrderItemRequest request) {
+    orderItemLotRepository
+      .findAllBy(request.getOrderItemId())
+      .forEach(itemLot -> {
+        val response = itemLot.apply(
+          new TransactionOrderItemLotMessages.DeleteRequest()
+        );
+        orderItemLotRepository.deleteBy(itemLot.getId());
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
+  @Getter
+  @Builder
+  public static class DeleteByOrderItemRequest {
+
+    @Valid
+    @NotNull
+    TransactionOrderItemId orderItemId;
+
   }
 
 }

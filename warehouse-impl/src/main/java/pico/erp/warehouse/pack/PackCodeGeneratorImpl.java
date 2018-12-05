@@ -1,4 +1,4 @@
-package pico.erp.warehouse.pack.code;
+package pico.erp.warehouse.pack;
 
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -6,9 +6,6 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import pico.erp.warehouse.pack.Pack;
-import pico.erp.warehouse.pack.PackCode;
-import pico.erp.warehouse.pack.PackRepository;
 
 @Component
 public class PackCodeGeneratorImpl implements PackCodeGenerator {

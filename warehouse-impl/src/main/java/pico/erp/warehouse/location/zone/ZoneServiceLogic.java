@@ -2,7 +2,10 @@ package pico.erp.warehouse.location.zone;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ import pico.erp.warehouse.location.zone.ZoneRequests.UpdateRequest;
 public class ZoneServiceLogic implements ZoneService {
 
   @Autowired
-  private ZoneRepository warehouseZoneRepository;
+  private ZoneRepository zoneRepository;
 
   @Autowired
   private EventPublisher eventPublisher;
@@ -36,55 +39,90 @@ public class ZoneServiceLogic implements ZoneService {
   public ZoneData create(CreateRequest request) {
     val warehouseZone = new Zone();
     val response = warehouseZone.apply(mapper.map(request));
-    if (warehouseZoneRepository.exists(warehouseZone.getId())) {
+    if (zoneRepository.exists(warehouseZone.getId())) {
       throw new ZoneExceptions.AlreadyExistsException();
     }
-    if (warehouseZoneRepository.exists(warehouseZone.getLocationCode())) {
+    if (zoneRepository.exists(warehouseZone.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    val created = warehouseZoneRepository.create(warehouseZone);
+    val created = zoneRepository.create(warehouseZone);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
 
   @Override
   public void delete(DeleteRequest request) {
-    val warehouseZone = warehouseZoneRepository.findBy(request.getId())
+    val warehouseZone = zoneRepository.findBy(request.getId())
       .orElseThrow(ZoneExceptions.NotFoundException::new);
     val response = warehouseZone.apply(mapper.map(request));
-    warehouseZoneRepository.update(warehouseZone);
+    zoneRepository.update(warehouseZone);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  public void deleteBy(DeleteBySiteRequest request) {
+    zoneRepository.findAllBy(request.getSiteId())
+      .map(level -> new ZoneRequests.DeleteRequest(level.getId()))
+      .forEach(this::delete);
   }
 
   @Override
   public boolean exists(@NotNull ZoneId id) {
-    return warehouseZoneRepository.exists(id);
+    return zoneRepository.exists(id);
   }
 
   @Override
   public ZoneData get(@NotNull ZoneId id) {
-    return warehouseZoneRepository.findBy(id)
+    return zoneRepository.findBy(id)
       .map(mapper::map)
       .orElseThrow(ZoneExceptions.NotFoundException::new);
   }
 
   @Override
   public List<ZoneData> getAll(@NotNull SiteId siteId) {
-    return warehouseZoneRepository.findAllBy(siteId)
+    return zoneRepository.findAllBy(siteId)
       .map(mapper::map)
       .collect(Collectors.toList());
   }
 
+  public void resetCodeBy(ResetCodeBySiteRequest request) {
+    zoneRepository.findAllBy(request.getSiteId())
+      .forEach(bay -> {
+        val response = bay.apply(new ZoneMessages.ResetLocationCodeRequest());
+        zoneRepository.update(bay);
+        eventPublisher.publishEvents(response.getEvents());
+      });
+  }
+
   @Override
   public void update(UpdateRequest request) {
-    val warehouseZone = warehouseZoneRepository.findBy(request.getId())
+    val warehouseZone = zoneRepository.findBy(request.getId())
       .orElseThrow(ZoneExceptions.NotFoundException::new);
     val response = warehouseZone.apply(mapper.map(request));
-    if (response.isCodeChanged() && warehouseZoneRepository
+    if (response.isCodeChanged() && zoneRepository
       .exists(warehouseZone.getLocationCode())) {
       throw new CodeAlreadyExistsException();
     }
-    warehouseZoneRepository.update(warehouseZone);
+    zoneRepository.update(warehouseZone);
     eventPublisher.publishEvents(response.getEvents());
+  }
+
+  @Getter
+  @Builder
+  public static class DeleteBySiteRequest {
+
+    @Valid
+    @NotNull
+    SiteId siteId;
+
+  }
+
+  @Getter
+  @Builder
+  public static class ResetCodeBySiteRequest {
+
+    @Valid
+    @NotNull
+    SiteId siteId;
+
   }
 }

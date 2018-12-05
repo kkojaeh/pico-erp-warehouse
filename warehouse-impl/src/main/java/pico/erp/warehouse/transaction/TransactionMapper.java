@@ -19,7 +19,7 @@ import pico.erp.warehouse.location.station.Station;
 import pico.erp.warehouse.location.station.StationEntity;
 import pico.erp.warehouse.location.station.StationId;
 import pico.erp.warehouse.location.station.StationMapper;
-import pico.erp.warehouse.pack.code.PackCodeGenerator;
+import pico.erp.warehouse.pack.PackCodeGenerator;
 import pico.erp.warehouse.transaction.TransactionMessages.CreateRequest;
 
 @Mapper
