@@ -6,4 +6,4 @@
  |__/|__/\__,_/_/   \___/_/ /_/\____/\__,_/____/\___/
 
 
-made by http://patorjk.com/software/taag/#p=display&f=Slant&t=Warehouse
+${application.version} - made by http://patorjk.com/software/taag/#p=display&f=Slant&t=Warehouse

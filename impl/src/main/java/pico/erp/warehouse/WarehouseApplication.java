@@ -1,24 +1,30 @@
 package pico.erp.warehouse;
 
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import pico.erp.audit.AuditConfiguration;
+import pico.erp.company.CompanyApi;
+import pico.erp.item.ItemApi;
+import pico.erp.shared.ApplicationId;
 import pico.erp.shared.ApplicationStarter;
 import pico.erp.shared.Public;
 import pico.erp.shared.SpringBootConfigs;
 import pico.erp.shared.data.Role;
 import pico.erp.shared.impl.ApplicationImpl;
+import pico.erp.user.UserApi;
+import pico.erp.warehouse.WarehouseApi.Roles;
 
 @Slf4j
 @SpringBootConfigs
 public class WarehouseApplication implements ApplicationStarter {
 
   public static final String CONFIG_NAME = "warehouse/application";
-
-  public static final String CONFIG_NAME_PROPERTY = "spring.config.name=warehouse/application";
 
   public static final Properties DEFAULT_PROPERTIES = new Properties();
 
@@ -42,42 +48,51 @@ public class WarehouseApplication implements ApplicationStarter {
   public AuditConfiguration auditConfiguration() {
     return AuditConfiguration.builder()
       .packageToScan("pico.erp.warehouse")
-      .entity(WarehouseRoles.class)
+      .entity(Roles.class)
       .build();
   }
 
-  @Bean
-  @Public
-  public Role warehouseAccessorRole() {
-    return WarehouseRoles.WAREHOUSE_ACCESSOR;
-  }
-
-  @Bean
-  @Public
-  public Role warehouseManagerRole() {
-    return WarehouseRoles.WAREHOUSE_MANAGER;
-  }
-
-  @Bean
-  @Public
-  public Role warehouseTransactionRequesterRole() {
-    return WarehouseRoles.WAREHOUSE_TRANSACTION_REQUESTER;
-  }
-
-  @Bean
-  @Public
-  public Role warehouseWorkerRole() {
-    return WarehouseRoles.WAREHOUSE_WORKER;
+  @Override
+  public Set<ApplicationId> getDependencies() {
+    return Stream.of(
+      UserApi.ID,
+      CompanyApi.ID,
+      ItemApi.ID
+    ).collect(Collectors.toSet());
   }
 
   @Override
-  public int getOrder() {
-    return 3;
+  public ApplicationId getId() {
+    return WarehouseApi.ID;
   }
 
   @Override
   public boolean isWeb() {
     return false;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseAccessorRole() {
+    return Roles.WAREHOUSE_ACCESSOR;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseManagerRole() {
+    return Roles.WAREHOUSE_MANAGER;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseTransactionRequesterRole() {
+    return Roles.WAREHOUSE_TRANSACTION_REQUESTER;
+  }
+
+  @Bean
+  @Public
+  public Role warehouseWorkerRole() {
+    return Roles.WAREHOUSE_WORKER;
   }
 
   @Override
