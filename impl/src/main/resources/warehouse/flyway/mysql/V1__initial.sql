@@ -79,6 +79,9 @@ create table wah_warehouse_rack (
 
 create table wah_warehouse_site (
 	id binary(16) not null,
+	address_detail varchar(50),
+	address_postal_code varchar(10),
+	address_street varchar(50),
 	code varchar(20),
 	created_by_id varchar(50),
 	created_by_name varchar(50),
