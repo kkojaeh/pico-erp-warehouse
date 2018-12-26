@@ -22,6 +22,7 @@ public abstract class SiteMapper {
       .name(entity.getName())
       .deleted(entity.isDeleted())
       .deletedDate(entity.getDeletedDate())
+      .address(entity.getAddress())
       .build();
   }
 

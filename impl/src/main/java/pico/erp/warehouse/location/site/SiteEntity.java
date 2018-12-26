@@ -25,6 +25,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.LocationCode;
 
@@ -60,6 +61,14 @@ public class SiteEntity implements Serializable {
 
   @Column(length = TypeDefinitions.NAME_LENGTH)
   String name;
+
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "postalCode", column = @Column(name = "ADDRESS_POSTAL_CODE", length = TypeDefinitions.ADDRESS_POSTAL_LENGTH)),
+    @AttributeOverride(name = "street", column = @Column(name = "ADDRESS_STREET", length = TypeDefinitions.ADDRESS_STREET_LENGTH)),
+    @AttributeOverride(name = "detail", column = @Column(name = "ADDRESS_DETAIL", length = TypeDefinitions.ADDRESS_DETAIL_LENGTH))
+  })
+  Address address;
 
   @Embedded
   @AttributeOverrides({

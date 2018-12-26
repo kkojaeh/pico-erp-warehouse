@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
+import pico.erp.shared.data.Address;
 import pico.erp.warehouse.location.LocationCode;
 
 @Data
@@ -24,6 +25,8 @@ public class SiteData implements Serializable {
   LocationCode locationCode;
 
   String name;
+
+  Address address;
 
   boolean deleted;
 

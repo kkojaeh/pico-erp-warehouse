@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.Address;
 
 
 public interface SiteRequests {
@@ -30,6 +31,10 @@ public interface SiteRequests {
     @Size(max = TypeDefinitions.NAME_LENGTH)
     String name;
 
+    @Valid
+    @NotNull
+    Address address;
+
   }
 
   @Data
@@ -49,6 +54,10 @@ public interface SiteRequests {
     @NotNull
     @Size(max = TypeDefinitions.NAME_LENGTH)
     String name;
+
+    @Valid
+    @NotNull
+    Address address;
 
   }
 

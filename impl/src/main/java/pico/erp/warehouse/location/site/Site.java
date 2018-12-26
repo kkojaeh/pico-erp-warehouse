@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import pico.erp.audit.annotation.Audit;
+import pico.erp.shared.data.Address;
 import pico.erp.warehouse.location.LocationCode;
 
 @Builder(toBuilder = true)
@@ -39,11 +40,14 @@ public class Site implements Serializable {
 
   OffsetDateTime deletedDate;
 
+  Address address;
+
   public SiteMessages.CreateResponse apply(SiteMessages.CreateRequest request) {
     id = request.getId();
     code = request.getCode();
     name = request.getName();
     locationCode = LocationCode.from(code);
+    address = request.getAddress();
     return new SiteMessages.CreateResponse(
       Arrays.asList(new SiteEvents.CreatedEvent(this.id)));
   }
@@ -53,6 +57,7 @@ public class Site implements Serializable {
     code = request.getCode();
     name = request.getName();
     locationCode = LocationCode.from(code);
+    address = request.getAddress();
     return new SiteMessages.UpdateResponse(
       Arrays.asList(new SiteEvents.UpdatedEvent(this.id, codeChanged)), codeChanged);
   }

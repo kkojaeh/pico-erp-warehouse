@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.Value;
 import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.Address;
 import pico.erp.shared.event.Event;
 
 public interface SiteMessages {
@@ -25,6 +26,10 @@ public interface SiteMessages {
     @Size(max = TypeDefinitions.NAME_LENGTH)
     String name;
 
+    @Valid
+    @NotNull
+    Address address;
+
   }
 
   @Data
@@ -36,6 +41,10 @@ public interface SiteMessages {
 
     @Size(max = TypeDefinitions.NAME_LENGTH)
     String name;
+
+    @Valid
+    @NotNull
+    Address address;
 
   }
 

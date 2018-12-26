@@ -8,6 +8,7 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.data.Address
 import pico.erp.warehouse.location.site.*
 import spock.lang.Specification
 
@@ -24,11 +25,18 @@ class SiteServiceSpec extends Specification {
 
   def siteId = SiteId.from("A2")
 
+  def address = new Address(
+    postalCode: '13496',
+    street: '경기도 성남시 분당구 장미로 42',
+    detail: '야탑리더스 410호'
+  )
+
   def setup() {
     siteService.create(new SiteRequests.CreateRequest(
       id: siteId,
       code: SiteCode.from("A2"),
-      name: "안성 2창고"
+      name: "안성 2창고",
+      address: address
     ))
   }
 
@@ -70,7 +78,7 @@ class SiteServiceSpec extends Specification {
     def sites = siteService.getAll()
 
     then:
-    sites.size() == 2
+    sites.size() == 3
   }
 
   def "중복 코드를 생성하면 오류 발생"() {
@@ -78,7 +86,8 @@ class SiteServiceSpec extends Specification {
     siteService.create(new SiteRequests.CreateRequest(
       id: SiteId.from("A3"),
       code: SiteCode.from("A2"),
-      name: "안성 2창고1"
+      name: "안성 2창고1",
+      address: address
     ))
     then:
     thrown(SiteExceptions.CodeAlreadyExistsException)
@@ -89,12 +98,14 @@ class SiteServiceSpec extends Specification {
     siteService.create(new SiteRequests.CreateRequest(
       id: SiteId.from("A3"),
       code: SiteCode.from("A3"),
-      name: "안성 3창고"
+      name: "안성 3창고",
+      address: address
     ))
     siteService.update(new SiteRequests.UpdateRequest(
       id: SiteId.from("A3"),
       code: SiteCode.from("A2"),
-      name: "안성 3창고"
+      name: "안성 3창고",
+      address: address
     ))
     then:
     thrown(SiteExceptions.CodeAlreadyExistsException)
@@ -109,7 +120,7 @@ class SiteServiceSpec extends Specification {
 
     then:
     site.deleted == true
-    siteService.getAll().size() == 1
+    siteService.getAll().size() == 2
   }
 
 }

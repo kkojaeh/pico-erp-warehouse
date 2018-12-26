@@ -3,6 +3,17 @@ data:
   - id: A1
     code: A1
     name: 안성 1창고
+    address:
+      postal-code: '17598'
+      street: '경기도 안성시 미양면 은골길 36-27'
+      detail: '에이스팩'
+  - id: B1
+    code: B1
+    name: 분당 사무실
+    address:
+      postal-code: '13496'
+      street: '경기도 성남시 분당구 장미로 42'
+      detail: '야탑리더스 410호'
   zones:
   - id: A
     code: A
