@@ -2,9 +2,6 @@ banner:
   location: classpath:warehouse/banner.txt
 
 spring:
-  profiles:
-    include:
-    - test-cfg
   application:
     name: pico-warehouse
   session:
