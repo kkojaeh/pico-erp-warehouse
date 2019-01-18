@@ -40,6 +40,7 @@ public abstract class TransactionRequestMapper {
   @Autowired
   protected TransactionRequestItemRepository requestItemRepository;
 
+  @Lazy
   @Autowired
   private TransactionRequestItemLotRepository requestItemLotRepository;
 

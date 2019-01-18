@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId;
 public class TransactionRequestItemLotServiceLogic implements
   TransactionRequestItemLotService {
 
+  @Lazy
   @Autowired
   private TransactionRequestItemLotRepository requestItemLotRepository;
 
