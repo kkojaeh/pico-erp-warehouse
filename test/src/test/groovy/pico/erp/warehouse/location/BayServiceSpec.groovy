@@ -1,23 +1,26 @@
 package pico.erp.warehouse.location
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.company.CompanyApplication
+import pico.erp.item.ItemApplication
+import pico.erp.shared.TestParentApplication
+import pico.erp.user.UserApplication
+import pico.erp.warehouse.TestConfig
+import pico.erp.warehouse.WarehouseApplication
 import pico.erp.warehouse.location.bay.*
 import pico.erp.warehouse.location.rack.RackId
 import spock.lang.Specification
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [WarehouseApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblings = [ItemApplication, UserApplication, CompanyApplication])
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class BayServiceSpec extends Specification {
 
   @Autowired

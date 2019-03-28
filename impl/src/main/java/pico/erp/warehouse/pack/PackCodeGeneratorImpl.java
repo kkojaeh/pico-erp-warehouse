@@ -1,7 +1,7 @@
 package pico.erp.warehouse.pack;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +16,7 @@ public class PackCodeGeneratorImpl implements PackCodeGenerator {
 
   @Override
   public PackCode generate(Pack warehousePack) {
-    val now = OffsetDateTime.now();
+    val now = LocalDateTime.now();
     val begin = now.with(LocalTime.MIN);
     val end = now.with(LocalTime.MAX);
 

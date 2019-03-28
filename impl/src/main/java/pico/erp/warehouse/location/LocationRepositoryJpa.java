@@ -38,12 +38,12 @@ public class LocationRepositoryJpa implements LocationRepository {
 
   @Override
   public void deleteBy(@NotNull LocationId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull LocationId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -53,13 +53,13 @@ public class LocationRepositoryJpa implements LocationRepository {
 
   @Override
   public Optional<Location> findBy(@NotNull LocationId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Location rack) {
-    val entity = repository.findOne(rack.getId());
+    val entity = repository.findById(rack.getId()).get();
     mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }

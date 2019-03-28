@@ -2,7 +2,7 @@ package pico.erp.warehouse.pack;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.Location;
@@ -21,7 +20,6 @@ import pico.erp.warehouse.location.Location;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-pack")
 public class Pack implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -41,7 +39,7 @@ public class Pack implements Serializable {
 
   Auditor createdBy;
 
-  OffsetDateTime createdDate;
+  LocalDateTime createdDate;
 
   public Pack() {
     status = PackStatusKind.EMPTY;

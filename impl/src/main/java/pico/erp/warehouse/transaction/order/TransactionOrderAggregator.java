@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.order;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,12 +40,12 @@ public class TransactionOrderAggregator extends TransactionOrder {
 
   @Builder(builderMethodName = "aggregatorBuilder")
   public TransactionOrderAggregator(boolean committable,
-    TransactionOrderId id, TransactionOrderCode code, OffsetDateTime dueDate,
+    TransactionOrderId id, TransactionOrderCode code, LocalDateTime dueDate,
     CompanyData relatedCompany, Station station,
     TransactionOrderStatusKind status, TransactionTypeKind type,
-    Auditor acceptedBy, OffsetDateTime acceptedDate, Auditor completedBy,
-    OffsetDateTime completedDate, Auditor committedBy, OffsetDateTime committedDate,
-    Auditor canceledBy, OffsetDateTime canceledDate,
+    Auditor acceptedBy, LocalDateTime acceptedDate, Auditor completedBy,
+    LocalDateTime completedDate, Auditor committedBy, LocalDateTime committedDate,
+    Auditor canceledBy, LocalDateTime canceledDate,
     TransactionRequest request,
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionOrderItem> items,
@@ -92,7 +92,7 @@ public class TransactionOrderAggregator extends TransactionOrder {
     }
     status = TransactionOrderStatusKind.COMMITTED;
     committedBy = request.getCommittedBy();
-    committedDate = OffsetDateTime.now();
+    committedDate = LocalDateTime.now();
     return new TransactionOrderMessages.CommitResponse(
       Arrays.asList(new TransactionOrderEvents.CommittedEvent(this.id)),
       packs

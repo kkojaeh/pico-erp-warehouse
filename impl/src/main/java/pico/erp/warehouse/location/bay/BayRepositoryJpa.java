@@ -44,12 +44,12 @@ public class BayRepositoryJpa implements BayRepository {
 
   @Override
   public void deleteBy(@NotNull BayId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull BayId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -65,13 +65,13 @@ public class BayRepositoryJpa implements BayRepository {
 
   @Override
   public Optional<Bay> findBy(@NotNull BayId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Bay rack) {
-    val entity = repository.findOne(rack.getId());
+    val entity = repository.findById(rack.getId()).get();
     mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }

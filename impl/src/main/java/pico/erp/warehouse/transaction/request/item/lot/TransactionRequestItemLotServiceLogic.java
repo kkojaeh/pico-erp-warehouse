@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import kkojaeh.spring.boot.component.Give;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.request.TransactionRequestId;
@@ -21,7 +21,7 @@ import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@Give
 @Transactional
 @Validated
 public class TransactionRequestItemLotServiceLogic implements

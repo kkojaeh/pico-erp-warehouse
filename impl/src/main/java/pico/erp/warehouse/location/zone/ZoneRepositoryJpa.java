@@ -44,12 +44,12 @@ public class ZoneRepositoryJpa implements ZoneRepository {
 
   @Override
   public void deleteBy(@NotNull ZoneId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull ZoneId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -65,13 +65,13 @@ public class ZoneRepositoryJpa implements ZoneRepository {
 
   @Override
   public Optional<Zone> findBy(@NotNull ZoneId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Zone site) {
-    val entity = repository.findOne(site.getId());
+    val entity = repository.findById(site.getId()).get();
     mapper.pass(mapper.jpa(site), entity);
     repository.save(entity);
   }

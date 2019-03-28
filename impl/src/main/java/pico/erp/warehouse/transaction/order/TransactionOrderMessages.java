@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.order;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,7 +32,7 @@ public interface TransactionOrderMessages {
 
     // 예정일
     @NotNull
-    OffsetDateTime dueDate;
+    LocalDateTime dueDate;
 
     // 대상 회사(회사)
     @NotNull
@@ -60,7 +60,7 @@ public interface TransactionOrderMessages {
 
     // 예정일
     @NotNull
-    OffsetDateTime dueDate;
+    LocalDateTime dueDate;
 
     // 대상 회사(회사)
     @NotNull

@@ -44,12 +44,12 @@ public class StationRepositoryJpa implements StationRepository {
 
   @Override
   public void deleteBy(@NotNull StationId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull StationId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -65,13 +65,13 @@ public class StationRepositoryJpa implements StationRepository {
 
   @Override
   public Optional<Station> findBy(@NotNull StationId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Station site) {
-    val entity = repository.findOne(site.getId());
+    val entity = repository.findById(site.getId()).get();
     mapper.pass(mapper.jpa(site), entity);
     repository.save(entity);
   }

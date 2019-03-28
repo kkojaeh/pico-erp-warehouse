@@ -8,6 +8,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import kkojaeh.spring.boot.component.Give;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,13 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.jpa.QueryDslJpaSupport;
 import pico.erp.warehouse.transaction.order.TransactionOrderView.Filter;
 import pico.erp.warehouse.transaction.order.item.QTransactionOrderItemEntity;
 
 @Service
-@Public
+@Give
 @Transactional(readOnly = true)
 @Validated
 public class TransactionOrderQueryJpa implements TransactionOrderQuery {

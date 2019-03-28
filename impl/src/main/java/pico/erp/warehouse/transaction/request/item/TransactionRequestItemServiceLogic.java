@@ -2,20 +2,20 @@ package pico.erp.warehouse.transaction.request.item;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import kkojaeh.spring.boot.component.Give;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.request.TransactionRequestId;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@Give
 @Transactional
 @Validated
 public class TransactionRequestItemServiceLogic implements

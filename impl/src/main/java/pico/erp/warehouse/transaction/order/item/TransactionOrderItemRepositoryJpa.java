@@ -48,12 +48,12 @@ public class TransactionOrderItemRepositoryJpa implements
 
   @Override
   public void deleteBy(@NotNull TransactionOrderItemId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull TransactionOrderItemId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -72,13 +72,13 @@ public class TransactionOrderItemRepositoryJpa implements
   @Override
   public Optional<TransactionOrderItem> findBy(
     @NotNull TransactionOrderItemId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull TransactionOrderItem domain) {
-    val entity = repository.findOne(domain.getId());
+    val entity = repository.findById(domain.getId()).get();
     mapper.pass(mapper.jpa(domain), entity);
     repository.save(entity);
   }

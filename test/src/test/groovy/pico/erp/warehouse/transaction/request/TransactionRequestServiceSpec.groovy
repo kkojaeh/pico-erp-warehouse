@@ -1,29 +1,32 @@
 package pico.erp.warehouse.transaction.request
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
+import pico.erp.company.CompanyApplication
 import pico.erp.company.CompanyId
+import pico.erp.item.ItemApplication
 import pico.erp.item.lot.ItemLotId
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.TestParentApplication
+import pico.erp.user.UserApplication
+import pico.erp.warehouse.TestConfig
+import pico.erp.warehouse.WarehouseApplication
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
 import spock.lang.Specification
 
 import javax.validation.ConstraintViolationException
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [WarehouseApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblings = [ItemApplication, UserApplication, CompanyApplication])
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class TransactionRequestServiceSpec extends Specification {
 
   @Autowired
@@ -44,7 +47,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "입고요청을 처리 한다"() {
     when:
-    def dueDate = OffsetDateTime.now().plusDays(2)
+    def dueDate = LocalDateTime.now().plusDays(2)
     def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
@@ -70,7 +73,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
-        dueDate: OffsetDateTime.now().minusDays(2),
+        dueDate: LocalDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -84,7 +87,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "출고요청을 처리 한다"() {
     when:
-    def dueDate = OffsetDateTime.now().plusDays(2)
+    def dueDate = LocalDateTime.now().plusDays(2)
     def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
@@ -109,7 +112,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: OffsetDateTime.now().minusDays(2),
+        dueDate: LocalDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -123,7 +126,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "예정시간을 지나도 제출하지 않은 입/출고요청은 취소 된다"() {
     when:
-    def dueDate = OffsetDateTime.now().plusDays(2)
+    def dueDate = LocalDateTime.now().plusDays(2)
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
@@ -151,7 +154,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -173,7 +176,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,

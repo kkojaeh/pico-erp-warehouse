@@ -1,6 +1,6 @@
 package pico.erp.warehouse.pack;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -21,8 +21,8 @@ interface PackEntityRepository extends
   CrudRepository<PackEntity, PackId> {
 
   @Query("SELECT COUNT(p) FROM Pack p WHERE p.createdDate >= :begin AND p.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") OffsetDateTime begin,
-    @Param("end") OffsetDateTime end);
+  long countCreatedBetween(@Param("begin") LocalDateTime begin,
+    @Param("end") LocalDateTime end);
 
   @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Pack p WHERE p.code = :code")
   boolean exists(@Param("code") PackCode code);
@@ -46,7 +46,7 @@ public class PackRepositoryJpa implements PackRepository {
   private PackMapper mapper;
 
   @Override
-  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
+  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
     return repository.countCreatedBetween(begin, end);
   }
 
@@ -59,7 +59,7 @@ public class PackRepositoryJpa implements PackRepository {
 
   @Override
   public void deleteBy(@NotNull PackId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
@@ -69,7 +69,7 @@ public class PackRepositoryJpa implements PackRepository {
 
   @Override
   public boolean exists(@NotNull PackId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -80,7 +80,7 @@ public class PackRepositoryJpa implements PackRepository {
 
   @Override
   public Optional<Pack> findBy(@NotNull PackId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
@@ -91,7 +91,7 @@ public class PackRepositoryJpa implements PackRepository {
 
   @Override
   public void update(@NotNull Pack rack) {
-    val entity = repository.findOne(rack.getId());
+    val entity = repository.findById(rack.getId()).get();
     mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }

@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.warehouse.transaction.request.TransactionRequestEvents;
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItem;
@@ -22,7 +21,6 @@ import pico.erp.warehouse.transaction.request.item.TransactionRequestItem;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-transaction-request-item-lot")
 public class TransactionRequestItemLot implements Serializable {
 
   private static final long serialVersionUID = 1L;

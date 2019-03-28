@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.order;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.Station;
@@ -25,7 +24,6 @@ import pico.erp.warehouse.transaction.request.TransactionRequest;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-transaction-order")
 public class TransactionOrder implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -37,7 +35,7 @@ public class TransactionOrder implements Serializable {
 
   TransactionOrderCode code;
 
-  OffsetDateTime dueDate;
+  LocalDateTime dueDate;
 
   CompanyData transactionCompany;
 
@@ -49,19 +47,19 @@ public class TransactionOrder implements Serializable {
 
   Auditor acceptedBy;
 
-  OffsetDateTime acceptedDate;
+  LocalDateTime acceptedDate;
 
   Auditor completedBy;
 
-  OffsetDateTime completedDate;
+  LocalDateTime completedDate;
 
   Auditor committedBy;
 
-  OffsetDateTime committedDate;
+  LocalDateTime committedDate;
 
   Auditor canceledBy;
 
-  OffsetDateTime canceledDate;
+  LocalDateTime canceledDate;
 
   TransactionRequest request;
 
@@ -104,7 +102,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
-    canceledDate = OffsetDateTime.now();
+    canceledDate = LocalDateTime.now();
     return new TransactionOrderMessages.CancelResponse(
       Arrays.asList(new TransactionOrderEvents.CanceledEvent(this.id))
     );
@@ -117,7 +115,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.ACCEPTED;
     acceptedBy = request.getAcceptedBy();
-    acceptedDate = OffsetDateTime.now();
+    acceptedDate = LocalDateTime.now();
     return new TransactionOrderMessages.AcceptResponse(
       Arrays.asList(new TransactionOrderEvents.AcceptedEvent(this.id))
     );
@@ -130,7 +128,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.COMPLETED;
     completedBy = request.getCompletedBy();
-    completedDate = OffsetDateTime.now();
+    completedDate = LocalDateTime.now();
     return new TransactionOrderMessages.CompleteResponse(
       Arrays.asList(new TransactionOrderEvents.CompletedEvent(this.id))
     );

@@ -3,7 +3,7 @@ package pico.erp.warehouse.transaction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -88,6 +88,6 @@ public class TransactionEntity implements Serializable {
   Auditor transactedBy;
 
   @Column
-  OffsetDateTime transactedDate;
+  LocalDateTime transactedDate;
 
 }

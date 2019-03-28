@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,12 +32,12 @@ public class TransactionRequestAggregator extends TransactionRequest {
 
   @Builder(builderMethodName = "aggregatorBuilder")
   public TransactionRequestAggregator(boolean committable,
-    TransactionRequestId id, TransactionRequestCode code, OffsetDateTime dueDate,
+    TransactionRequestId id, TransactionRequestCode code, LocalDateTime dueDate,
     CompanyData transactionCompany, Station station,
     TransactionRequestStatusKind status, TransactionTypeKind type,
-    Auditor committedBy, OffsetDateTime committedDate, Auditor canceledBy,
-    OffsetDateTime canceledDate, Auditor acceptedBy, OffsetDateTime acceptedDate,
-    Auditor completedBy, OffsetDateTime completedDate,
+    Auditor committedBy, LocalDateTime committedDate, Auditor canceledBy,
+    LocalDateTime canceledDate, Auditor acceptedBy, LocalDateTime acceptedDate,
+    Auditor completedBy, LocalDateTime completedDate,
     TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy,
     List<TransactionRequestItem> items,
     List<TransactionRequestItemLot> itemLots) {

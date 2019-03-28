@@ -2,7 +2,7 @@ package pico.erp.warehouse.location.station;
 
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -80,7 +80,7 @@ public class StationEntity implements Serializable {
 
   @CreatedDate
   @Column(updatable = false)
-  OffsetDateTime createdDate;
+  LocalDateTime createdDate;
 
   @Embedded
   @AttributeOverrides({
@@ -91,10 +91,10 @@ public class StationEntity implements Serializable {
   Auditor lastModifiedBy;
 
   @LastModifiedDate
-  OffsetDateTime lastModifiedDate;
+  LocalDateTime lastModifiedDate;
 
   boolean deleted;
 
-  OffsetDateTime deletedDate;
+  LocalDateTime deletedDate;
 
 }

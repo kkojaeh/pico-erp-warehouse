@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.request;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 interface TransactionRequestEntityRepository extends
   CrudRepository<TransactionRequestEntity, TransactionRequestId> {
 
+  @Query("SELECT COUNT(r) FROM TransactionRequest r WHERE r.createdDate >= :begin AND r.createdDate <= :end")
+  long countCreatedBetween(@Param("begin") LocalDateTime begin, @Param("end") LocalDateTime end);
+
   @Query("SELECT r FROM TransactionRequest r WHERE r.status = :status AND r.dueDate < :fixedDate")
   Stream<TransactionRequestEntity> findAllDueDateBeforeThan(
-    @Param("fixedDate") OffsetDateTime fixedDate,
+    @Param("fixedDate") LocalDateTime fixedDate,
     @Param("status") TransactionRequestStatusKind status);
-
-  @Query("SELECT COUNT(r) FROM TransactionRequest r WHERE r.createdDate >= :begin AND r.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
 
   @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM TransactionRequest r WHERE r.code = :code")
   boolean exists(@Param("code") TransactionRequestCode code);
@@ -50,13 +50,13 @@ public class TransactionRequestRepositoryJpa implements
   }
 
   @Override
-  public void deleteBy(@NotNull TransactionRequestId id) {
-    repository.delete(id);
+  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
+    return repository.countCreatedBetween(begin, end);
   }
 
   @Override
-  public boolean exists(@NotNull TransactionRequestId id) {
-    return repository.exists(id);
+  public void deleteBy(@NotNull TransactionRequestId id) {
+    repository.deleteById(id);
   }
 
   @Override
@@ -65,14 +65,19 @@ public class TransactionRequestRepositoryJpa implements
   }
 
   @Override
+  public boolean exists(@NotNull TransactionRequestId id) {
+    return repository.existsById(id);
+  }
+
+  @Override
   public Optional<TransactionRequestAggregator> findAggregatorBy(
     TransactionRequestId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::aggregator);
   }
 
   @Override
-  public Stream<TransactionRequest> findAllUncommittedAt(OffsetDateTime fixedDate) {
+  public Stream<TransactionRequest> findAllUncommittedAt(LocalDateTime fixedDate) {
     return repository
       .findAllDueDateBeforeThan(fixedDate, TransactionRequestStatusKind.CREATED)
       .map(mapper::jpa);
@@ -80,20 +85,15 @@ public class TransactionRequestRepositoryJpa implements
 
   @Override
   public Optional<TransactionRequest> findBy(@NotNull TransactionRequestId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull TransactionRequest request) {
-    val entity = repository.findOne(request.getId());
+    val entity = repository.findById(request.getId()).get();
     mapper.pass(mapper.jpa(request), entity);
     repository.save(entity);
-  }
-
-  @Override
-  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
-    return repository.countCreatedBetween(begin, end);
   }
 
 }

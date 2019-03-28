@@ -1,7 +1,7 @@
 package pico.erp.warehouse.location.zone;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.warehouse.location.LocationCode;
 import pico.erp.warehouse.location.site.Site;
 
@@ -22,7 +21,6 @@ import pico.erp.warehouse.location.site.Site;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-zone")
 public class Zone implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -38,7 +36,7 @@ public class Zone implements Serializable {
 
   boolean deleted;
 
-  OffsetDateTime deletedDate;
+  LocalDateTime deletedDate;
 
   public ZoneMessages.CreateResponse apply(ZoneMessages.CreateRequest request) {
     id = request.getId();
@@ -66,7 +64,7 @@ public class Zone implements Serializable {
 
   public ZoneMessages.DeleteResponse apply(ZoneMessages.DeleteRequest request) {
     deleted = true;
-    deletedDate = OffsetDateTime.now();
+    deletedDate = LocalDateTime.now();
     return new ZoneMessages.DeleteResponse(
       Arrays.asList(new ZoneEvents.DeletedEvent(this.id)));
   }
