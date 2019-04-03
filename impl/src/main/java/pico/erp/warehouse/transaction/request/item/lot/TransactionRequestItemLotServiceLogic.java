@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
@@ -21,7 +21,7 @@ import pico.erp.warehouse.transaction.request.item.TransactionRequestItemId;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Give
+@ComponentBean
 @Transactional
 @Validated
 public class TransactionRequestItemLotServiceLogic implements

@@ -6,10 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
-import pico.erp.company.CompanyApplication
-import pico.erp.item.ItemApplication
+import pico.erp.shared.ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier
 import pico.erp.shared.TestParentApplication
-import pico.erp.user.UserApplication
 import pico.erp.warehouse.TestConfig
 import pico.erp.warehouse.WarehouseApplication
 import pico.erp.warehouse.location.bay.*
@@ -17,7 +15,7 @@ import pico.erp.warehouse.location.rack.RackId
 import spock.lang.Specification
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
-@SpringBootTestComponent(parent = TestParentApplication, siblings = [ItemApplication, UserApplication, CompanyApplication])
+@SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
 @Transactional
 @Rollback
 @ActiveProfiles("test")

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -17,7 +17,7 @@ import pico.erp.item.lot.ItemLotService;
 import pico.erp.warehouse.pack.PackRepository.ItemLotQuantity;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 
-@Give
+@ComponentBean
 @Component
 @Validated
 public class PackSelectorImpl implements PackSelector {

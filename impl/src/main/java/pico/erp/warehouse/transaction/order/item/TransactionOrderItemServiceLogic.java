@@ -2,7 +2,7 @@ package pico.erp.warehouse.transaction.order.item;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -15,7 +15,7 @@ import pico.erp.warehouse.transaction.order.TransactionOrderId;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Give
+@ComponentBean
 @Transactional
 @Validated
 public class TransactionOrderItemServiceLogic implements

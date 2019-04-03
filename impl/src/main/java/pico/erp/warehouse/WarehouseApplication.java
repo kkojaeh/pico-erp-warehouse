@@ -1,6 +1,6 @@
 package pico.erp.warehouse;
 
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import kkojaeh.spring.boot.component.SpringBootComponent;
 import kkojaeh.spring.boot.component.SpringBootComponentBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pico.erp.ComponentDefinition;
 import pico.erp.shared.SharedConfiguration;
 import pico.erp.shared.data.Role;
 import pico.erp.warehouse.WarehouseApi.Roles;
@@ -27,7 +28,7 @@ import pico.erp.warehouse.WarehouseApi.Roles;
 @Import(value = {
   SharedConfiguration.class
 })
-public class WarehouseApplication {
+public class WarehouseApplication implements ComponentDefinition {
 
 
   public static void main(String[] args) {
@@ -36,27 +37,32 @@ public class WarehouseApplication {
       .run(args);
   }
 
+  @Override
+  public Class<?> getComponentClass() {
+    return WarehouseApplication.class;
+  }
+
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role warehouseAccessorRole() {
     return Roles.WAREHOUSE_ACCESSOR;
   }
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role warehouseManagerRole() {
     return Roles.WAREHOUSE_MANAGER;
   }
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role warehouseTransactionRequesterRole() {
     return Roles.WAREHOUSE_TRANSACTION_REQUESTER;
   }
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role warehouseWorkerRole() {
     return Roles.WAREHOUSE_WORKER;
   }

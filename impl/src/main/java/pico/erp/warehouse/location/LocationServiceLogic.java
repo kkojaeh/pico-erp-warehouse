@@ -2,7 +2,7 @@ package pico.erp.warehouse.location;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
@@ -16,7 +16,7 @@ import pico.erp.warehouse.location.level.LevelService;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Give
+@ComponentBean
 @Transactional
 @Validated
 public class LocationServiceLogic implements LocationService {
