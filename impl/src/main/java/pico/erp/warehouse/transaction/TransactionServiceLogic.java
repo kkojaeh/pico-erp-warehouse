@@ -1,17 +1,17 @@
 package pico.erp.warehouse.transaction;
 
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.TransactionRequests.CreateRequest;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@ComponentBean
 @Transactional
 @Validated
 public class TransactionServiceLogic implements TransactionService {

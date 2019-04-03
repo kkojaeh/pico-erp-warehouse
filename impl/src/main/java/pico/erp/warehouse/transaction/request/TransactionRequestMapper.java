@@ -130,25 +130,25 @@ public abstract class TransactionRequestMapper {
     TransactionRequestRequests.UpdateRequest request);
 
   @Mappings({
-    @Mapping(target = "committedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "committedBy", expression = "java(auditorAware.getCurrentAuditor().get())")
   })
   public abstract TransactionRequestMessages.CommitRequest map(
     TransactionRequestRequests.CommitRequest request);
 
   @Mappings({
-    @Mapping(target = "canceledBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "canceledBy", expression = "java(auditorAware.getCurrentAuditor().get())")
   })
   public abstract TransactionRequestMessages.CancelRequest map(
     TransactionRequestRequests.CancelRequest request);
 
   @Mappings({
-    @Mapping(target = "acceptedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "acceptedBy", expression = "java(auditorAware.getCurrentAuditor().get())")
   })
   public abstract TransactionRequestMessages.AcceptRequest map(
     TransactionRequestRequests.AcceptRequest request);
 
   @Mappings({
-    @Mapping(target = "completedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "completedBy", expression = "java(auditorAware.getCurrentAuditor().get())")
   })
   public abstract TransactionRequestMessages.CompleteRequest map(
     TransactionRequestRequests.CompleteRequest request);

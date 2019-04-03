@@ -1,29 +1,30 @@
 package pico.erp.warehouse.transaction.order
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.company.CompanyId
 import pico.erp.item.lot.ItemLotId
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier
+import pico.erp.shared.TestParentApplication
+import pico.erp.warehouse.TestConfig
+import pico.erp.warehouse.WarehouseApplication
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
 import spock.lang.Specification
 
 import javax.validation.ConstraintViolationException
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [WarehouseApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class TransactionOrderServiceSpec extends Specification {
 
   @Autowired
@@ -44,7 +45,7 @@ class TransactionOrderServiceSpec extends Specification {
 
   def "입고지시를 처리 한다"() {
     when:
-    def dueDate = OffsetDateTime.now().plusDays(2)
+    def dueDate = LocalDateTime.now().plusDays(2)
     def inbounded = warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: inboundOrderId,
@@ -69,7 +70,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: inboundOrderId,
-        dueDate: OffsetDateTime.now().minusDays(2),
+        dueDate: LocalDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -83,7 +84,7 @@ class TransactionOrderServiceSpec extends Specification {
 
   def "출고지시를 처리 한다"() {
     when:
-    def dueDate = OffsetDateTime.now().plusDays(2)
+    def dueDate = LocalDateTime.now().plusDays(2)
     def inbounded = warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
@@ -107,7 +108,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: OffsetDateTime.now().minusDays(2),
+        dueDate: LocalDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -124,7 +125,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -146,7 +147,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,

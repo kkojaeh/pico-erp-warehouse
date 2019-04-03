@@ -3,12 +3,12 @@ package pico.erp.warehouse.location.site;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.location.site.SiteExceptions.CodeAlreadyExistsException;
 import pico.erp.warehouse.location.site.SiteRequests.CreateRequest;
@@ -17,7 +17,7 @@ import pico.erp.warehouse.location.site.SiteRequests.UpdateRequest;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@ComponentBean
 @Transactional
 @Validated
 public class SiteServiceLogic implements SiteService {

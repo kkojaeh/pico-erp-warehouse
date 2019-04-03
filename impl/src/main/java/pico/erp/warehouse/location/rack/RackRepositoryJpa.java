@@ -44,12 +44,12 @@ public class RackRepositoryJpa implements RackRepository {
 
   @Override
   public void deleteBy(@NotNull RackId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull RackId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -65,13 +65,13 @@ public class RackRepositoryJpa implements RackRepository {
 
   @Override
   public Optional<Rack> findBy(@NotNull RackId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Rack rack) {
-    val entity = repository.findOne(rack.getId());
+    val entity = repository.findById(rack.getId()).get();
     mapper.pass(mapper.jpa(rack), entity);
     repository.save(entity);
   }

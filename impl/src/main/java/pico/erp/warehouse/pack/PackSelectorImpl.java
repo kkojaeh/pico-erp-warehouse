@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.item.lot.ItemLotService;
-import pico.erp.shared.Public;
 import pico.erp.warehouse.pack.PackRepository.ItemLotQuantity;
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind;
 
-@Public
+@ComponentBean
 @Component
 @Validated
 public class PackSelectorImpl implements PackSelector {

@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class TransactionRequestData implements Serializable {
 
   TransactionRequestCode code;
 
-  OffsetDateTime dueDate;
+  LocalDateTime dueDate;
 
   CompanyId transactionCompanyId;
 
@@ -33,19 +33,19 @@ public class TransactionRequestData implements Serializable {
 
   Auditor committedBy;
 
-  OffsetDateTime committedDate;
+  LocalDateTime committedDate;
 
   Auditor canceledBy;
 
-  OffsetDateTime canceledDate;
+  LocalDateTime canceledDate;
 
   Auditor acceptedBy;
 
-  OffsetDateTime acceptedDate;
+  LocalDateTime acceptedDate;
 
   Auditor completedBy;
 
-  OffsetDateTime completedDate;
+  LocalDateTime completedDate;
 
   TransactionRequestStatusKind status;
 

@@ -1,8 +1,8 @@
 package pico.erp.warehouse.transaction.order;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -17,8 +17,8 @@ public class TransactionOrderCodeGeneratorImpl implements TransactionOrderCodeGe
 
   @Override
   public TransactionOrderCode generate(TransactionOrder transactionOrder) {
-    val begin = OffsetDateTime.now().with(LocalTime.MIN);
-    val end = OffsetDateTime.now().with(LocalTime.MAX);
+    val begin = LocalDateTime.now().with(LocalTime.MIN);
+    val end = LocalDateTime.now().with(LocalTime.MAX);
     val count = transactionOrderRepository.countCreatedBetween(begin, end);
     val now = LocalDate.now();
     val date =

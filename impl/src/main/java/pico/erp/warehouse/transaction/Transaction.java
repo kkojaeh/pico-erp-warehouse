@@ -2,7 +2,7 @@ package pico.erp.warehouse.transaction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
 import pico.erp.item.lot.ItemLotData;
 import pico.erp.shared.data.Auditor;
@@ -22,7 +21,6 @@ import pico.erp.warehouse.location.station.Station;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-transaction")
 public class Transaction implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -38,7 +36,7 @@ public class Transaction implements Serializable {
 
   Auditor transactedBy;
 
-  OffsetDateTime transactedDate;
+  LocalDateTime transactedDate;
 
   CompanyData transactionCompany;
 
@@ -57,7 +55,7 @@ public class Transaction implements Serializable {
     transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     transactedBy = request.getTransactedBy();
-    transactedDate = OffsetDateTime.now();
+    transactedDate = LocalDateTime.now();
     return new TransactionMessages.CreateResponse(
       Arrays.asList(new TransactionEvents.InboundedEvent(this.id))
     );

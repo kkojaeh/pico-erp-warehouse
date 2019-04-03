@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.order;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class TransactionOrderView {
 
   TransactionOrderCode code;
 
-  OffsetDateTime dueDate;
+  LocalDateTime dueDate;
 
   CompanyId transactionCompanyId;
 
@@ -40,19 +40,19 @@ public class TransactionOrderView {
 
   Auditor committedBy;
 
-  OffsetDateTime committedDate;
+  LocalDateTime committedDate;
 
   Auditor canceledBy;
 
-  OffsetDateTime canceledDate;
+  LocalDateTime canceledDate;
 
   Auditor acceptedBy;
 
-  OffsetDateTime acceptedDate;
+  LocalDateTime acceptedDate;
 
   Auditor completedBy;
 
-  OffsetDateTime completedDate;
+  LocalDateTime completedDate;
 
   @Data
   @NoArgsConstructor
@@ -72,9 +72,9 @@ public class TransactionOrderView {
 
     UserId createBy;
 
-    OffsetDateTime startCreatedDate;
+    LocalDateTime startCreatedDate;
 
-    OffsetDateTime endCreatedDate;
+    LocalDateTime endCreatedDate;
   }
 
 }

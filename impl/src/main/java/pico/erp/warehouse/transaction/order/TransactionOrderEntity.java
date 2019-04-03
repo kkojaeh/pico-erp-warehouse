@@ -2,7 +2,7 @@ package pico.erp.warehouse.transaction.order;
 
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -57,7 +57,7 @@ public class TransactionOrderEntity implements Serializable {
   })
   TransactionOrderCode code;
 
-  OffsetDateTime dueDate;
+  LocalDateTime dueDate;
 
   @AttributeOverrides({
     @AttributeOverride(name = "value", column = @Column(name = "TRANSACTION_COMPANY_ID", length = TypeDefinitions.ID_LENGTH))
@@ -87,7 +87,7 @@ public class TransactionOrderEntity implements Serializable {
 
   @CreatedDate
   @Column(updatable = false)
-  OffsetDateTime createdDate;
+  LocalDateTime createdDate;
 
   @Embedded
   @AttributeOverrides({
@@ -97,7 +97,7 @@ public class TransactionOrderEntity implements Serializable {
   Auditor committedBy;
 
   @Column
-  OffsetDateTime committedDate;
+  LocalDateTime committedDate;
 
   @Embedded
   @AttributeOverrides({
@@ -107,7 +107,7 @@ public class TransactionOrderEntity implements Serializable {
   Auditor canceledBy;
 
   @Column
-  OffsetDateTime canceledDate;
+  LocalDateTime canceledDate;
 
   @Embedded
   @AttributeOverrides({
@@ -117,7 +117,7 @@ public class TransactionOrderEntity implements Serializable {
   Auditor acceptedBy;
 
   @Column
-  OffsetDateTime acceptedDate;
+  LocalDateTime acceptedDate;
 
   @Embedded
   @AttributeOverrides({
@@ -127,7 +127,7 @@ public class TransactionOrderEntity implements Serializable {
   Auditor completedBy;
 
   @Column
-  OffsetDateTime completedDate;
+  LocalDateTime completedDate;
 
   boolean committable;
 

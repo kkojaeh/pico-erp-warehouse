@@ -55,12 +55,12 @@ public class TransactionRequestItemLotRepositoryJpa implements
 
   @Override
   public void deleteBy(@NotNull TransactionRequestItemLotId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull TransactionRequestItemLotId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -86,13 +86,13 @@ public class TransactionRequestItemLotRepositoryJpa implements
   @Override
   public Optional<TransactionRequestItemLot> findBy(
     @NotNull TransactionRequestItemLotId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull TransactionRequestItemLot domain) {
-    val entity = repository.findOne(domain.getId());
+    val entity = repository.findById(domain.getId()).get();
     mapper.pass(mapper.jpa(domain), entity);
     repository.save(entity);
   }

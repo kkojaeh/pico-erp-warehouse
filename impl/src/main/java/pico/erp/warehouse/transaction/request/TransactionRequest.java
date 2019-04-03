@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
 import pico.erp.shared.data.Auditor;
 import pico.erp.warehouse.location.station.Station;
@@ -24,7 +23,6 @@ import pico.erp.warehouse.transaction.TransactionTypeKind;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
-@Audit(alias = "warehouse-transaction-request")
 public class TransactionRequest implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -36,7 +34,7 @@ public class TransactionRequest implements Serializable {
 
   TransactionRequestCode code;
 
-  OffsetDateTime dueDate;
+  LocalDateTime dueDate;
 
   CompanyData transactionCompany;
 
@@ -48,19 +46,19 @@ public class TransactionRequest implements Serializable {
 
   Auditor committedBy;
 
-  OffsetDateTime committedDate;
+  LocalDateTime committedDate;
 
   Auditor canceledBy;
 
-  OffsetDateTime canceledDate;
+  LocalDateTime canceledDate;
 
   Auditor acceptedBy;
 
-  OffsetDateTime acceptedDate;
+  LocalDateTime acceptedDate;
 
   Auditor completedBy;
 
-  OffsetDateTime completedDate;
+  LocalDateTime completedDate;
 
   TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
@@ -101,7 +99,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.COMMITTED;
     committedBy = request.getCommittedBy();
-    committedDate = OffsetDateTime.now();
+    committedDate = LocalDateTime.now();
     return new TransactionRequestMessages.CommitResponse(
       Arrays.asList(new TransactionRequestEvents.CommittedEvent(this.id))
     );
@@ -114,7 +112,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
-    canceledDate = OffsetDateTime.now();
+    canceledDate = LocalDateTime.now();
     return new TransactionRequestMessages.CancelResponse(
       Arrays.asList(new TransactionRequestEvents.CanceledEvent(this.id))
     );
@@ -127,7 +125,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.ACCEPTED;
     acceptedBy = request.getAcceptedBy();
-    acceptedDate = OffsetDateTime.now();
+    acceptedDate = LocalDateTime.now();
     return new TransactionRequestMessages.AcceptResponse(
       Arrays.asList(new TransactionRequestEvents.AcceptedEvent(this.id))
     );
@@ -140,7 +138,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.COMPLETED;
     completedBy = request.getCompletedBy();
-    completedDate = OffsetDateTime.now();
+    completedDate = LocalDateTime.now();
     return new TransactionRequestMessages.CompleteResponse(
       Arrays.asList(new TransactionRequestEvents.CompletedEvent(this.id))
     );

@@ -96,7 +96,7 @@ public abstract class TransactionMapper {
     @Mapping(target = "transactionCompany", source = "transactionCompanyId"),
     @Mapping(target = "station", source = "stationId"),
     @Mapping(target = "itemLot", source = "itemLotId"),
-    @Mapping(target = "transactedBy", expression = "java(auditorAware.getCurrentAuditor())")
+    @Mapping(target = "transactedBy", expression = "java(auditorAware.getCurrentAuditor().get())")
   })
   public abstract CreateRequest map(
     TransactionRequests.CreateRequest request);

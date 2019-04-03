@@ -1,22 +1,23 @@
-banner:
-  location: classpath:warehouse/banner.txt
-
 spring:
+  banner:
+    location: classpath:warehouse/banner.txt
   application:
     name: pico-warehouse
   session:
     store-type: NONE
   messages:
-    cache-seconds: 60
     basename: warehouse-messages
     encoding: UTF-8
   datasource:
+    name: warehouse-datasource
     url: ${FACILITY_DATASOURCE_URL:${DATASOURCE_URL:jdbc:p6spy:hsqldb:mem:warehouse}}
     driver-class-name: ${FACILITY_DATASOURCE_DRIVER_CLASS_NAME:${DATASOURCE_DRIVER_CLASS_NAME:com.p6spy.engine.spy.P6SpyDriver}}
     username: ${FACILITY_DATASOURCE_USERNAME:${DATASOURCE_USERNAME:as}}
     password: ${FACILITY_DATASOURCE_PASSWORD:${DATASOURCE_PASSWORD:null}}
     hikari:
       maximum-pool-size: 4
+  flyway:
+    enabled: false
   jpa:
     database: HSQL
     hibernate:
@@ -82,6 +83,3 @@ logging:
   level:
     org:
       springframework: INFO
-
-flyway:
-  enabled: false

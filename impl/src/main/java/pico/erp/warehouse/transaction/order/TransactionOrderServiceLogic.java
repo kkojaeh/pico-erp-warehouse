@@ -3,6 +3,7 @@ package pico.erp.warehouse.transaction.order;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.shared.Public;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.transaction.order.TransactionOrderRequests.AcceptRequest;
@@ -33,7 +33,7 @@ import pico.erp.warehouse.transaction.request.item.lot.TransactionRequestItemLot
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@ComponentBean
 @Transactional
 @Validated
 public class TransactionOrderServiceLogic implements TransactionOrderService {

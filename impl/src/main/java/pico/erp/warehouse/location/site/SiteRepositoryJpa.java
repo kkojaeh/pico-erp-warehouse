@@ -43,12 +43,12 @@ public class SiteRepositoryJpa implements SiteRepository {
 
   @Override
   public void deleteBy(@NotNull SiteId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(@NotNull SiteId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -64,13 +64,13 @@ public class SiteRepositoryJpa implements SiteRepository {
 
   @Override
   public Optional<Site> findBy(@NotNull SiteId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(@NotNull Site site) {
-    val entity = repository.findOne(site.getId());
+    val entity = repository.findById(site.getId()).get();
     mapper.pass(mapper.jpa(site), entity);
     repository.save(entity);
   }

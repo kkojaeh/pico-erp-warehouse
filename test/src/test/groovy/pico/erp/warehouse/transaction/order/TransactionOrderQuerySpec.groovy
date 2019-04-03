@@ -1,16 +1,18 @@
 package pico.erp.warehouse.transaction.order
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.company.CompanyId
 import pico.erp.item.ItemId
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier
+import pico.erp.shared.TestParentApplication
+import pico.erp.warehouse.TestConfig
+import pico.erp.warehouse.WarehouseApplication
 import pico.erp.warehouse.location.station.StationId
 import pico.erp.warehouse.transaction.TransactionQuantityCorrectionPolicyKind
 import pico.erp.warehouse.transaction.TransactionTypeKind
@@ -19,14 +21,13 @@ import pico.erp.warehouse.transaction.order.item.TransactionOrderItemRequests
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemService
 import spock.lang.Specification
 
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [WarehouseApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class TransactionOrderQuerySpec extends Specification {
 
   def inboundOrderId = TransactionOrderId.from("create")
@@ -45,7 +46,7 @@ class TransactionOrderQuerySpec extends Specification {
     transactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: inboundOrderId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -55,7 +56,7 @@ class TransactionOrderQuerySpec extends Specification {
     transactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: OffsetDateTime.now().plusDays(2),
+        dueDate: LocalDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
