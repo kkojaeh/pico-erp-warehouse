@@ -18,7 +18,7 @@ import pico.erp.warehouse.transaction.TransactionTypeKind
 import spock.lang.Specification
 
 import javax.validation.ConstraintViolationException
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
 @SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
@@ -45,7 +45,7 @@ class TransactionOrderServiceSpec extends Specification {
 
   def "입고지시를 처리 한다"() {
     when:
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     def inbounded = warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: inboundOrderId,
@@ -70,7 +70,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: inboundOrderId,
-        dueDate: LocalDateTime.now().minusDays(2),
+        dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -84,7 +84,7 @@ class TransactionOrderServiceSpec extends Specification {
 
   def "출고지시를 처리 한다"() {
     when:
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     def inbounded = warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
@@ -108,7 +108,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: LocalDateTime.now().minusDays(2),
+        dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -125,7 +125,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -147,7 +147,7 @@ class TransactionOrderServiceSpec extends Specification {
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: outboundOrderId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,

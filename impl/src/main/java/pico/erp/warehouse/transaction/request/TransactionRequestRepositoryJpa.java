@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -18,11 +18,11 @@ interface TransactionRequestEntityRepository extends
   CrudRepository<TransactionRequestEntity, TransactionRequestId> {
 
   @Query("SELECT COUNT(r) FROM TransactionRequest r WHERE r.createdDate >= :begin AND r.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") LocalDateTime begin, @Param("end") LocalDateTime end);
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
 
   @Query("SELECT r FROM TransactionRequest r WHERE r.status = :status AND r.dueDate < :fixedDate")
   Stream<TransactionRequestEntity> findAllDueDateBeforeThan(
-    @Param("fixedDate") LocalDateTime fixedDate,
+    @Param("fixedDate") OffsetDateTime fixedDate,
     @Param("status") TransactionRequestStatusKind status);
 
   @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM TransactionRequest r WHERE r.code = :code")
@@ -50,7 +50,7 @@ public class TransactionRequestRepositoryJpa implements
   }
 
   @Override
-  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
+  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
     return repository.countCreatedBetween(begin, end);
   }
 
@@ -77,7 +77,7 @@ public class TransactionRequestRepositoryJpa implements
   }
 
   @Override
-  public Stream<TransactionRequest> findAllUncommittedAt(LocalDateTime fixedDate) {
+  public Stream<TransactionRequest> findAllUncommittedAt(OffsetDateTime fixedDate) {
     return repository
       .findAllDueDateBeforeThan(fixedDate, TransactionRequestStatusKind.CREATED)
       .map(mapper::jpa);

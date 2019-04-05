@@ -2,7 +2,7 @@ package pico.erp.warehouse.transaction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class Transaction implements Serializable {
 
   Auditor transactedBy;
 
-  LocalDateTime transactedDate;
+  OffsetDateTime transactedDate;
 
   CompanyData transactionCompany;
 
@@ -55,7 +55,7 @@ public class Transaction implements Serializable {
     transactionCompany = request.getTransactionCompany();
     station = request.getStation();
     transactedBy = request.getTransactedBy();
-    transactedDate = LocalDateTime.now();
+    transactedDate = OffsetDateTime.now();
     return new TransactionMessages.CreateResponse(
       Arrays.asList(new TransactionEvents.InboundedEvent(this.id))
     );

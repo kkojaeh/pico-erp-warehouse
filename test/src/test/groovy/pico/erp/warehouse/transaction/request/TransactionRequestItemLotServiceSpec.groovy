@@ -25,7 +25,7 @@ import pico.erp.warehouse.transaction.request.item.lot.TransactionRequestItemLot
 import pico.erp.warehouse.transaction.request.item.lot.TransactionRequestItemLotService
 import spock.lang.Specification
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
 @SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
@@ -58,7 +58,7 @@ class TransactionRequestItemLotServiceSpec extends Specification {
   def itemLotId = ItemLotId.from("item-1-lot-1")
 
   def setup() {
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     warehouseTransactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: requestId,

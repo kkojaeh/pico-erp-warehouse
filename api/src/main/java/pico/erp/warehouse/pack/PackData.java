@@ -2,7 +2,7 @@ package pico.erp.warehouse.pack;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -34,6 +34,6 @@ public class PackData implements Serializable {
 
   Auditor createdBy;
 
-  LocalDateTime createdDate;
+  OffsetDateTime createdDate;
 
 }

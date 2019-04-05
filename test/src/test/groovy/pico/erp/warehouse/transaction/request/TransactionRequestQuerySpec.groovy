@@ -21,7 +21,7 @@ import pico.erp.warehouse.transaction.request.item.TransactionRequestItemRequest
 import pico.erp.warehouse.transaction.request.item.TransactionRequestItemService
 import spock.lang.Specification
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
 @SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
@@ -46,7 +46,7 @@ class TransactionRequestQuerySpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -56,7 +56,7 @@ class TransactionRequestQuerySpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,

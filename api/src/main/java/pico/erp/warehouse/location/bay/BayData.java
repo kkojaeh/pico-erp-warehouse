@@ -1,7 +1,7 @@
 package pico.erp.warehouse.location.bay;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -28,6 +28,6 @@ public class BayData implements Serializable {
 
   boolean deleted;
 
-  LocalDateTime deletedDate;
+  OffsetDateTime deletedDate;
 
 }

@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.order;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -35,7 +35,7 @@ public class TransactionOrder implements Serializable {
 
   TransactionOrderCode code;
 
-  LocalDateTime dueDate;
+  OffsetDateTime dueDate;
 
   CompanyData transactionCompany;
 
@@ -47,19 +47,19 @@ public class TransactionOrder implements Serializable {
 
   Auditor acceptedBy;
 
-  LocalDateTime acceptedDate;
+  OffsetDateTime acceptedDate;
 
   Auditor completedBy;
 
-  LocalDateTime completedDate;
+  OffsetDateTime completedDate;
 
   Auditor committedBy;
 
-  LocalDateTime committedDate;
+  OffsetDateTime committedDate;
 
   Auditor canceledBy;
 
-  LocalDateTime canceledDate;
+  OffsetDateTime canceledDate;
 
   TransactionRequest request;
 
@@ -102,7 +102,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
-    canceledDate = LocalDateTime.now();
+    canceledDate = OffsetDateTime.now();
     return new TransactionOrderMessages.CancelResponse(
       Arrays.asList(new TransactionOrderEvents.CanceledEvent(this.id))
     );
@@ -115,7 +115,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.ACCEPTED;
     acceptedBy = request.getAcceptedBy();
-    acceptedDate = LocalDateTime.now();
+    acceptedDate = OffsetDateTime.now();
     return new TransactionOrderMessages.AcceptResponse(
       Arrays.asList(new TransactionOrderEvents.AcceptedEvent(this.id))
     );
@@ -128,7 +128,7 @@ public class TransactionOrder implements Serializable {
     }
     status = TransactionOrderStatusKind.COMPLETED;
     completedBy = request.getCompletedBy();
-    completedDate = LocalDateTime.now();
+    completedDate = OffsetDateTime.now();
     return new TransactionOrderMessages.CompleteResponse(
       Arrays.asList(new TransactionOrderEvents.CompletedEvent(this.id))
     );

@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -19,12 +19,12 @@ public interface TransactionRequestRepository {
   Optional<TransactionRequestAggregator> findAggregatorBy(
     @NotNull TransactionRequestId id);
 
-  long countCreatedBetween(LocalDateTime begin, LocalDateTime end);
+  long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end);
 
   Optional<TransactionRequest> findBy(@NotNull TransactionRequestId id);
 
   void update(@NotNull TransactionRequest warehouseTransactionRequest);
 
-  Stream<TransactionRequest> findAllUncommittedAt(@NotNull LocalDateTime fixedDate);
+  Stream<TransactionRequest> findAllUncommittedAt(@NotNull OffsetDateTime fixedDate);
 
 }

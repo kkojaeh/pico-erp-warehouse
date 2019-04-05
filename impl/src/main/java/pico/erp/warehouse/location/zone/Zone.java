@@ -1,7 +1,7 @@
 package pico.erp.warehouse.location.zone;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class Zone implements Serializable {
 
   boolean deleted;
 
-  LocalDateTime deletedDate;
+  OffsetDateTime deletedDate;
 
   public ZoneMessages.CreateResponse apply(ZoneMessages.CreateRequest request) {
     id = request.getId();
@@ -64,7 +64,7 @@ public class Zone implements Serializable {
 
   public ZoneMessages.DeleteResponse apply(ZoneMessages.DeleteRequest request) {
     deleted = true;
-    deletedDate = LocalDateTime.now();
+    deletedDate = OffsetDateTime.now();
     return new ZoneMessages.DeleteResponse(
       Arrays.asList(new ZoneEvents.DeletedEvent(this.id)));
   }

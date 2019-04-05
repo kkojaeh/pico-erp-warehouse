@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -34,7 +34,7 @@ public class TransactionRequest implements Serializable {
 
   TransactionRequestCode code;
 
-  LocalDateTime dueDate;
+  OffsetDateTime dueDate;
 
   CompanyData transactionCompany;
 
@@ -46,19 +46,19 @@ public class TransactionRequest implements Serializable {
 
   Auditor committedBy;
 
-  LocalDateTime committedDate;
+  OffsetDateTime committedDate;
 
   Auditor canceledBy;
 
-  LocalDateTime canceledDate;
+  OffsetDateTime canceledDate;
 
   Auditor acceptedBy;
 
-  LocalDateTime acceptedDate;
+  OffsetDateTime acceptedDate;
 
   Auditor completedBy;
 
-  LocalDateTime completedDate;
+  OffsetDateTime completedDate;
 
   TransactionQuantityCorrectionPolicyKind quantityCorrectionPolicy;
 
@@ -99,7 +99,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.COMMITTED;
     committedBy = request.getCommittedBy();
-    committedDate = LocalDateTime.now();
+    committedDate = OffsetDateTime.now();
     return new TransactionRequestMessages.CommitResponse(
       Arrays.asList(new TransactionRequestEvents.CommittedEvent(this.id))
     );
@@ -112,7 +112,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.CANCELED;
     canceledBy = request.getCanceledBy();
-    canceledDate = LocalDateTime.now();
+    canceledDate = OffsetDateTime.now();
     return new TransactionRequestMessages.CancelResponse(
       Arrays.asList(new TransactionRequestEvents.CanceledEvent(this.id))
     );
@@ -125,7 +125,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.ACCEPTED;
     acceptedBy = request.getAcceptedBy();
-    acceptedDate = LocalDateTime.now();
+    acceptedDate = OffsetDateTime.now();
     return new TransactionRequestMessages.AcceptResponse(
       Arrays.asList(new TransactionRequestEvents.AcceptedEvent(this.id))
     );
@@ -138,7 +138,7 @@ public class TransactionRequest implements Serializable {
     }
     status = TransactionRequestStatusKind.COMPLETED;
     completedBy = request.getCompletedBy();
-    completedDate = LocalDateTime.now();
+    completedDate = OffsetDateTime.now();
     return new TransactionRequestMessages.CompleteResponse(
       Arrays.asList(new TransactionRequestEvents.CompletedEvent(this.id))
     );

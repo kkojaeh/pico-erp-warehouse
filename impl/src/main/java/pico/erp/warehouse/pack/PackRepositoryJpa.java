@@ -1,6 +1,6 @@
 package pico.erp.warehouse.pack;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -21,8 +21,8 @@ interface PackEntityRepository extends
   CrudRepository<PackEntity, PackId> {
 
   @Query("SELECT COUNT(p) FROM Pack p WHERE p.createdDate >= :begin AND p.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") LocalDateTime begin,
-    @Param("end") LocalDateTime end);
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin,
+    @Param("end") OffsetDateTime end);
 
   @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Pack p WHERE p.code = :code")
   boolean exists(@Param("code") PackCode code);
@@ -46,7 +46,7 @@ public class PackRepositoryJpa implements PackRepository {
   private PackMapper mapper;
 
   @Override
-  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
+  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
     return repository.countCreatedBetween(begin, end);
   }
 

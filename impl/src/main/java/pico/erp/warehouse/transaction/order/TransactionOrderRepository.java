@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.order;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ public interface TransactionOrderRepository {
 
   boolean exists(@NotNull TransactionOrderId id);
 
-  long countCreatedBetween(LocalDateTime begin, LocalDateTime end);
+  long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end);
 
   Optional<TransactionOrderAggregator> findAggregatorBy(
     @NotNull TransactionOrderId id);
@@ -28,6 +28,6 @@ public interface TransactionOrderRepository {
 
   void update(@NotNull TransactionOrder warehouseTransactionOrder);
 
-  Stream<TransactionOrder> findAllUnacceptedAt(@NotNull LocalDateTime fixedDate);
+  Stream<TransactionOrder> findAllUnacceptedAt(@NotNull OffsetDateTime fixedDate);
 
 }

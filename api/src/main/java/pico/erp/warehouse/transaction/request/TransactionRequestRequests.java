@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ public interface TransactionRequestRequests {
     // 예정일
     @Future
     @NotNull
-    LocalDateTime dueDate;
+    OffsetDateTime dueDate;
 
     // 대상 회사(회사)
     @NotNull
@@ -59,7 +59,7 @@ public interface TransactionRequestRequests {
     // 예정일
     @Future
     @NotNull
-    LocalDateTime dueDate;
+    OffsetDateTime dueDate;
 
     // 공급처 회사(회사)
     @NotNull
@@ -101,7 +101,7 @@ public interface TransactionRequestRequests {
      * 지정 기준시간보다 예전 데이터를 삭제
      */
     @NotNull
-    LocalDateTime fixedDate;
+    OffsetDateTime fixedDate;
 
   }
 

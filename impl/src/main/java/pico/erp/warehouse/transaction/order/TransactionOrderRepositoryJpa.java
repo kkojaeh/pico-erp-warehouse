@@ -1,6 +1,6 @@
 package pico.erp.warehouse.transaction.order;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ interface TransactionOrderEntityRepository extends
   CrudRepository<TransactionOrderEntity, TransactionOrderId> {
 
   @Query("SELECT COUNT(o) FROM TransactionOrder o WHERE o.createdDate >= :begin AND o.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") LocalDateTime begin, @Param("end") LocalDateTime end);
+  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
 
   @Query("SELECT o FROM TransactionOrder o WHERE o.requestId = :requestId")
   Optional<TransactionOrderEntity> findBy(
@@ -30,7 +30,7 @@ interface TransactionOrderEntityRepository extends
 
   @Query("SELECT o FROM TransactionOrder o WHERE o.status = :status AND o.dueDate < :fixedDate")
   Stream<TransactionOrderEntity> findAllUnacceptedAt(
-    @Param("fixedDate") LocalDateTime fixedDate,
+    @Param("fixedDate") OffsetDateTime fixedDate,
     @Param("status") TransactionOrderStatusKind status);
 
 }
@@ -55,7 +55,7 @@ public class TransactionOrderRepositoryJpa implements
   }
 
   @Override
-  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
+  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
     return repository.countCreatedBetween(begin, end);
   }
 
@@ -82,7 +82,7 @@ public class TransactionOrderRepositoryJpa implements
   }
 
   @Override
-  public Stream<TransactionOrder> findAllUnacceptedAt(LocalDateTime fixedDate) {
+  public Stream<TransactionOrder> findAllUnacceptedAt(OffsetDateTime fixedDate) {
     return repository
       .findAllUnacceptedAt(fixedDate, TransactionOrderStatusKind.COMMITTED)
       .map(mapper::jpa);

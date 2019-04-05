@@ -21,7 +21,7 @@ import pico.erp.warehouse.transaction.order.item.TransactionOrderItemRequests
 import pico.erp.warehouse.transaction.order.item.TransactionOrderItemService
 import spock.lang.Specification
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
 @SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
@@ -47,7 +47,7 @@ class TransactionOrderItemServiceSpec extends Specification {
   def stationId = StationId.from("S2")
 
   def setup() {
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     warehouseTransactionOrderService.create(
       new TransactionOrderRequests.CreateRequest(
         id: orderId,

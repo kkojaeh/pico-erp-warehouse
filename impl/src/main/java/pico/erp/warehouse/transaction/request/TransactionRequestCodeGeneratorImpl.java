@@ -1,7 +1,7 @@
 package pico.erp.warehouse.transaction.request;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +16,7 @@ public class TransactionRequestCodeGeneratorImpl implements TransactionRequestCo
 
   @Override
   public TransactionRequestCode generate(TransactionRequest transactionRequest) {
-    val now = LocalDateTime.now();
+    val now = OffsetDateTime.now();
     val begin = now.with(LocalTime.MIN);
     val end = now.with(LocalTime.MAX);
     val count = transactionRequestRepository.countCreatedBetween(begin, end);

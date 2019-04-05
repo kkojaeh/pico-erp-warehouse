@@ -18,7 +18,7 @@ import pico.erp.warehouse.transaction.TransactionTypeKind
 import spock.lang.Specification
 
 import javax.validation.ConstraintViolationException
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [WarehouseApplication, TestConfig])
 @SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
@@ -45,7 +45,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "입고요청을 처리 한다"() {
     when:
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
@@ -71,7 +71,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: inboundRequestId,
-        dueDate: LocalDateTime.now().minusDays(2),
+        dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.INBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -85,7 +85,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "출고요청을 처리 한다"() {
     when:
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     def inbounded = transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
@@ -110,7 +110,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: LocalDateTime.now().minusDays(2),
+        dueDate: OffsetDateTime.now().minusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -124,7 +124,7 @@ class TransactionRequestServiceSpec extends Specification {
 
   def "예정시간을 지나도 제출하지 않은 입/출고요청은 취소 된다"() {
     when:
-    def dueDate = LocalDateTime.now().plusDays(2)
+    def dueDate = OffsetDateTime.now().plusDays(2)
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
@@ -152,7 +152,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
@@ -174,7 +174,7 @@ class TransactionRequestServiceSpec extends Specification {
     transactionRequestService.create(
       new TransactionRequestRequests.CreateRequest(
         id: outboundRequestId,
-        dueDate: LocalDateTime.now().plusDays(2),
+        dueDate: OffsetDateTime.now().plusDays(2),
         type: TransactionTypeKind.OUTBOUND,
         transactionCompanyId: companyId,
         stationId: stationId,
